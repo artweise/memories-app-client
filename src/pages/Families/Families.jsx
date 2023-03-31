@@ -1,18 +1,23 @@
 import { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
+
+import { AuthContext } from "../../context/auth.context";
 import Navbar from "../../components/Navbar/Navbar";
 import FamilyCard from "../../components/FamilyCard/FamilyCard";
-import familiesMock from "../../utilities/familiesMock.json";
-import { FamiliesContainer } from "./style";
-import { AuthContext } from "../../context/auth.context";
 import FamilyCardEmpty from "../../components/FamilyCard/FamilyCardEmpty";
+import CreateFamilyModal from "../../components/Modals/CreateFamilyModal/CreateFamilyModal";
+import { FamiliesContainer } from "./style";
+import familiesMock from "../../utilities/familiesMock.json";
 
 const Families = () => {
   const { isLoggedIn, isLoading, token } = useContext(AuthContext);
   const [families, setFamilies] = useState(familiesMock);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
-  const handleAddFamily = () => {
-    console.log("handleAddFamily");
+  const handleCloseCreateFamily = () => setIsCreateModalOpen(false);
+
+  const handleCreateFamily = (familyValues) => {
+    console.log(familyValues);
   };
 
   return (
@@ -24,8 +29,13 @@ const Families = () => {
             <FamilyCard family={family} />
           </Link>
         ))}
-        <FamilyCardEmpty onClick={handleAddFamily} />
+        <FamilyCardEmpty onClick={() => setIsCreateModalOpen(true)} />
       </FamiliesContainer>
+      <CreateFamilyModal
+        isOpen={isCreateModalOpen}
+        handleClose={handleCloseCreateFamily}
+        onCreate={handleCreateFamily}
+      />
     </>
   );
 };

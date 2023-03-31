@@ -2,7 +2,6 @@ import styled, { css } from "styled-components";
 
 export const StyledFamilyCard = styled.div`
   ${({ color = "#f9f9f9" }) => css`
-    // min-width: 31%;
     height: 18vw;
     background: ${color};
     box-shadow: 4px 4px 16px 4px #d4d4d4;
