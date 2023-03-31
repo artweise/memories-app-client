@@ -19,7 +19,7 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { ToastContainer, toast } from "react-toastify";
 
 import Navbar from "../../components/Navbar/Navbar";
-import { url } from "../../utilities/url";
+import { urlAuth } from "../../utilities/url";
 
 import "./style.css";
 
@@ -33,9 +33,9 @@ const FormAuth = ({ title }) => {
   });
 
   const navigate = useNavigate();
-  const { storeToken } = useContext(AuthContext);
+  const { storeToken, authenticateUser } = useContext(AuthContext);
 
-  //   const notify = () => toast("Wow so easy !");
+  const notify = () => toast("Wow so easy !");
 
   const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value });
@@ -62,7 +62,7 @@ const FormAuth = ({ title }) => {
     if (action === "Sign Up") {
       try {
         let response = await axios.post(
-          `${url}/signup`,
+          `${urlAuth}/signup`,
           {
             username: values.username,
             email: values.email,
@@ -76,70 +76,79 @@ const FormAuth = ({ title }) => {
           //     },
           //   }
         );
+        // console.log(response);
         setValues({
           ...values,
           username: "",
           email: "",
           password: "",
-          msg: response.data.msg,
+          msg: response.data.message,
         });
-        // notify();
-        // toast.success(response.data.msg, {
-        //   icon: "🧸",
-        // });
+        notify();
+        toast.success(response.data.message, {
+          icon: "🧸",
+        });
 
         navigate("/login");
       } catch (e) {
+        // console.log(e);
         setValues({
           ...values,
-          msg: e.response.data.msg,
+          msg: e.response.data.message,
           username: "",
           email: "",
           password: "",
         });
-        toast.error(e.response.data.msg, {
+        toast.error(e.response.data.message, {
           icon: "😳",
         });
       }
     } else if (action === "Log In") {
       try {
         const response = await axios.post(
-          `${url}/login`,
+          `${urlAuth}/login`,
           {
             email: values.email,
             password: values.password,
           }
-          //   {
-          //     // The headers property specifies the HTTP headers
-          //     //  to include in the request. In this case,
-          //     // the headers include "Access-Control-Allow-Origin": "*",
-          //     // which sets the allowed origin domain to any domain,
-          //     // and "Content-Type": "application/json",
-          //     // which specifies that the request payload is in JSON format.
-          //     withCredentials: true,
-          //     headers: {
-          //       "Access-Control-Allow-Origin": "*",
-          //       "Content-Type": "application/json",
-          //     },
-          //   }
+          // { headers: { Authorization: `Bearer ${storedToken}` } }
+
+          // {
+          //   // The headers property specifies the HTTP headers
+          //   //  to include in the request. In this case,
+          //   // the headers include "Access-Control-Allow-Origin": "*",
+          //   // which sets the allowed origin domain to any domain,
+          //   // and "Content-Type": "application/json",
+          //   // which specifies that the request payload is in JSON format.
+          //   withCredentials: true,
+          //   headers: {
+          //     "Access-Control-Allow-Origin": "*",
+          //     "Content-Type": "application/json",
+          //   },
+          // }
         );
+        // console.log(response);
         setValues({
           ...values,
           email: "",
           password: "",
         });
         // localStorage.setItem("accessToken", response.data.accessToken);
+        // Save the token in the localStorage.
         storeToken(response.data.accessToken);
-        console.log("JWT token", response);
+        // Verify the token by sending a request
+        // to the server's JWT validation endpoint.
+        authenticateUser();
         navigate("/families");
       } catch (e) {
+        console.log(e);
         setValues({
           ...values,
           email: "",
           password: "",
-          msg: e.response.data.msg,
+          msg: e.response.data.message,
         });
-        toast.error(e.response.data.msg, {
+        toast.error(e.response.data.message, {
           icon: "🥺",
         });
       }
