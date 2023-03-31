@@ -76,7 +76,6 @@ const FormAuth = ({ title }) => {
           //     },
           //   }
         );
-        // console.log(response);
         setValues({
           ...values,
           username: "",
@@ -127,7 +126,6 @@ const FormAuth = ({ title }) => {
           //   },
           // }
         );
-        // console.log(response);
         setValues({
           ...values,
           email: "",
@@ -138,10 +136,9 @@ const FormAuth = ({ title }) => {
         storeToken(response.data.accessToken);
         // Verify the token by sending a request
         // to the server's JWT validation endpoint.
-        authenticateUser();
+        await authenticateUser();
         navigate("/families");
       } catch (e) {
-        console.log(e);
         setValues({
           ...values,
           email: "",

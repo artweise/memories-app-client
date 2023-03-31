@@ -6,6 +6,7 @@ import Home from "./pages/Home/Home";
 import FormAuth from "./pages/SignupLogin/SignupLogin";
 import Families from "./pages/Families/Families";
 import "react-toastify/dist/ReactToastify.css";
+import Memories from "./pages/Memories/Memories";
 // import "./App.css";
 
 const App = () => {
@@ -45,6 +46,14 @@ const App = () => {
           element={
             <IsPrivate>
               <Families />
+            </IsPrivate>
+          }
+        />
+        <Route
+          path="/memories/:familyId"
+          element={
+            <IsPrivate>
+              <Memories />
             </IsPrivate>
           }
         />
