@@ -1,7 +1,14 @@
 import { useState } from "react";
-import { Autocomplete, TextField, Chip, Button } from "@mui/material";
-import { validEmailPattern } from "../../../utilities/formUtilities";
-import { Container } from "./style";
+import {
+  Autocomplete,
+  TextField,
+  Chip,
+  Button,
+  FormHelperText,
+} from "@mui/material";
+
+import { validateEmail } from "./utils";
+import { Container, helperTextStyle } from "./style";
 
 import ModalComponent from "../Modal";
 
@@ -11,25 +18,55 @@ const CreateFamilyModal = ({ isOpen, handleClose, onCreate }) => {
     title: "",
     description: "",
   });
+  const [error, setError] = useState("");
 
-  const isValidEmail = (value, reason) => {
-    value.match(validEmailPattern);
+  const handleInputChange = () => {
+    if (error) {
+      setError("");
+    }
+  };
+
+  const onClose = () => {
+    setError("");
+    handleClose();
   };
 
   const handleChange = (value, reason) => {
-    setFamilyValues({ ...familyValues, members: value });
+    value === [] && setError("");
+    if (reason === "createOption" || reason === "blur") {
+      const newEmail = value[value.length - 1];
+      const isValidEmail = validateEmail(newEmail);
+      if (isValidEmail) {
+        setFamilyValues({
+          ...familyValues,
+          members: [...familyValues.members, newEmail],
+        });
+      } else {
+        setError("Invalid email");
+      }
+    } else {
+      setFamilyValues({
+        ...familyValues,
+        members: value,
+      });
+    }
   };
 
   return (
-    <ModalComponent isOpen={isOpen} handleClose={handleClose}>
+    <ModalComponent isOpen={isOpen} handleClose={onClose}>
       <Container>
         <Autocomplete
           multiple
+          value={familyValues.members}
           id="new-family-members"
+          clearOnEscape
+          clearOnBlur
+          freeSolo
+          blurOnSelect
+          autoSelect
           options={[]}
           onChange={(_, value, reason) => handleChange(value, reason)}
-          onInputChange={(_, value, reason) => isValidEmail(value, reason)}
-          freeSolo
+          onInputChange={() => handleInputChange()}
           renderTags={(value, getTagProps) =>
             value.map((option, index) => (
               <Chip
@@ -47,6 +84,9 @@ const CreateFamilyModal = ({ isOpen, handleClose, onCreate }) => {
             />
           )}
         />
+
+        {error && <FormHelperText sx={helperTextStyle}>{error}</FormHelperText>}
+
         <Button
           onClick={() => onCreate(familyValues)}
           variant="contained"
