@@ -79,7 +79,7 @@ const FormAuth = ({ title }) => {
           email: "",
           password: "",
         });
-        notifyError("Ooops. Something went wrong, please try again.");
+        notifyError(e.response.data.message);
       }
     } else if (action === "Log In") {
       try {
@@ -106,7 +106,7 @@ const FormAuth = ({ title }) => {
           password: "",
           msg: e.response.data.message,
         });
-        notifyError("Ooops. Something went wrong, please try again.");
+        notifyError(e.response.data.message);
       }
     }
   };

@@ -9,6 +9,7 @@ import FamilyCardEmpty from "../../components/FamilyCard/FamilyCardEmpty";
 import CreateFamilyModal from "../../components/Modals/CreateFamilyModal/CreateFamilyModal";
 import { getAllFamilies, createFamily } from "./services/familyServices";
 import { notifySuccess, notifyError } from "../../utilities/toastUtilities";
+import { PageContainer } from "../style";
 import { FamiliesContainer } from "./style";
 
 const Families = () => {
@@ -42,16 +43,18 @@ const Families = () => {
   return (
     <>
       <Navbar />
-      <FamiliesContainer>
-        {familyQuery.status === "loading" && <div>LOADING</div>}
-        {familyQuery.status === "success" &&
-          familyQuery?.data?.map((family) => (
-            <Link to={`/memories/${family._id}`} key={family._id}>
-              <FamilyCard family={family} />
-            </Link>
-          ))}
-        <FamilyCardEmpty onClick={() => setIsCreateModalOpen(true)} />
-      </FamiliesContainer>
+      <PageContainer>
+        <FamiliesContainer>
+          {familyQuery.status === "loading" && <div>LOADING</div>}
+          {familyQuery.status === "success" &&
+            familyQuery?.data?.map((family) => (
+              <Link to={`/memories/${family._id}`} key={family._id}>
+                <FamilyCard family={family} />
+              </Link>
+            ))}
+          <FamilyCardEmpty onClick={() => setIsCreateModalOpen(true)} />
+        </FamiliesContainer>
+      </PageContainer>
       <CreateFamilyModal
         isOpen={isCreateModalOpen}
         handleClose={handleCloseCreateFamily}

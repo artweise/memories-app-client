@@ -44,7 +44,7 @@ const Navbar = () => {
     setAnchorElUser(null);
   };
   return (
-    <AppBar position="static" sx={{ background: PRIMARY_SHADES[700] }}>
+    <AppBar position="fixed" sx={{ background: PRIMARY_SHADES[700] }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           {/* LOGO */}

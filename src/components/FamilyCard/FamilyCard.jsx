@@ -5,7 +5,7 @@ import Typography from "@mui/material/Typography";
 
 const FamilyCard = ({ family }) => {
   return (
-    <StyledFamilyCard>
+    <StyledFamilyCard color={family.color}>
       <Typography variant="h5" sx={{ mb: 2 }} noWrap={true}>
         {family.title}
       </Typography>
