@@ -106,7 +106,7 @@ const CreateFamilyModal = ({ isOpen, handleClose, onCreate }) => {
             error={!!titleError}
             value={familyValues.title}
             onChange={(event) => handleTitleChange(event.target.value)}
-            // When input looses focus if title was not filled - set error
+            // When input looses focus, if title was not filled - set title error
             onBlur={() =>
               familyValues.title === "" && setTitleError("Title is required")
             }
@@ -141,7 +141,7 @@ const CreateFamilyModal = ({ isOpen, handleClose, onCreate }) => {
             options={[]}
             // Validation and saving new value to the state
             onChange={(_, value, reason) => handleMembersChange(value, reason)}
-            // When start typing - clear error
+            // When start typing - clear emails error
             onInputChange={() => handleEmailsInputChange()}
             renderTags={(value, getTagProps) =>
               value.map((option, index) => (

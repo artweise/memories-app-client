@@ -17,8 +17,8 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Navbar from "../../components/Navbar/Navbar";
 import { urlAuth } from "../../utilities/url";
-import "./style.css";
 import { notifySuccess, notifyError } from "../../utilities/toastUtilities";
+import "./style.css";
 
 const FormAuth = ({ title }) => {
   const [values, setValues] = useState({
