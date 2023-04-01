@@ -5,10 +5,11 @@ import {
   Chip,
   Button,
   FormHelperText,
+  FormControl,
 } from "@mui/material";
 
 import { validateEmail } from "./utils";
-import { Container, helperTextStyle } from "./style";
+import { StyledForm, helperTextStyle, formControlStyle } from "./style";
 
 import ModalComponent from "../Modal";
 
@@ -19,6 +20,7 @@ const CreateFamilyModal = ({ isOpen, handleClose, onCreate }) => {
     description: "",
   });
   const [error, setError] = useState("");
+  const [titleError, setTitleError] = useState("");
 
   const handleInputChange = () => {
     if (error) {
@@ -31,7 +33,15 @@ const CreateFamilyModal = ({ isOpen, handleClose, onCreate }) => {
     handleClose();
   };
 
-  const handleChange = (value, reason) => {
+  const handleTitleChange = (value) => {
+    setTitleError("");
+    setFamilyValues({
+      ...familyValues,
+      title: value,
+    });
+  };
+
+  const handleMembersChange = (value, reason) => {
     value === [] && setError("");
     if (reason === "createOption" || reason === "blur") {
       const newEmail = value[value.length - 1];
@@ -45,6 +55,7 @@ const CreateFamilyModal = ({ isOpen, handleClose, onCreate }) => {
         setError("Invalid email");
       }
     } else {
+      setError("");
       setFamilyValues({
         ...familyValues,
         members: value,
@@ -52,49 +63,84 @@ const CreateFamilyModal = ({ isOpen, handleClose, onCreate }) => {
     }
   };
 
+  const onSubmitForm = (event) => {
+    event.preventDefault();
+    if (!error) {
+      onCreate(familyValues);
+    }
+  };
+
   return (
     <ModalComponent isOpen={isOpen} handleClose={onClose}>
-      <Container>
-        <Autocomplete
-          multiple
-          value={familyValues.members}
-          id="new-family-members"
-          clearOnEscape
-          clearOnBlur
-          freeSolo
-          blurOnSelect
-          autoSelect
-          options={[]}
-          onChange={(_, value, reason) => handleChange(value, reason)}
-          onInputChange={() => handleInputChange()}
-          renderTags={(value, getTagProps) =>
-            value.map((option, index) => (
-              <Chip
-                variant="outlined"
-                label={option}
-                {...getTagProps({ index })}
-              />
-            ))
-          }
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              label="Members"
-              placeholder="Family members emails"
-            />
+      <StyledForm onSubmit={(event) => onSubmitForm(event)}>
+        <FormControl sx={formControlStyle}>
+          <TextField
+            required
+            id="family-title"
+            label="Title"
+            error={!!titleError}
+            onChange={(event) => handleTitleChange(event.target.value)}
+            onBlur={() =>
+              familyValues.title === "" && setTitleError("Title is required")
+            }
+          />
+          {titleError && (
+            <FormHelperText sx={helperTextStyle}>{titleError}</FormHelperText>
           )}
-        />
+        </FormControl>
+        <FormControl sx={formControlStyle}>
+          <TextField
+            id="family-description"
+            label="Description"
+            onChange={(event) => {
+              setFamilyValues({
+                ...familyValues,
+                description: event.target.value,
+              });
+            }}
+          />
+        </FormControl>
+        <FormControl sx={formControlStyle}>
+          <Autocomplete
+            multiple
+            value={familyValues.members}
+            id="new-family-members"
+            clearOnEscape
+            clearOnBlur
+            freeSolo
+            blurOnSelect
+            autoSelect
+            options={[]}
+            onChange={(_, value, reason) => handleMembersChange(value, reason)}
+            onInputChange={() => handleInputChange()}
+            renderTags={(value, getTagProps) =>
+              value.map((option, index) => (
+                <Chip
+                  variant="outlined"
+                  label={option}
+                  {...getTagProps({ index })}
+                />
+              ))
+            }
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Members"
+                placeholder="Family members emails"
+                onFocus={() => setError("")}
+                error={!!error}
+              />
+            )}
+          />
+          {error && (
+            <FormHelperText sx={helperTextStyle}>{error}</FormHelperText>
+          )}
+        </FormControl>
 
-        {error && <FormHelperText sx={helperTextStyle}>{error}</FormHelperText>}
-
-        <Button
-          onClick={() => onCreate(familyValues)}
-          variant="contained"
-          sx={{ m: 1 }}
-        >
+        <Button variant="contained" sx={{ mt: 2 }} type="submit">
           Create
         </Button>
-      </Container>
+      </StyledForm>
     </ModalComponent>
   );
 };
