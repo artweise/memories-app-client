@@ -6,6 +6,7 @@ import {
   Button,
   FormHelperText,
   FormControl,
+  Typography,
 } from "@mui/material";
 
 import { validateEmail } from "./utils";
@@ -103,6 +104,7 @@ const CreateFamilyModal = ({
 
   return (
     <ModalComponent isOpen={isOpen} handleClose={() => onClose()}>
+      <Typography variant="h5">Create new family</Typography>
       <StyledForm onSubmit={(event) => onSubmitForm(event)}>
         <FormControl sx={formControlStyle}>
           <TextField
