@@ -21,7 +21,6 @@ const Families = () => {
 
   // Queries
   const familyQuery = useQuery(["family", token], () => getAllFamilies(token));
-  console.log(familyQuery);
 
   const handleCloseCreateFamily = () => setIsCreateModalOpen(false);
 

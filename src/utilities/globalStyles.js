@@ -1,5 +1,20 @@
 import { createGlobalStyle } from "styled-components";
 
+export const PRIMARY_SHADES = {
+  50: "#ECECF0",
+  100: "#F2EEF9",
+  200: "#EEE7F8",
+  300: "#DCCFF0",
+  400: "#C5B5E5",
+  500: "#A88FDA",
+  600: "#8C6BCE",
+  700: "#7743C9",
+  800: "#5F10C5",
+  900: "#3D1084",
+  1000: "#22084C",
+  1100: "#080213",
+};
+
 export const NEUTRAL_SHADES = {
   WHITE: "#FFFFFF",
   LIGHT_GRAY: "#FAFAFA",
@@ -66,7 +81,12 @@ export const GlobalStyle = createGlobalStyle`
     font-family: 'Roboto', sans-serif;
     font-size: 16px;
   }
+  body{
+    background-color: ${NEUTRAL_SHADES[150]};
+  }
   a {
     text-decoration: none;
+    color: ${NEUTRAL_SHADES.BLACK};
   }
+
 `;
