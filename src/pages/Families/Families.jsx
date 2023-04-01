@@ -7,15 +7,13 @@ import Navbar from "../../components/Navbar/Navbar";
 import FamilyCard from "../../components/FamilyCard/FamilyCard";
 import FamilyCardEmpty from "../../components/FamilyCard/FamilyCardEmpty";
 import CreateFamilyModal from "../../components/Modals/CreateFamilyModal/CreateFamilyModal";
+import { getAllFamilies, createFamily } from "./services/familyServices";
+import { notifySuccess, notifyError } from "../../utilities/toastUtilities";
 import { FamiliesContainer } from "./style";
-import familiesMock from "../../utilities/familiesMock.json";
-import { getAllFamilies, createFamily } from "./services/services";
 
 const Families = () => {
   const { isLoggedIn, isLoading, token } = useContext(AuthContext);
-  const [families, setFamilies] = useState(familiesMock);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
 
   // Access the client
   const queryClient = useQueryClient();
@@ -27,10 +25,11 @@ const Families = () => {
     onSuccess: () => {
       // Invalidate and refetch
       setIsCreateModalOpen(false);
+      notifySuccess("Family created successfully", "🏡");
       queryClient.invalidateQueries("families");
     },
     onError: (err) => {
-      setErrorMessage(err.response.data.message);
+      notifyError(err.response.data.message);
     },
   });
 
@@ -57,8 +56,6 @@ const Families = () => {
         isOpen={isCreateModalOpen}
         handleClose={handleCloseCreateFamily}
         onCreate={handleCreateFamily}
-        errorMessage={errorMessage}
-        setErrorMessage={setErrorMessage}
       />
     </>
   );

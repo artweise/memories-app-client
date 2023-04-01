@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import {
   Autocomplete,
   TextField,
@@ -14,24 +14,19 @@ import { StyledForm, helperTextStyle, formControlStyle } from "./style";
 
 import ModalComponent from "../Modal";
 
-const CreateFamilyModal = ({
-  isOpen,
-  handleClose,
-  onCreate,
-  errorMessage,
-  setErrorMessage,
-}) => {
+const CreateFamilyModal = ({ isOpen, handleClose, onCreate }) => {
   const [familyValues, setFamilyValues] = useState({
     members: [],
     title: "",
     description: "",
   });
-  const [error, setError] = useState("");
+  const [emailsError, setEmailsError] = useState("");
   const [titleError, setTitleError] = useState("");
 
-  const handleInputChange = () => {
-    if (error) {
-      setError("");
+  // When start typing new email clear emails error if there is one
+  const handleEmailsInputChange = () => {
+    if (emailsError) {
+      setEmailsError("");
     }
   };
 
@@ -44,7 +39,9 @@ const CreateFamilyModal = ({
   };
 
   const handleMembersChange = (value, reason) => {
-    value === [] && setError("");
+    // When clear emails - remove error message
+    value === [] && setEmailsError("");
+    // When added new email - validate before saving to the state
     if (reason === "createOption" || reason === "blur") {
       const newEmail = value[value.length - 1];
       const isValidEmail = validateEmail(newEmail);
@@ -54,10 +51,11 @@ const CreateFamilyModal = ({
           members: [...familyValues.members, newEmail],
         });
       } else {
-        setError("Invalid email");
+        setEmailsError("Invalid email");
       }
     } else {
-      setError("");
+      // When removed one email or all emails - update the state
+      setEmailsError("");
       setFamilyValues({
         ...familyValues,
         members: value,
@@ -66,27 +64,27 @@ const CreateFamilyModal = ({
   };
 
   const onClose = () => {
-    setError("");
+    // clear errors
+    setEmailsError("");
     setTitleError("");
-    setErrorMessage("");
     // clear form
     setFamilyValues({
       members: [],
       title: "",
       description: "",
     });
+    // close modal
     handleClose();
   };
 
   const onSubmitForm = (event) => {
     event.preventDefault();
-    if (!error) {
+    if (!emailsError) {
       // send request
       onCreate(familyValues);
       // clear errors
-      setError("");
+      setEmailsError("");
       setTitleError("");
-      setErrorMessage("");
       // clear form
       setFamilyValues({
         members: [],
@@ -95,12 +93,6 @@ const CreateFamilyModal = ({
       });
     }
   };
-
-  useEffect(() => {
-    setTimeout(() => {
-      setErrorMessage("");
-    }, 2000);
-  }, [errorMessage]);
 
   return (
     <ModalComponent isOpen={isOpen} handleClose={() => onClose()}>
@@ -114,6 +106,7 @@ const CreateFamilyModal = ({
             error={!!titleError}
             value={familyValues.title}
             onChange={(event) => handleTitleChange(event.target.value)}
+            // When input looses focus if title was not filled - set error
             onBlur={() =>
               familyValues.title === "" && setTitleError("Title is required")
             }
@@ -146,8 +139,10 @@ const CreateFamilyModal = ({
             blurOnSelect
             autoSelect
             options={[]}
+            // Validation and saving new value to the state
             onChange={(_, value, reason) => handleMembersChange(value, reason)}
-            onInputChange={() => handleInputChange()}
+            // When start typing - clear error
+            onInputChange={() => handleEmailsInputChange()}
             renderTags={(value, getTagProps) =>
               value.map((option, index) => (
                 <Chip
@@ -162,16 +157,13 @@ const CreateFamilyModal = ({
                 {...params}
                 label="Members"
                 placeholder="Family members emails"
-                onFocus={() => setError("")}
-                error={!!error}
+                onFocus={() => setEmailsError("")}
+                error={!!emailsError}
               />
             )}
           />
-          {error && (
-            <FormHelperText sx={helperTextStyle}>{error}</FormHelperText>
-          )}
-          {errorMessage && (
-            <FormHelperText sx={helperTextStyle}>{errorMessage}</FormHelperText>
+          {emailsError && (
+            <FormHelperText sx={helperTextStyle}>{emailsError}</FormHelperText>
           )}
         </FormControl>
 
