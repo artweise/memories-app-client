@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Autocomplete,
   TextField,
@@ -13,7 +13,13 @@ import { StyledForm, helperTextStyle, formControlStyle } from "./style";
 
 import ModalComponent from "../Modal";
 
-const CreateFamilyModal = ({ isOpen, handleClose, onCreate }) => {
+const CreateFamilyModal = ({
+  isOpen,
+  handleClose,
+  onCreate,
+  errorMessage,
+  setErrorMessage,
+}) => {
   const [familyValues, setFamilyValues] = useState({
     members: [],
     title: "",
@@ -26,11 +32,6 @@ const CreateFamilyModal = ({ isOpen, handleClose, onCreate }) => {
     if (error) {
       setError("");
     }
-  };
-
-  const onClose = () => {
-    setError("");
-    handleClose();
   };
 
   const handleTitleChange = (value) => {
@@ -63,15 +64,45 @@ const CreateFamilyModal = ({ isOpen, handleClose, onCreate }) => {
     }
   };
 
+  const onClose = () => {
+    setError("");
+    setTitleError("");
+    setErrorMessage("");
+    // clear form
+    setFamilyValues({
+      members: [],
+      title: "",
+      description: "",
+    });
+    handleClose();
+  };
+
   const onSubmitForm = (event) => {
     event.preventDefault();
     if (!error) {
+      // send request
       onCreate(familyValues);
+      // clear errors
+      setError("");
+      setTitleError("");
+      setErrorMessage("");
+      // clear form
+      setFamilyValues({
+        members: [],
+        title: "",
+        description: "",
+      });
     }
   };
 
+  useEffect(() => {
+    setTimeout(() => {
+      setErrorMessage("");
+    }, 2000);
+  }, [errorMessage]);
+
   return (
-    <ModalComponent isOpen={isOpen} handleClose={onClose}>
+    <ModalComponent isOpen={isOpen} handleClose={() => onClose()}>
       <StyledForm onSubmit={(event) => onSubmitForm(event)}>
         <FormControl sx={formControlStyle}>
           <TextField
@@ -79,6 +110,7 @@ const CreateFamilyModal = ({ isOpen, handleClose, onCreate }) => {
             id="family-title"
             label="Title"
             error={!!titleError}
+            value={familyValues.title}
             onChange={(event) => handleTitleChange(event.target.value)}
             onBlur={() =>
               familyValues.title === "" && setTitleError("Title is required")
@@ -92,6 +124,7 @@ const CreateFamilyModal = ({ isOpen, handleClose, onCreate }) => {
           <TextField
             id="family-description"
             label="Description"
+            value={familyValues.description}
             onChange={(event) => {
               setFamilyValues({
                 ...familyValues,
@@ -134,6 +167,9 @@ const CreateFamilyModal = ({ isOpen, handleClose, onCreate }) => {
           />
           {error && (
             <FormHelperText sx={helperTextStyle}>{error}</FormHelperText>
+          )}
+          {errorMessage && (
+            <FormHelperText sx={helperTextStyle}>{errorMessage}</FormHelperText>
           )}
         </FormControl>
 

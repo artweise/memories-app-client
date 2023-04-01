@@ -28,7 +28,7 @@ export const EmptyCard = styled(StyledFamilyCard)`
 `;
 
 export const Description = styled.div`
-  min-height: 60%;
+  height: 60%;
 `;
 
 export const MembersContainer = styled.div`

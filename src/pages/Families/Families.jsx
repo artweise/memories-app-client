@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
-import { useQuery, useQueryClient } from "react-query";
+import { useQuery, useQueryClient, useMutation } from "react-query";
 
 import { AuthContext } from "../../context/auth.context";
 import Navbar from "../../components/Navbar/Navbar";
@@ -9,23 +9,35 @@ import FamilyCardEmpty from "../../components/FamilyCard/FamilyCardEmpty";
 import CreateFamilyModal from "../../components/Modals/CreateFamilyModal/CreateFamilyModal";
 import { FamiliesContainer } from "./style";
 import familiesMock from "../../utilities/familiesMock.json";
-import { getAllFamilies } from "./services/services";
+import { getAllFamilies, createFamily } from "./services/services";
 
 const Families = () => {
   const { isLoggedIn, isLoading, token } = useContext(AuthContext);
   const [families, setFamilies] = useState(familiesMock);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   // Access the client
-  // const queryClient = useQueryClient();
+  const queryClient = useQueryClient();
 
   // Queries
-  const familyQuery = useQuery(["family", token], () => getAllFamilies(token));
+  const familyQuery = useQuery("families", () => getAllFamilies());
+  // Mutations
+  const mutation = useMutation(createFamily, {
+    onSuccess: () => {
+      // Invalidate and refetch
+      setIsCreateModalOpen(false);
+      queryClient.invalidateQueries("families");
+    },
+    onError: (err) => {
+      setErrorMessage(err.response.data.message);
+    },
+  });
 
   const handleCloseCreateFamily = () => setIsCreateModalOpen(false);
 
-  const handleCreateFamily = (familyValues) => {
-    console.log(familyValues);
+  const handleCreateFamily = async (familyValues) => {
+    mutation.mutate(familyValues);
   };
 
   return (
@@ -45,6 +57,8 @@ const Families = () => {
         isOpen={isCreateModalOpen}
         handleClose={handleCloseCreateFamily}
         onCreate={handleCreateFamily}
+        errorMessage={errorMessage}
+        setErrorMessage={setErrorMessage}
       />
     </>
   );

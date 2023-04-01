@@ -1,9 +1,13 @@
-import axios from "../../../config/axios.config";
+import axios, { getHeaders } from "../../../config/axios.config";
 
-export const getAllFamilies = async (token) => {
-  const res = await axios.get("/families", {
-    headers: { Authorization: `Bearer ${token}` },
-  });
+export const getAllFamilies = async () => {
+  const res = await axios.get("/families", getHeaders());
   if (res.status === 200) return res.data;
-  else throw new Error("Could not fetch families");
+  // else throw new Error("Could not fetch families");
+};
+
+export const createFamily = async (data) => {
+  const res = await axios.post("/family", data, getHeaders());
+  console.log(res);
+  if (res.status === 200) return res.data;
 };
