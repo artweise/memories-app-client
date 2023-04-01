@@ -1,17 +1,24 @@
 import styled, { css } from "styled-components";
-import { NEUTRAL_SHADES } from "../../utilities/globalStyles";
+import {
+  NEUTRAL_SHADES,
+  SUCCESS_SHADES,
+  PRIMARY_SHADES,
+} from "../../utilities/globalStyles";
 
 export const StyledFamilyCard = styled.div`
-  height: 18vw;
-  background: ${NEUTRAL_SHADES.WHITE};
-  box-shadow: 4px 4px 16px 4px #d4d4d4;
-  border-radius: 16px;
-  padding: 24px;
-  display: flex;
-  flex-direction: column;
-  &:hover {
-    box-shadow: 4px 4px 16px 4px #ababab;
-  }
+  ${({ color = SUCCESS_SHADES[300] }) => css`
+    height: 22vw;
+    background: ${NEUTRAL_SHADES.WHITE};
+    box-shadow: 4px 4px 16px 4px #d4d4d4;
+    border-radius: 16px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    border-top: 64px solid ${color};
+    &:hover {
+      box-shadow: 4px 4px 16px 4px #ababab;
+    }
+  `}
 `;
 // border: ${(props) => props.color};
 
@@ -20,6 +27,7 @@ export const EmptyCard = styled(StyledFamilyCard)`
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  border-top: 64px solid ${NEUTRAL_SHADES[500]};
   .MuiSvgIcon-root.MuiSvgIcon-fontSizeLarge {
     width: 60%;
     height: 60%;
@@ -39,3 +47,19 @@ export const MembersContainer = styled.div`
   align-items: center;
   height: 22%;
 `;
+
+export const AvatarAndUsername = styled.div`
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 4px;
+`;
+
+export const paperPopoverStyles = { padding: "16px", borderRadius: "8px" };
+
+export const avatarStyles = {
+  bgcolor: PRIMARY_SHADES[800],
+  width: 24,
+  height: 24,
+  fontSize: "12px",
+};
