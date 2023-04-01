@@ -1,21 +1,28 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { BrowserRouter as Router } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "react-query";
+
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { AuthProviderWrapper } from "./context/auth.context";
 import { GlobalStyle } from "./utilities/globalStyles";
-import { BrowserRouter as Router } from "react-router-dom";
 const root = ReactDOM.createRoot(document.getElementById("root"));
+
+// Create a client
+const queryClient = new QueryClient();
 
 root.render(
   <React.StrictMode>
-    <Router>
-      <GlobalStyle />
-      <AuthProviderWrapper>
-        <App />
-      </AuthProviderWrapper>
-    </Router>
+    <QueryClientProvider client={queryClient}>
+      <Router>
+        <GlobalStyle />
+        <AuthProviderWrapper>
+          <App />
+        </AuthProviderWrapper>
+      </Router>
+    </QueryClientProvider>
   </React.StrictMode>
 );
 

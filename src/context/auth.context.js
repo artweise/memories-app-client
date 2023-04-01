@@ -15,6 +15,24 @@ function AuthProviderWrapper(props) {
     localStorage.setItem("accessToken", token);
   };
 
+  const removeToken = () => {
+    // Upon logout, remove the token from the localStorage
+    localStorage.removeItem("accessToken");
+  };
+
+  const clearState = () => {
+    setIsLoggedIn(false);
+    setIsLoading(false);
+    setUser(null);
+  };
+
+  const logOutUser = () => {
+    // To log out the user, remove the token
+    removeToken();
+    // and update the state variables
+    clearState();
+  };
+
   const authenticateUser = async () => {
     // Get the stored token from the localStorage
     const storedToken = localStorage.getItem("accessToken");
@@ -22,7 +40,7 @@ function AuthProviderWrapper(props) {
     // If the token exists in the localStorage
     if (storedToken) {
       try {
-        const response = axios.get(`${urlAuth}/verify`, {
+        const response = await axios.get(`${urlAuth}/verify`, {
           headers: { Authorization: `Bearer ${storedToken}` },
         });
         const user = response.data;
@@ -32,9 +50,8 @@ function AuthProviderWrapper(props) {
         setUser(user);
         setToken(storedToken);
       } catch (error) {
-        setIsLoggedIn(false);
-        setIsLoading(false);
-        setUser(null);
+        removeToken();
+        clearState();
       }
       // We must send the JWT token in the request's "Authorization" Headers
 
@@ -59,26 +76,15 @@ function AuthProviderWrapper(props) {
       // });
     } else {
       // If the token is not available (or is removed)
-      setIsLoggedIn(false);
-      setIsLoading(false);
-      setUser(null);
+      clearState();
     }
   };
 
-  const removeToken = () => {
-    // Upon logout, remove the token from the localStorage
-    localStorage.removeItem("accessToken");
-  };
-
-  const logOutUser = () => {
-    // To log out the user, remove the token
-    removeToken();
-    // and update the state variables
-    authenticateUser();
-  };
-
   useEffect(() => {
-    authenticateUser();
+    const asyncAuthenticate = async () => {
+      await authenticateUser();
+    };
+    asyncAuthenticate();
   }, []);
 
   return (
