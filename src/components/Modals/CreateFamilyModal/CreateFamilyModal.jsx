@@ -6,6 +6,7 @@ import {
   Button,
   FormHelperText,
   FormControl,
+  Typography,
 } from "@mui/material";
 
 import { validateEmail } from "./utils";
@@ -19,18 +20,14 @@ const CreateFamilyModal = ({ isOpen, handleClose, onCreate }) => {
     title: "",
     description: "",
   });
-  const [error, setError] = useState("");
+  const [emailsError, setEmailsError] = useState("");
   const [titleError, setTitleError] = useState("");
 
-  const handleInputChange = () => {
-    if (error) {
-      setError("");
+  // When start typing new email clear emails error if there is one
+  const handleEmailsInputChange = () => {
+    if (emailsError) {
+      setEmailsError("");
     }
-  };
-
-  const onClose = () => {
-    setError("");
-    handleClose();
   };
 
   const handleTitleChange = (value) => {
@@ -42,7 +39,9 @@ const CreateFamilyModal = ({ isOpen, handleClose, onCreate }) => {
   };
 
   const handleMembersChange = (value, reason) => {
-    value === [] && setError("");
+    // When clear emails - remove error message
+    value === [] && setEmailsError("");
+    // When added new email - validate before saving to the state
     if (reason === "createOption" || reason === "blur") {
       const newEmail = value[value.length - 1];
       const isValidEmail = validateEmail(newEmail);
@@ -52,10 +51,11 @@ const CreateFamilyModal = ({ isOpen, handleClose, onCreate }) => {
           members: [...familyValues.members, newEmail],
         });
       } else {
-        setError("Invalid email");
+        setEmailsError("Invalid email");
       }
     } else {
-      setError("");
+      // When removed one email or all emails - update the state
+      setEmailsError("");
       setFamilyValues({
         ...familyValues,
         members: value,
@@ -63,15 +63,40 @@ const CreateFamilyModal = ({ isOpen, handleClose, onCreate }) => {
     }
   };
 
+  const onClose = () => {
+    // clear errors
+    setEmailsError("");
+    setTitleError("");
+    // clear form
+    setFamilyValues({
+      members: [],
+      title: "",
+      description: "",
+    });
+    // close modal
+    handleClose();
+  };
+
   const onSubmitForm = (event) => {
     event.preventDefault();
-    if (!error) {
+    if (!emailsError) {
+      // send request
       onCreate(familyValues);
+      // clear errors
+      setEmailsError("");
+      setTitleError("");
+      // clear form
+      setFamilyValues({
+        members: [],
+        title: "",
+        description: "",
+      });
     }
   };
 
   return (
-    <ModalComponent isOpen={isOpen} handleClose={onClose}>
+    <ModalComponent isOpen={isOpen} handleClose={() => onClose()}>
+      <Typography variant="h5">Create new family</Typography>
       <StyledForm onSubmit={(event) => onSubmitForm(event)}>
         <FormControl sx={formControlStyle}>
           <TextField
@@ -79,7 +104,9 @@ const CreateFamilyModal = ({ isOpen, handleClose, onCreate }) => {
             id="family-title"
             label="Title"
             error={!!titleError}
+            value={familyValues.title}
             onChange={(event) => handleTitleChange(event.target.value)}
+            // When input looses focus if title was not filled - set error
             onBlur={() =>
               familyValues.title === "" && setTitleError("Title is required")
             }
@@ -92,6 +119,7 @@ const CreateFamilyModal = ({ isOpen, handleClose, onCreate }) => {
           <TextField
             id="family-description"
             label="Description"
+            value={familyValues.description}
             onChange={(event) => {
               setFamilyValues({
                 ...familyValues,
@@ -111,8 +139,10 @@ const CreateFamilyModal = ({ isOpen, handleClose, onCreate }) => {
             blurOnSelect
             autoSelect
             options={[]}
+            // Validation and saving new value to the state
             onChange={(_, value, reason) => handleMembersChange(value, reason)}
-            onInputChange={() => handleInputChange()}
+            // When start typing - clear error
+            onInputChange={() => handleEmailsInputChange()}
             renderTags={(value, getTagProps) =>
               value.map((option, index) => (
                 <Chip
@@ -127,13 +157,13 @@ const CreateFamilyModal = ({ isOpen, handleClose, onCreate }) => {
                 {...params}
                 label="Members"
                 placeholder="Family members emails"
-                onFocus={() => setError("")}
-                error={!!error}
+                onFocus={() => setEmailsError("")}
+                error={!!emailsError}
               />
             )}
           />
-          {error && (
-            <FormHelperText sx={helperTextStyle}>{error}</FormHelperText>
+          {emailsError && (
+            <FormHelperText sx={helperTextStyle}>{emailsError}</FormHelperText>
           )}
         </FormControl>
 

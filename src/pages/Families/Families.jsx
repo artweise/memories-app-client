@@ -1,32 +1,42 @@
 import { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
-import { useQuery, useQueryClient } from "react-query";
+import { useQuery, useQueryClient, useMutation } from "react-query";
 
 import { AuthContext } from "../../context/auth.context";
 import Navbar from "../../components/Navbar/Navbar";
 import FamilyCard from "../../components/FamilyCard/FamilyCard";
 import FamilyCardEmpty from "../../components/FamilyCard/FamilyCardEmpty";
 import CreateFamilyModal from "../../components/Modals/CreateFamilyModal/CreateFamilyModal";
+import { getAllFamilies, createFamily } from "./services/familyServices";
+import { notifySuccess, notifyError } from "../../utilities/toastUtilities";
 import { FamiliesContainer } from "./style";
-import familiesMock from "../../utilities/familiesMock.json";
-import { getAllFamilies } from "./services/services";
 
 const Families = () => {
   const { isLoggedIn, isLoading, token } = useContext(AuthContext);
-  const [families, setFamilies] = useState(familiesMock);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
   // Access the client
-  // const queryClient = useQueryClient();
+  const queryClient = useQueryClient();
 
   // Queries
-  const familyQuery = useQuery(["family", token], () => getAllFamilies(token));
-  console.log(familyQuery);
+  const familyQuery = useQuery("families", () => getAllFamilies());
+  // Mutations
+  const mutation = useMutation(createFamily, {
+    onSuccess: () => {
+      // Invalidate and refetch
+      setIsCreateModalOpen(false);
+      notifySuccess("Family created successfully", "🏡");
+      queryClient.invalidateQueries("families");
+    },
+    onError: (err) => {
+      notifyError(err.response.data.message);
+    },
+  });
 
   const handleCloseCreateFamily = () => setIsCreateModalOpen(false);
 
-  const handleCreateFamily = (familyValues) => {
-    console.log(familyValues);
+  const handleCreateFamily = async (familyValues) => {
+    mutation.mutate(familyValues);
   };
 
   return (

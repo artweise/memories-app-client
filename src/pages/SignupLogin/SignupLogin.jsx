@@ -1,6 +1,5 @@
 import { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { AuthContext } from "../../context/auth.context";
 import axios from "axios";
 
 import {
@@ -13,15 +12,13 @@ import {
   InputAdornment,
   FormControl,
 } from "@mui/material";
-
+import { AuthContext } from "../../context/auth.context";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import { ToastContainer, toast } from "react-toastify";
-
 import Navbar from "../../components/Navbar/Navbar";
 import { urlAuth } from "../../utilities/url";
-
 import "./style.css";
+import { notifySuccess, notifyError } from "../../utilities/toastUtilities";
 
 const FormAuth = ({ title }) => {
   const [values, setValues] = useState({
@@ -34,8 +31,6 @@ const FormAuth = ({ title }) => {
 
   const navigate = useNavigate();
   const { storeToken, authenticateUser } = useContext(AuthContext);
-
-  const notify = () => toast("Wow so easy !");
 
   const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value });
@@ -61,21 +56,11 @@ const FormAuth = ({ title }) => {
   const handleAction = async (action) => {
     if (action === "Sign Up") {
       try {
-        let response = await axios.post(
-          `${urlAuth}/signup`,
-          {
-            username: values.username,
-            email: values.email,
-            password: values.password,
-          }
-          //   {
-          //     withCredentials: true,
-          //     headers: {
-          //       "Access-Control-Allow-Origin": "*",
-          //       "Content-Type": "application/json",
-          //     },
-          //   }
-        );
+        let response = await axios.post(`${urlAuth}/signup`, {
+          username: values.username,
+          email: values.email,
+          password: values.password,
+        });
         setValues({
           ...values,
           username: "",
@@ -83,14 +68,10 @@ const FormAuth = ({ title }) => {
           password: "",
           msg: response.data.message,
         });
-        notify();
-        toast.success(response.data.message, {
-          icon: "🧸",
-        });
+        notifySuccess("Signed up successfully. Please log in");
 
         navigate("/login");
       } catch (e) {
-        // console.log(e);
         setValues({
           ...values,
           msg: e.response.data.message,
@@ -98,45 +79,25 @@ const FormAuth = ({ title }) => {
           email: "",
           password: "",
         });
-        toast.error(e.response.data.message, {
-          icon: "😳",
-        });
+        notifyError("Ooops. Something went wrong, please try again.");
       }
     } else if (action === "Log In") {
       try {
-        const response = await axios.post(
-          `${urlAuth}/login`,
-          {
-            email: values.email,
-            password: values.password,
-          }
-          // { headers: { Authorization: `Bearer ${storedToken}` } }
-
-          // {
-          //   // The headers property specifies the HTTP headers
-          //   //  to include in the request. In this case,
-          //   // the headers include "Access-Control-Allow-Origin": "*",
-          //   // which sets the allowed origin domain to any domain,
-          //   // and "Content-Type": "application/json",
-          //   // which specifies that the request payload is in JSON format.
-          //   withCredentials: true,
-          //   headers: {
-          //     "Access-Control-Allow-Origin": "*",
-          //     "Content-Type": "application/json",
-          //   },
-          // }
-        );
+        const response = await axios.post(`${urlAuth}/login`, {
+          email: values.email,
+          password: values.password,
+        });
         setValues({
           ...values,
           email: "",
           password: "",
         });
-        // localStorage.setItem("accessToken", response.data.accessToken);
         // Save the token in the localStorage.
         storeToken(response.data.accessToken);
         // Verify the token by sending a request
         // to the server's JWT validation endpoint.
         await authenticateUser();
+        notifySuccess("Logged in successfully.");
         navigate("/families");
       } catch (e) {
         setValues({
@@ -145,9 +106,7 @@ const FormAuth = ({ title }) => {
           password: "",
           msg: e.response.data.message,
         });
-        toast.error(e.response.data.message, {
-          icon: "🥺",
-        });
+        notifyError("Ooops. Something went wrong, please try again.");
       }
     }
   };

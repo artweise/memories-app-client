@@ -4,7 +4,6 @@ import { ERROR_SHADES } from "../../../utilities/globalStyles";
 
 export const StyledForm = styled.form`
   width: 600px;
-  padding: 24px;
 `;
 
 export const helperTextStyle = {

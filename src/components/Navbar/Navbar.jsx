@@ -16,6 +16,7 @@ import AdbIcon from "@mui/icons-material/Adb";
 import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/auth.context";
+import { PRIMARY_SHADES } from "../../utilities/globalStyles";
 
 // const pages = ["Products", "Pricing", "Blog"];
 const settings = ["Profile", "Families"];
@@ -43,7 +44,7 @@ const Navbar = () => {
     setAnchorElUser(null);
   };
   return (
-    <AppBar position="static">
+    <AppBar position="static" sx={{ background: PRIMARY_SHADES[700] }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           {/* LOGO */}
