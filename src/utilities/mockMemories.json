@@ -1,0 +1,73 @@
+[
+    {
+        "_id": "64293c6b6b060aec5c0670cf",
+        "publication": "Lyudi boleyut i pitayutsya umeret",
+        "date": "2023-04-02T08:27:23.544Z",
+        "place": "Kfar Saba",
+        "tags": [
+            "#emma"
+        ],
+        "familyId": "6428b8e0f9e65422553de8ab",
+        "images": [],
+        "createdAt": "2023-04-02T08:27:23.556Z",
+        "updatedAt": "2023-04-02T08:30:16.670Z",
+        "__v": 0
+    },
+    {
+        "_id": "64293d386b060aec5c0670d4",
+        "publication": "Igra v playg",
+        "date": "2023-04-02T08:30:48.048Z",
+        "place": "Kfar Saba",
+        "tags": [
+            "#emma"
+        ],
+        "familyId": "6428b8e0f9e65422553de8ab",
+        "images": [],
+        "createdAt": "2023-04-02T08:30:48.049Z",
+        "updatedAt": "2023-04-02T08:30:48.049Z",
+        "__v": 0
+    },
+    {
+        "_id": "64293d446b060aec5c0670d6",
+        "publication": "Kokteyli",
+        "date": "2023-04-02T08:31:00.159Z",
+        "place": "Kfar Saba",
+        "tags": [
+            "#emma"
+        ],
+        "familyId": "6428b8e0f9e65422553de8ab",
+        "images": [],
+        "createdAt": "2023-04-02T08:31:00.160Z",
+        "updatedAt": "2023-04-02T08:31:00.160Z",
+        "__v": 0
+    },
+    {
+        "_id": "64293d736b060aec5c0670da",
+        "publication": "Risovanie Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+        "date": "2023-04-02T08:31:47.482Z",
+        "place": "Kfar Saba",
+        "tags": [
+            "#emma"
+        ],
+        "familyId": "6428b8e0f9e65422553de8ab",
+        "images": [],
+        "createdAt": "2023-04-02T08:31:47.483Z",
+        "updatedAt": "2023-04-02T08:31:47.483Z",
+        "__v": 0
+    },
+    {
+        "_id": "64293eef3a203ff93173b3ed",
+        "publication": "JERUSALEM Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+        "date": "2023-04-02T08:38:07.597Z",
+        "place": "Kfar Saba",
+        "tags": [
+            "#emma"
+        ],
+        "owner": "64288009c6122ead8e2c859f",
+        "familyId": "6428b8e0f9e65422553de8ab",
+        "images": [],
+        "createdAt": "2023-04-02T08:38:07.611Z",
+        "updatedAt": "2023-04-02T08:38:07.611Z",
+        "__v": 0
+    }
+]
