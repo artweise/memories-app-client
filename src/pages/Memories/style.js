@@ -7,3 +7,12 @@ export const MemoriesContainer = styled.div`
   width: 60vw;
   row-gap: 24px;
 `;
+
+export const MemoriesHeaderContainer = styled.div`
+  display: flex;
+  margin: 0 auto;
+  width: 60vw;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 40px;
+`;

@@ -7,11 +7,24 @@
         "tags": [
             "#emma"
         ],
-        "familyId": "6428b8e0f9e65422553de8ab",
         "images": [],
         "createdAt": "2023-04-02T08:27:23.556Z",
         "updatedAt": "2023-04-02T08:30:16.670Z",
-        "__v": 0
+        "__v": 0,
+        "family": {
+            "_id": "6428b8e0f9e65422553de8ab",
+            "title": "my fam 2",
+            "description": "",
+            "color": "#7DCBAA",
+            "members": [
+                "64288009c6122ead8e2c859f",
+                "64288009c6122ead8e2c859f"
+            ],
+            "tags": [],
+            "createdAt": "2023-04-01T23:06:08.947Z",
+            "updatedAt": "2023-04-01T23:06:08.947Z",
+            "__v": 0
+        }
     },
     {
         "_id": "64293d386b060aec5c0670d4",
@@ -21,11 +34,24 @@
         "tags": [
             "#emma"
         ],
-        "familyId": "6428b8e0f9e65422553de8ab",
         "images": [],
         "createdAt": "2023-04-02T08:30:48.049Z",
         "updatedAt": "2023-04-02T08:30:48.049Z",
-        "__v": 0
+        "__v": 0,
+        "family": {
+            "_id": "6428b8e0f9e65422553de8ab",
+            "title": "my fam 2",
+            "description": "",
+            "color": "#7DCBAA",
+            "members": [
+                "64288009c6122ead8e2c859f",
+                "64288009c6122ead8e2c859f"
+            ],
+            "tags": [],
+            "createdAt": "2023-04-01T23:06:08.947Z",
+            "updatedAt": "2023-04-01T23:06:08.947Z",
+            "__v": 0
+        }
     },
     {
         "_id": "64293d446b060aec5c0670d6",
@@ -35,11 +61,24 @@
         "tags": [
             "#emma"
         ],
-        "familyId": "6428b8e0f9e65422553de8ab",
         "images": [],
         "createdAt": "2023-04-02T08:31:00.160Z",
         "updatedAt": "2023-04-02T08:31:00.160Z",
-        "__v": 0
+        "__v": 0,
+        "family": {
+            "_id": "6428b8e0f9e65422553de8ab",
+            "title": "my fam 2",
+            "description": "",
+            "color": "#7DCBAA",
+            "members": [
+                "64288009c6122ead8e2c859f",
+                "64288009c6122ead8e2c859f"
+            ],
+            "tags": [],
+            "createdAt": "2023-04-01T23:06:08.947Z",
+            "updatedAt": "2023-04-01T23:06:08.947Z",
+            "__v": 0
+        }
     },
     {
         "_id": "64293d736b060aec5c0670da",
@@ -49,11 +88,24 @@
         "tags": [
             "#emma"
         ],
-        "familyId": "6428b8e0f9e65422553de8ab",
         "images": [],
         "createdAt": "2023-04-02T08:31:47.483Z",
         "updatedAt": "2023-04-02T08:31:47.483Z",
-        "__v": 0
+        "__v": 0,
+        "family": {
+            "_id": "6428b8e0f9e65422553de8ab",
+            "title": "my fam 2",
+            "description": "",
+            "color": "#7DCBAA",
+            "members": [
+                "64288009c6122ead8e2c859f",
+                "64288009c6122ead8e2c859f"
+            ],
+            "tags": [],
+            "createdAt": "2023-04-01T23:06:08.947Z",
+            "updatedAt": "2023-04-01T23:06:08.947Z",
+            "__v": 0
+        }
     },
     {
         "_id": "64293eef3a203ff93173b3ed",
@@ -64,10 +116,52 @@
             "#emma"
         ],
         "owner": "64288009c6122ead8e2c859f",
-        "familyId": "6428b8e0f9e65422553de8ab",
         "images": [],
         "createdAt": "2023-04-02T08:38:07.611Z",
         "updatedAt": "2023-04-02T08:38:07.611Z",
-        "__v": 0
+        "__v": 0,
+        "family": {
+            "_id": "6428b8e0f9e65422553de8ab",
+            "title": "my fam 2",
+            "description": "",
+            "color": "#7DCBAA",
+            "members": [
+                "64288009c6122ead8e2c859f",
+                "64288009c6122ead8e2c859f"
+            ],
+            "tags": [],
+            "createdAt": "2023-04-01T23:06:08.947Z",
+            "updatedAt": "2023-04-01T23:06:08.947Z",
+            "__v": 0
+        }
+    },
+    {
+        "_id": "642b1efb37522fa10f177ed5",
+        "publication": "DAYTE FINIK!!!!",
+        "date": "2019-09-18T00:00:00.000Z",
+        "place": "Kfar Saba",
+        "tags": [
+            "#emma",
+            "#finiki" 
+        ],
+        "owner": "64288009c6122ead8e2c859f",
+        "images": [],
+        "createdAt": "2023-04-03T18:46:19.201Z",
+        "updatedAt": "2023-04-03T18:46:19.201Z",
+        "__v": 0,
+        "family": {
+            "_id": "6428b8e0f9e65422553de8ab",
+            "title": "my fam 2",
+            "description": "",
+            "color": "#7DCBAA",
+            "members": [
+                "64288009c6122ead8e2c859f",
+                "64288009c6122ead8e2c859f"
+            ],
+            "tags": [],
+            "createdAt": "2023-04-01T23:06:08.947Z",
+            "updatedAt": "2023-04-01T23:06:08.947Z",
+            "__v": 0
+        }
     }
 ]
