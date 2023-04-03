@@ -1,6 +1,4 @@
 import { useState } from "react";
-import ModalComponent from "../Modal";
-
 import {
   Autocomplete,
   TextField,
@@ -13,6 +11,8 @@ import {
   FormControlLabel,
   FormGroup,
 } from "@mui/material";
+import ModalComponent from "../Modal";
+import DatePickerComponent from "../../DatePickerComponent/DatePickerComponent";
 
 const CreateMemoryModal = ({ isOpen, handleClose }) => {
   const [memoryValues, setMemoryValues] = useState({
@@ -26,6 +26,9 @@ const CreateMemoryModal = ({ isOpen, handleClose }) => {
   const onClose = () => {
     handleClose();
   };
+  // const setDate = (date) => {
+  //   setMemoryValues({ ...memoryValues, date });
+  // };
 
   return (
     <ModalComponent isOpen={isOpen} handleClose={() => onClose()}>
@@ -38,6 +41,7 @@ const CreateMemoryModal = ({ isOpen, handleClose }) => {
           <TextField
             id="memory-title"
             label="Title"
+            value={memoryValues.title}
             // error={!!titleError}
             // value={familyValues.title}
             // onChange={(event) => handleTitleChange(event.target.value)}
@@ -51,15 +55,28 @@ const CreateMemoryModal = ({ isOpen, handleClose }) => {
           )} */}
         </FormControl>
         <FormControl>
+          <DatePickerComponent
+            value={memoryValues.date}
+            setDate={(date) => {
+              setMemoryValues({ ...memoryValues, date });
+            }}
+          />
+        </FormControl>
+        <FormControl>
+          <TextField
+            id="memory-place"
+            label="Place"
+            value={memoryValues.place}
+          />
+        </FormControl>
+        <FormControl>
           <TextField
             id="memory-publication"
             label="Publication"
             multiline
             rows={3}
+            value={memoryValues.publication}
           />
-        </FormControl>
-        <FormControl>
-          <TextField id="memory-place" label="Place" />
         </FormControl>
       </div>
     </ModalComponent>
