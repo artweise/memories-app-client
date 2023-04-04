@@ -1,25 +1,66 @@
-import logo from './logo.svg';
-import './App.css';
+import { Routes, Route, useLocation } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 
-function App() {
+import IsPrivate from "./components/IsPrivate/IsPrivate";
+import IsAnon from "./components/IsAnon/IsAnon";
+import Home from "./pages/Home/Home";
+import FormAuth from "./pages/SignupLogin/SignupLogin";
+import Families from "./pages/Families/Families";
+import "react-toastify/dist/ReactToastify.css";
+import Memories from "./pages/Memories/Memories";
+// import "./App.css";
+
+const App = () => {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
+      <Routes>
+        <Route path="/" element={<Home title={"Home"} />} />
+        <Route
+          path="/signup"
+          element={
+            <IsAnon>
+              <FormAuth title={"Sign Up"} />
+            </IsAnon>
+          }
+        />
+        <Route
+          path="/login"
+          element={
+            // <IsAnon>
+            <FormAuth title={"Log In"} />
+            // </IsAnon>
+          }
+        />
+        <Route
+          path="/families"
+          element={
+            <IsPrivate>
+              <Families />
+            </IsPrivate>
+          }
+        />
+        <Route
+          path="/memories/:familyId"
+          element={
+            <IsPrivate>
+              <Memories />
+            </IsPrivate>
+          }
+        />
+      </Routes>
     </div>
   );
-}
+};
 
 export default App;
