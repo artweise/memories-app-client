@@ -16,9 +16,15 @@ import { AuthContext } from "../../context/auth.context";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Navbar from "../../components/Navbar/Navbar";
-import { urlAuth } from "../../utilities/url";
 import { notifySuccess, notifyError } from "../../utilities/toastUtilities";
 import "./style.css";
+
+const urlAuth =
+  process.env.NODE_ENV === "production"
+    ? process.env.REACT_APP_PROD_SERVER_AUTH
+    : process.env.REACT_APP_DEV_SERVER_AUTH;
+
+// const urlAuth = process.env.REACT_APP_PROD_SERVER_AUTH;
 
 const FormAuth = ({ title }) => {
   const [values, setValues] = useState({

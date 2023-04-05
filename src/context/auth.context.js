@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { urlAuth } from "../utilities/url";
+
+// const urlAuth = process.env.REACT_APP_PROD_SERVER_AUTH;
+
+const urlAuth =
+  process.env.NODE_ENV === "production"
+    ? process.env.REACT_APP_PROD_SERVER_AUTH
+    : process.env.REACT_APP_DEV_SERVER_AUTH;
 
 const AuthContext = React.createContext(null);
 
