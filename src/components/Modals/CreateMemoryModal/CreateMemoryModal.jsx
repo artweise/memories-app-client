@@ -32,8 +32,11 @@ const CreateMemoryModal = ({ isOpen, handleClose }) => {
   // };
 
   return (
-    <ModalComponent isOpen={isOpen} handleClose={() => onClose()}>
-      <Typography variant="h5">Create new memory</Typography>
+    <ModalComponent
+      isOpen={isOpen}
+      handleClose={() => onClose()}
+      title="Create new memory"
+    >
       <div>
         <FormGroup>
           <FormControlLabel control={<Switch />} label="Private" />

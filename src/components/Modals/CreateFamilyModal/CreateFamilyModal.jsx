@@ -95,8 +95,11 @@ const CreateFamilyModal = ({ isOpen, handleClose, onCreate }) => {
   };
 
   return (
-    <ModalComponent isOpen={isOpen} handleClose={() => onClose()}>
-      <Typography variant="h5">Create new family</Typography>
+    <ModalComponent
+      isOpen={isOpen}
+      handleClose={() => onClose()}
+      title="Create new family"
+    >
       <StyledForm onSubmit={(event) => onSubmitForm(event)}>
         <FormControl sx={formControlStyle}>
           <TextField
