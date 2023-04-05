@@ -13,7 +13,8 @@ import { PageContainer } from "../style";
 import { FamiliesContainer } from "./style";
 
 const Families = () => {
-  const { isLoggedIn, isLoading, token } = useContext(AuthContext);
+  const { isLoggedIn, isLoading, token, setCurrentFamily } =
+    useContext(AuthContext);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
   // Access the client
@@ -34,8 +35,6 @@ const Families = () => {
     },
   });
 
-  const handleCloseCreateFamily = () => setIsCreateModalOpen(false);
-
   const handleCreateFamily = async (familyValues) => {
     mutation.mutate(familyValues);
   };
@@ -48,7 +47,11 @@ const Families = () => {
           {familyQuery.status === "loading" && <div>LOADING</div>}
           {familyQuery.status === "success" &&
             familyQuery?.data?.map((family) => (
-              <Link to={`/memories/${family._id}`} key={family._id}>
+              <Link
+                onClick={() => setCurrentFamily(family._id)}
+                to={`/memories/${family._id}`}
+                key={family._id}
+              >
                 <FamilyCard family={family} />
               </Link>
             ))}
@@ -57,7 +60,7 @@ const Families = () => {
       </PageContainer>
       <CreateFamilyModal
         isOpen={isCreateModalOpen}
-        handleClose={handleCloseCreateFamily}
+        handleClose={() => setIsCreateModalOpen(false)}
         onCreate={handleCreateFamily}
       />
     </>
