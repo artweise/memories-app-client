@@ -9,7 +9,7 @@ export const notifySuccess = (message = "Success", icon = "🧸") => {
     pauseOnHover: true,
     draggable: true,
     progress: undefined,
-    theme: "colored",
+    theme: "light",
   });
 };
 
@@ -22,6 +22,6 @@ export const notifyError = (message = "Something went wong", icon = "👀") => {
     pauseOnHover: true,
     draggable: true,
     progress: undefined,
-    theme: "colored",
+    theme: "light",
   });
 };
