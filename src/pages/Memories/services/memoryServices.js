@@ -1,7 +1,6 @@
 import axios, { getHeaders } from "../../../config/axios.config";
 
-export const getAllMemories = async () => {
-  const res = await axios.post("/memories", getHeaders());
+export const getAllMemories = async (familyId) => {
+  const res = await axios.post("/memories", { familyId }, getHeaders());
   if (res.status === 200) return res.data;
-  // else throw new Error("Could not fetch families");
 };
