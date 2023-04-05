@@ -16,6 +16,7 @@ import DatePickerComponent from "../../DatePickerComponent/DatePickerComponent";
 
 const CreateMemoryModal = ({ isOpen, handleClose }) => {
   const [memoryValues, setMemoryValues] = useState({
+    title: "",
     publication: "",
     date: null,
     place: "",
@@ -44,7 +45,9 @@ const CreateMemoryModal = ({ isOpen, handleClose }) => {
             value={memoryValues.title}
             // error={!!titleError}
             // value={familyValues.title}
-            // onChange={(event) => handleTitleChange(event.target.value)}
+            onChange={(event) =>
+              setMemoryValues({ ...memoryValues, title: event.target.value })
+            }
             // // When input looses focus, if title was not filled - set title error
             // onBlur={() =>
             //   familyValues.title === "" && setTitleError("Title is required")
@@ -67,6 +70,9 @@ const CreateMemoryModal = ({ isOpen, handleClose }) => {
             id="memory-place"
             label="Place"
             value={memoryValues.place}
+            onChange={(event) =>
+              setMemoryValues({ ...memoryValues, place: event.target.value })
+            }
           />
         </FormControl>
         <FormControl>
@@ -76,6 +82,12 @@ const CreateMemoryModal = ({ isOpen, handleClose }) => {
             multiline
             rows={3}
             value={memoryValues.publication}
+            onChange={(event) =>
+              setMemoryValues({
+                ...memoryValues,
+                publication: event.target.value,
+              })
+            }
           />
         </FormControl>
       </div>
