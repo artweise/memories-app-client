@@ -1,10 +1,14 @@
 import styled, { css } from "styled-components";
-import { Button } from "@mui/material";
+import LoadingButton from "@mui/lab/LoadingButton";
 
-import { SUCCESS_SHADES } from "../../utilities/globalStyles";
+import { SUCCESS_SHADES, NEUTRAL_SHADES } from "../../utilities/globalStyles";
 
-export const StyledButton = styled(Button)`
-  background: ${SUCCESS_SHADES[600]} !important;
+export const StyledButton = styled(LoadingButton)`
+  ${({ disabled }) => css`
+    background: ${disabled
+      ? `${NEUTRAL_SHADES[300]}`
+      : `${SUCCESS_SHADES[600]} !important`};
+  `}
 `;
 
 export const formButtonStyles = {

@@ -15,7 +15,7 @@ import { helperTextStyle } from "./style";
 
 import ModalComponent from "../Modal";
 
-const CreateFamilyModal = ({ isOpen, handleClose, onCreate }) => {
+const CreateFamilyModal = ({ isOpen, handleClose, onCreate, loading }) => {
   const [familyValues, setFamilyValues] = useState({
     members: [],
     title: "",
@@ -171,7 +171,13 @@ const CreateFamilyModal = ({ isOpen, handleClose, onCreate }) => {
           )}
         </FormControl>
 
-        <Button sx={{ mt: 2 }} type="submit" isFormButton={true}>
+        <Button
+          sx={{ mt: 2 }}
+          type="submit"
+          isFormButton={true}
+          loading={loading}
+          disabled={loading}
+        >
           Create
         </Button>
       </StyledForm>

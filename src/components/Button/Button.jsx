@@ -8,6 +8,8 @@ const Button = ({
   fullWidth = false,
   sx = {},
   onClick = null,
+  loading = false,
+  disabled = false,
 }) => {
   return (
     <StyledButton
@@ -16,6 +18,8 @@ const Button = ({
       type={type}
       fullWidth={fullWidth}
       onClick={onClick}
+      disabled={disabled}
+      loading={loading}
     >
       {children}
     </StyledButton>
