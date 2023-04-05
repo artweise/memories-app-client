@@ -3,18 +3,19 @@ import {
   Autocomplete,
   TextField,
   Chip,
-  Button,
   FormHelperText,
   FormControl,
   Typography,
 } from "@mui/material";
 
+import Button from "../../Button/Button";
 import { validateEmail } from "./utils";
-import { StyledForm, helperTextStyle, formControlStyle } from "./style";
+import { StyledForm, formControlStyle } from "../style";
+import { helperTextStyle } from "./style";
 
 import ModalComponent from "../Modal";
 
-const CreateFamilyModal = ({ isOpen, handleClose, onCreate }) => {
+const CreateFamilyModal = ({ isOpen, handleClose, onCreate, loading }) => {
   const [familyValues, setFamilyValues] = useState({
     members: [],
     title: "",
@@ -95,8 +96,11 @@ const CreateFamilyModal = ({ isOpen, handleClose, onCreate }) => {
   };
 
   return (
-    <ModalComponent isOpen={isOpen} handleClose={() => onClose()}>
-      <Typography variant="h5">Create new family</Typography>
+    <ModalComponent
+      isOpen={isOpen}
+      handleClose={() => onClose()}
+      title="Create new family"
+    >
       <StyledForm onSubmit={(event) => onSubmitForm(event)}>
         <FormControl sx={formControlStyle}>
           <TextField
@@ -167,7 +171,13 @@ const CreateFamilyModal = ({ isOpen, handleClose, onCreate }) => {
           )}
         </FormControl>
 
-        <Button variant="contained" sx={{ mt: 2 }} type="submit">
+        <Button
+          sx={{ mt: 2 }}
+          type="submit"
+          isFormButton={true}
+          loading={loading}
+          disabled={loading}
+        >
           Create
         </Button>
       </StyledForm>
