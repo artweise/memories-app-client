@@ -10,6 +10,7 @@ import {
   FormControlLabel,
   FormGroup,
 } from "@mui/material";
+import { isEmpty } from "lodash";
 
 import Button from "../../Button/Button";
 import ModalComponent from "../Modal";
@@ -17,7 +18,13 @@ import DatePickerComponent from "../../DatePickerComponent/DatePickerComponent";
 import { formatToISO } from "../../../utilities/dateUtilities";
 import { StyledForm, formControlStyle } from "../style";
 
-const CreateMemoryModal = ({ isOpen, onCreate, handleClose }) => {
+const CreateMemoryModal = ({
+  isOpen,
+  onCreate,
+  handleClose,
+  loading,
+  familyId,
+}) => {
   const [memoryValues, setMemoryValues] = useState({
     title: "",
     publication: "",
@@ -40,7 +47,7 @@ const CreateMemoryModal = ({ isOpen, onCreate, handleClose }) => {
 
   const onSubmitForm = (event) => {
     event.preventDefault();
-    let values = { ...memoryValues };
+    let values = { ...memoryValues, familyId };
     let date;
     // if the date was not added  - set todays's date in ISO format
     if (!values.date) {
@@ -131,7 +138,10 @@ const CreateMemoryModal = ({ isOpen, onCreate, handleClose }) => {
           sx={{ mt: 2 }}
           type="submit"
           isFormButton={true}
-          // loading={loading}
+          disabled={
+            loading ||
+            Object.values(memoryValues).every((element) => isEmpty(element))
+          }
         >
           Create
         </Button>
@@ -141,3 +151,6 @@ const CreateMemoryModal = ({ isOpen, onCreate, handleClose }) => {
 };
 
 export default CreateMemoryModal;
+
+// Otkuda vylazyat deti
+// Kfar Saba

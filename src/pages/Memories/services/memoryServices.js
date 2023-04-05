@@ -4,3 +4,8 @@ export const getAllMemories = async (familyId) => {
   const res = await axios.post("/memories", { familyId }, getHeaders());
   if (res.status === 200) return res.data;
 };
+
+export const createMemory = async (data) => {
+  const res = await axios.post("/memory", data, getHeaders());
+  if (res.status === 200) return res.data;
+};
