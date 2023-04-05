@@ -3,7 +3,6 @@ import {
   Autocomplete,
   TextField,
   Chip,
-  Button,
   FormHelperText,
   FormControl,
   Typography,
@@ -11,11 +10,23 @@ import {
   FormControlLabel,
   FormGroup,
 } from "@mui/material";
+import { isEmpty } from "lodash";
+
+import Button from "../../Button/Button";
 import ModalComponent from "../Modal";
 import DatePickerComponent from "../../DatePickerComponent/DatePickerComponent";
+import { formatToISO } from "../../../utilities/dateUtilities";
+import { StyledForm, formControlStyle } from "../style";
 
-const CreateMemoryModal = ({ isOpen, handleClose }) => {
+const CreateMemoryModal = ({
+  isOpen,
+  onCreate,
+  handleClose,
+  loading,
+  familyId,
+}) => {
   const [memoryValues, setMemoryValues] = useState({
+    title: "",
     publication: "",
     date: null,
     place: "",
@@ -23,38 +34,71 @@ const CreateMemoryModal = ({ isOpen, handleClose }) => {
     tags: [],
   });
 
+  const clearMemoryValues = () => {
+    setMemoryValues({
+      title: "",
+      publication: "",
+      date: null,
+      place: "",
+      isPrivate: false,
+      tags: [],
+    });
+  };
+
+  const onSubmitForm = (event) => {
+    event.preventDefault();
+    let values = { ...memoryValues, familyId };
+    let date;
+    // if the date was not added  - set todays's date in ISO format
+    if (!values.date) {
+      const newDate = new Date();
+      date = formatToISO(newDate);
+    } else {
+      date = formatToISO(values.date);
+    }
+    values = { ...values, date };
+
+    // send request
+    onCreate(values);
+    // clear form
+    clearMemoryValues();
+  };
+
   const onClose = () => {
+    clearMemoryValues();
     handleClose();
   };
-  // const setDate = (date) => {
-  //   setMemoryValues({ ...memoryValues, date });
-  // };
 
   return (
-    <ModalComponent isOpen={isOpen} handleClose={() => onClose()}>
-      <Typography variant="h5">Create new memory</Typography>
-      <div>
+    <ModalComponent
+      isOpen={isOpen}
+      handleClose={() => onClose()}
+      title="Create new memory"
+    >
+      <StyledForm onSubmit={(event) => onSubmitForm(event)}>
         <FormGroup>
-          <FormControlLabel control={<Switch />} label="Private" />
+          <FormControlLabel
+            onChange={(event) =>
+              setMemoryValues({
+                ...memoryValues,
+                isPrivate: event.target.value ? true : false,
+              })
+            }
+            control={<Switch />}
+            label="Private"
+          />
         </FormGroup>
-        <FormControl>
+        <FormControl sx={formControlStyle}>
           <TextField
             id="memory-title"
             label="Title"
             value={memoryValues.title}
-            // error={!!titleError}
-            // value={familyValues.title}
-            // onChange={(event) => handleTitleChange(event.target.value)}
-            // // When input looses focus, if title was not filled - set title error
-            // onBlur={() =>
-            //   familyValues.title === "" && setTitleError("Title is required")
-            // }
+            onChange={(event) =>
+              setMemoryValues({ ...memoryValues, title: event.target.value })
+            }
           />
-          {/* {titleError && (
-            <FormHelperText sx={helperTextStyle}>{titleError}</FormHelperText>
-          )} */}
         </FormControl>
-        <FormControl>
+        <FormControl sx={formControlStyle}>
           <DatePickerComponent
             value={memoryValues.date}
             setDate={(date) => {
@@ -62,23 +106,43 @@ const CreateMemoryModal = ({ isOpen, handleClose }) => {
             }}
           />
         </FormControl>
-        <FormControl>
+        <FormControl sx={formControlStyle}>
           <TextField
             id="memory-place"
             label="Place"
             value={memoryValues.place}
+            onChange={(event) =>
+              setMemoryValues({ ...memoryValues, place: event.target.value })
+            }
           />
         </FormControl>
-        <FormControl>
+        <FormControl sx={formControlStyle}>
           <TextField
             id="memory-publication"
             label="Publication"
             multiline
             rows={3}
             value={memoryValues.publication}
+            onChange={(event) =>
+              setMemoryValues({
+                ...memoryValues,
+                publication: event.target.value,
+              })
+            }
           />
         </FormControl>
-      </div>
+        <Button
+          sx={{ mt: 2 }}
+          type="submit"
+          isFormButton={true}
+          disabled={
+            loading ||
+            Object.values(memoryValues).every((element) => isEmpty(element))
+          }
+        >
+          Create
+        </Button>
+      </StyledForm>
     </ModalComponent>
   );
 };
