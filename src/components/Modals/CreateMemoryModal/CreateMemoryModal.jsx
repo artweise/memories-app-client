@@ -68,9 +68,6 @@ const CreateMemoryModal = ({
     clearMemoryValues();
     handleClose();
   };
-  // const setDate = (date) => {
-  //   setMemoryValues({ ...memoryValues, date });
-  // };
 
   return (
     <ModalComponent
@@ -151,6 +148,3 @@ const CreateMemoryModal = ({
 };
 
 export default CreateMemoryModal;
-
-// Otkuda vylazyat deti
-// Kfar Saba
