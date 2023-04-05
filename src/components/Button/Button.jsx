@@ -1,10 +1,10 @@
-import { StyledButton } from "./style";
+import { StyledButton, formButtonStyles } from "./style";
 
 const Button = ({
   children,
   type = "button",
   variant = "contained",
-  isformbutton = false,
+  isFormButton = false,
   fullWidth = false,
   sx = {},
   onClick = null,
@@ -12,9 +12,8 @@ const Button = ({
   return (
     <StyledButton
       variant={variant}
-      sx={sx}
+      sx={isFormButton ? { ...sx, ...formButtonStyles } : { ...sx }}
       type={type}
-      isformbutton={isformbutton}
       fullWidth={fullWidth}
       onClick={onClick}
     >

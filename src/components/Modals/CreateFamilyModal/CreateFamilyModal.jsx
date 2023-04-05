@@ -3,12 +3,12 @@ import {
   Autocomplete,
   TextField,
   Chip,
-  Button,
   FormHelperText,
   FormControl,
   Typography,
 } from "@mui/material";
 
+import Button from "../../Button/Button";
 import { validateEmail } from "./utils";
 import { StyledForm, helperTextStyle, formControlStyle } from "./style";
 
@@ -167,7 +167,7 @@ const CreateFamilyModal = ({ isOpen, handleClose, onCreate }) => {
           )}
         </FormControl>
 
-        <Button variant="contained" sx={{ mt: 2 }} type="submit">
+        <Button sx={{ mt: 2 }} type="submit" isFormButton={true}>
           Create
         </Button>
       </StyledForm>

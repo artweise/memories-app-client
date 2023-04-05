@@ -1,8 +1,8 @@
 import { useState, useContext } from "react";
 import { Link, useParams } from "react-router-dom";
+import { Typography } from "@mui/material";
 
-import { Typography, Button } from "@mui/material";
-
+import Button from "../../components/Button/Button";
 import Navbar from "../../components/Navbar/Navbar";
 import { AuthContext } from "../../context/auth.context";
 
@@ -26,10 +26,7 @@ const Memories = () => {
       <PageContainer>
         <MemoriesHeaderContainer>
           <Typography variant="h5">Test memories</Typography>
-          <Button
-            variant="contained"
-            onClick={() => setIsCreateMemoryModalOpen(true)}
-          >
+          <Button onClick={() => setIsCreateMemoryModalOpen(true)}>
             Add new memory
           </Button>
         </MemoriesHeaderContainer>
