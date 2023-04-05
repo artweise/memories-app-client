@@ -10,7 +10,8 @@ import {
 
 import Button from "../../Button/Button";
 import { validateEmail } from "./utils";
-import { StyledForm, helperTextStyle, formControlStyle } from "./style";
+import { StyledForm, formControlStyle } from "../style";
+import { helperTextStyle } from "./style";
 
 import ModalComponent from "../Modal";
 

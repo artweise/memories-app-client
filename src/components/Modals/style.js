@@ -1,3 +1,5 @@
+import styled from "styled-components";
+
 import { NEUTRAL_SHADES } from "../../utilities/globalStyles";
 
 export const modalHeaderStyles = {
@@ -14,4 +16,13 @@ export const modalStyles = {
   bgcolor: `${NEUTRAL_SHADES.WHITE}`,
   boxShadow: 24,
   p: 4,
+};
+
+export const StyledForm = styled.form`
+  width: 600px;
+`;
+
+export const formControlStyle = {
+  width: "100%",
+  marginTop: "16px",
 };
