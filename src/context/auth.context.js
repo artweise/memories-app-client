@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { urlAuth } from "../utilities/url";
+
+// const urlAuth = process.env.REACT_APP_PROD_SERVER_AUTH;
+
+const urlAuth =
+  process.env.NODE_ENV === "production"
+    ? process.env.REACT_APP_PROD_SERVER_AUTH
+    : process.env.REACT_APP_DEV_SERVER_AUTH;
 
 const AuthContext = React.createContext(null);
 
@@ -9,6 +15,7 @@ function AuthProviderWrapper(props) {
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState(null);
   const [token, setToken] = useState("");
+  const [currentFamily, setCurrentFamily] = useState("");
 
   // Function storeToken expects a JWT token as the argument and then stores it in the localStorage
   const storeToken = (token) => {
@@ -53,27 +60,6 @@ function AuthProviderWrapper(props) {
         removeToken();
         clearState();
       }
-      // We must send the JWT token in the request's "Authorization" Headers
-
-      // axios
-      //   .get(`${urlAuth}/verify`, {
-      //     headers: { Authorization: `Bearer ${storedToken}` },
-      //   })
-      //   .then((response) => {
-      //     // If the server verifies that JWT token is valid
-      //     const user = response.data;
-      //     // Update state variables
-      //     setIsLoggedIn(true);
-      //     setIsLoading(false);
-      //     setUser(user);
-      //   })
-      // .catch((error) => {
-      //   // If the server sends an error response (invalid token)
-      //   // Update state variables
-      //   setIsLoggedIn(false);
-      //   setIsLoading(false);
-      //   setUser(null);
-      // });
     } else {
       // If the token is not available (or is removed)
       clearState();
@@ -97,6 +83,8 @@ function AuthProviderWrapper(props) {
         authenticateUser,
         logOutUser,
         token,
+        currentFamily,
+        setCurrentFamily,
       }}
     >
       {props.children}
