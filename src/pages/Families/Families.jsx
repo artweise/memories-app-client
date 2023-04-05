@@ -16,6 +16,7 @@ const Families = () => {
   const { isLoggedIn, isLoading, token, setCurrentFamily } =
     useContext(AuthContext);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [isCreationLoading, setIsCreationLoading] = useState(false);
 
   // Access the client
   const queryClient = useQueryClient();
@@ -29,9 +30,14 @@ const Families = () => {
       setIsCreateModalOpen(false);
       notifySuccess("Family created successfully", "🏡");
       queryClient.invalidateQueries("families");
+      setIsCreationLoading(false);
     },
     onError: (err) => {
       notifyError(err.response.data.message);
+      setIsCreationLoading(false);
+    },
+    onMutate: () => {
+      setIsCreationLoading(true);
     },
   });
 
@@ -62,6 +68,7 @@ const Families = () => {
         isOpen={isCreateModalOpen}
         handleClose={() => setIsCreateModalOpen(false)}
         onCreate={handleCreateFamily}
+        loading={isCreationLoading}
       />
     </>
   );

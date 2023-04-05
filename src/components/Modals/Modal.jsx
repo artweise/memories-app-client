@@ -1,18 +1,16 @@
-import { Backdrop, Modal, Fade, Box } from "@mui/material";
-import { NEUTRAL_SHADES } from "../../utilities/globalStyles";
+import {
+  Backdrop,
+  Modal,
+  Fade,
+  Box,
+  Typography,
+  IconButton,
+} from "@mui/material";
+import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: "fit-content",
-  bgcolor: `${NEUTRAL_SHADES.WHITE}`,
-  boxShadow: 24,
-  p: 4,
-};
+import { modalHeaderStyles, modalStyles } from "./style";
 
-const ModalComponent = ({ isOpen, handleClose, children }) => {
+const ModalComponent = ({ isOpen, handleClose, children, title = "" }) => {
   return (
     <Modal
       open={isOpen}
@@ -26,7 +24,15 @@ const ModalComponent = ({ isOpen, handleClose, children }) => {
       }}
     >
       <Fade in={isOpen}>
-        <Box sx={style}>{children}</Box>
+        <Box sx={modalStyles}>
+          <Box sx={modalHeaderStyles}>
+            {title && <Typography variant="h5">{title}</Typography>}
+            <IconButton onClick={handleClose} sx={{ marginLeft: "auto" }}>
+              <CloseRoundedIcon />
+            </IconButton>
+          </Box>
+          {children}
+        </Box>
       </Fade>
     </Modal>
   );
