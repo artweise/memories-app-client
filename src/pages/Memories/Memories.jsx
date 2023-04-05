@@ -20,6 +20,10 @@ const Memories = () => {
 
   const params = useParams();
 
+  const hanldeCreateMemory = (memoryValues) => {
+    console.log(memoryValues);
+  };
+
   return (
     <>
       <Navbar />
@@ -42,6 +46,7 @@ const Memories = () => {
       <CreateMemoryModal
         isOpen={isCreateMemoryModalOpen}
         handleClose={() => setIsCreateMemoryModalOpen(false)}
+        onCreate={hanldeCreateMemory}
       />
     </>
   );

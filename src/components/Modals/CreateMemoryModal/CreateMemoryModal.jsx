@@ -14,9 +14,10 @@ import {
 import Button from "../../Button/Button";
 import ModalComponent from "../Modal";
 import DatePickerComponent from "../../DatePickerComponent/DatePickerComponent";
+import { formatToISO } from "../../../utilities/dateUtilities";
 import { StyledForm, formControlStyle } from "../style";
 
-const CreateMemoryModal = ({ isOpen, handleClose }) => {
+const CreateMemoryModal = ({ isOpen, onCreate, handleClose }) => {
   const [memoryValues, setMemoryValues] = useState({
     title: "",
     publication: "",
@@ -26,7 +27,38 @@ const CreateMemoryModal = ({ isOpen, handleClose }) => {
     tags: [],
   });
 
+  const clearMemoryValues = () => {
+    setMemoryValues({
+      title: "",
+      publication: "",
+      date: null,
+      place: "",
+      isPrivate: false,
+      tags: [],
+    });
+  };
+
+  const onSubmitForm = (event) => {
+    event.preventDefault();
+    let values = { ...memoryValues };
+    let date;
+    // if the date was not added  - set todays's date in ISO format
+    if (!values.date) {
+      const newDate = new Date();
+      date = formatToISO(newDate);
+    } else {
+      date = formatToISO(values.date);
+    }
+    values = { ...values, date };
+
+    // send request
+    onCreate(values);
+    // clear form
+    clearMemoryValues();
+  };
+
   const onClose = () => {
+    clearMemoryValues();
     handleClose();
   };
   // const setDate = (date) => {
@@ -39,9 +71,18 @@ const CreateMemoryModal = ({ isOpen, handleClose }) => {
       handleClose={() => onClose()}
       title="Create new memory"
     >
-      <StyledForm>
+      <StyledForm onSubmit={(event) => onSubmitForm(event)}>
         <FormGroup>
-          <FormControlLabel control={<Switch />} label="Private" />
+          <FormControlLabel
+            onChange={(event) =>
+              setMemoryValues({
+                ...memoryValues,
+                isPrivate: event.target.value ? true : false,
+              })
+            }
+            control={<Switch />}
+            label="Private"
+          />
         </FormGroup>
         <FormControl sx={formControlStyle}>
           <TextField
@@ -86,10 +127,15 @@ const CreateMemoryModal = ({ isOpen, handleClose }) => {
             }
           />
         </FormControl>
+        <Button
+          sx={{ mt: 2 }}
+          type="submit"
+          isFormButton={true}
+          // loading={loading}
+        >
+          Create
+        </Button>
       </StyledForm>
-      <Button sx={{ mt: 2 }} type="submit" isFormButton={true}>
-        Create
-      </Button>
     </ModalComponent>
   );
 };

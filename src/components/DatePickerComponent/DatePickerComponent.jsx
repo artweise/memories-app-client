@@ -11,6 +11,7 @@ const DatePickerComponent = ({ date, setDate }) => {
         label="Date"
         onChange={(newValue) => setDate(newValue)}
         value={date}
+        format="dd/MMMM/yyyy"
       />
     </LocalizationProvider>
   );
