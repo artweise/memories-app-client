@@ -33,6 +33,7 @@ const Memories = () => {
   const [isDeletionLoading, setDeleletionLoading] = useState(false);
   const [isUpdatingLoading, setIsUpdatingLoading] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
+  const [currentMemory, setCurrentMemory] = useState(null);
 
   const queryClient = useQueryClient();
 
@@ -88,6 +89,25 @@ const Memories = () => {
 
   const handleEditMemory = (memory) => {
     console.log(memory);
+    setIsEditMode(true);
+    const date = new Date(memory.createdAt);
+    setCurrentMemory({
+      date,
+      title: memory?.title ? memory.title : "",
+      publication: memory?.publication ? memory.publication : "",
+      tags: memory?.tags?.length ? memory.tags : [],
+      place: memory?.place ? memory.place : "",
+      isPrivate: memory?.owner ? true : false,
+    });
+    setIsCreateEditMemoryModalOpen(true);
+  };
+
+  const handleCloseCreateEditModal = () => {
+    if (isEditMode) {
+      setIsEditMode(false);
+      setCurrentMemory(null);
+    }
+    setIsCreateEditMemoryModalOpen(false);
   };
 
   return (
@@ -133,11 +153,12 @@ const Memories = () => {
       </PageContainer>
       <CreateEditMemoryModal
         isOpen={isCreateEditMemoryModalOpen}
-        handleClose={() => setIsCreateEditMemoryModalOpen(false)}
+        handleClose={handleCloseCreateEditModal}
         onCreate={handleCreateMemory}
         loading={isCreationLoading}
         familyId={familyId}
         isEditMode={isEditMode}
+        currentMemory={currentMemory}
       />
     </>
   );
