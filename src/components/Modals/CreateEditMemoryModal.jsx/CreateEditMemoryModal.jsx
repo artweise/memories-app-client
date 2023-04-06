@@ -18,7 +18,7 @@ import DatePickerComponent from "../../DatePickerComponent/DatePickerComponent";
 import { formatToISO } from "../../../utilities/dateUtilities";
 import { StyledForm, formControlStyle } from "../style";
 
-const CreateMemoryModal = ({
+const CreateEditMemoryModal = ({
   isOpen,
   onCreate,
   handleClose,
@@ -194,4 +194,4 @@ const CreateMemoryModal = ({
   );
 };
 
-export default CreateMemoryModal;
+export default CreateEditMemoryModal;

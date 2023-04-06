@@ -9,7 +9,7 @@ import Navbar from "../../components/Navbar/Navbar";
 import { AuthContext } from "../../context/auth.context";
 
 import MemoryCard from "../../components/MemoryCard/MemoryCard";
-import CreateMemoryModal from "../../components/Modals/CreateMemoryModal/CreateMemoryModal";
+import CreateEditMemoryModal from "../../components/Modals/CreateEditMemoryModal.jsx/CreateEditMemoryModal";
 import { notifySuccess, notifyError } from "../../utilities/toastUtilities";
 import {
   getAllMemories,
@@ -27,10 +27,12 @@ import {
 const Memories = () => {
   const { isLoggedIn, isLoading, token, currentFamily, user } =
     useContext(AuthContext);
-  const [isCreateMemoryModalOpen, setIsCreateMemoryModalOpen] = useState(false);
+  const [isCreateEditMemoryModalOpen, setIsCreateEditMemoryModalOpen] =
+    useState(false);
   const [isCreationLoading, setIsCreationLoading] = useState(false);
   const [isDeletionLoading, setDeleletionLoading] = useState(false);
   const [isUpdatingLoading, setIsUpdatingLoading] = useState(false);
+  const [isEditMode, setIsEditMode] = useState(false);
 
   const queryClient = useQueryClient();
 
@@ -46,7 +48,7 @@ const Memories = () => {
   const createMutation = useMutation(createMemory, {
     onSuccess: () => {
       // Invalidate and refetch
-      setIsCreateMemoryModalOpen(false);
+      setIsCreateEditMemoryModalOpen(false);
       notifySuccess("Memory created successfully", "🏡");
       queryClient.invalidateQueries("memories");
       setIsCreationLoading(false);
@@ -84,8 +86,8 @@ const Memories = () => {
     deleteMutation.mutate(memoryId);
   };
 
-  const handleEditMemory = (memoryId) => {
-    console.log(memoryId);
+  const handleEditMemory = (memory) => {
+    console.log(memory);
   };
 
   return (
@@ -107,7 +109,7 @@ const Memories = () => {
               : "No memories yet"}
           </Typography>
           <Button
-            onClick={() => setIsCreateMemoryModalOpen(true)}
+            onClick={() => setIsCreateEditMemoryModalOpen(true)}
             disabled={!memoryQuery.status === "success" || isCreationLoading}
             loading={isCreationLoading}
           >
@@ -118,8 +120,9 @@ const Memories = () => {
         <MemoriesContainer>
           {memoryQuery.status === "loading" && <div>LOADING</div>}
           {memoryQuery.status === "success" &&
-            memoryQuery.data.map((memory) => (
+            memoryQuery.data.map((memory, index) => (
               <MemoryCard
+                key={index}
                 memory={memory}
                 handleDelete={handleDeleteMemory}
                 handleEdit={handleEditMemory}
@@ -128,12 +131,13 @@ const Memories = () => {
             ))}
         </MemoriesContainer>
       </PageContainer>
-      <CreateMemoryModal
-        isOpen={isCreateMemoryModalOpen}
-        handleClose={() => setIsCreateMemoryModalOpen(false)}
+      <CreateEditMemoryModal
+        isOpen={isCreateEditMemoryModalOpen}
+        handleClose={() => setIsCreateEditMemoryModalOpen(false)}
         onCreate={handleCreateMemory}
         loading={isCreationLoading}
         familyId={familyId}
+        isEditMode={isEditMode}
       />
     </>
   );
