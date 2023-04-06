@@ -12,6 +12,7 @@ import MemoryCard from "../../components/MemoryCard/MemoryCard";
 import CreateMemoryModal from "../../components/Modals/CreateMemoryModal/CreateMemoryModal";
 import { notifySuccess, notifyError } from "../../utilities/toastUtilities";
 import { getAllMemories, createMemory } from "./services/memoryServices";
+import { PRIMARY_SHADES } from "../../utilities/globalStyles";
 import { PageContainer } from "../style";
 import {
   MemoriesContainer,
@@ -56,19 +57,33 @@ const Memories = () => {
   const hanldeCreateMemory = async (memoryValues) => {
     mutation.mutate(memoryValues);
   };
-  console.log(memoryQuery.status);
+
+  const handleDeleteMemory = (memoryId) => {
+    console.log(memoryId);
+  };
+
+  const handleEditMemory = (memoryId) => {
+    console.log(memoryId);
+  };
+
   return (
     <>
       <Navbar />
       <PageContainer>
         <GoBackContainer>
-          <IconButton>
-            <ArrowBackRoundedIcon />
-          </IconButton>
-          <Typography>Go back to families</Typography>
+          <Link to="/families">
+            <IconButton>
+              <ArrowBackRoundedIcon />
+            </IconButton>
+            <Typography>Go back to families</Typography>
+          </Link>
         </GoBackContainer>
         <MemoriesHeaderContainer>
-          <Typography variant="h5">
+          <Typography
+            // sx={{ fontWeight: 500 }}
+            variant="h3"
+            color={PRIMARY_SHADES[1000]}
+          >
             {memoryQuery?.data?.length
               ? `${memoryQuery.data[0].family.title} memories`
               : "No memories yet"}
@@ -86,9 +101,11 @@ const Memories = () => {
           {memoryQuery.status === "loading" && <div>LOADING</div>}
           {memoryQuery.status === "success" &&
             memoryQuery.data.map((memory) => (
-              <Link to={`/memories/${memory._id}`} key={memory._id}>
-                <MemoryCard memory={memory} />
-              </Link>
+              <MemoryCard
+                memory={memory}
+                handleDelete={handleDeleteMemory}
+                handleEdit={handleEditMemory}
+              />
             ))}
         </MemoriesContainer>
       </PageContainer>
