@@ -9,3 +9,8 @@ export const createMemory = async (data) => {
   const res = await axios.post("/memory", data, getHeaders());
   if (res.status === 200) return res.data;
 };
+
+export const deleteMemory = async (memoryId) => {
+  const res = await axios.delete(`/memory/${memoryId}`, getHeaders());
+  if (res.status === 200) return res.data;
+};

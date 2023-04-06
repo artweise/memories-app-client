@@ -4,7 +4,7 @@ import { NEUTRAL_SHADES } from "../../utilities/globalStyles";
 export const MemoriesContainer = styled.div`
   display: flex;
   flex-direction: column;
-  margin: 0 auto;
+  margin: 0 auto 48px;
   width: 60vw;
   gap: 24px;
 `;

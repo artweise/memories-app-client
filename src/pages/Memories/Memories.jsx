@@ -11,7 +11,11 @@ import { AuthContext } from "../../context/auth.context";
 import MemoryCard from "../../components/MemoryCard/MemoryCard";
 import CreateMemoryModal from "../../components/Modals/CreateMemoryModal/CreateMemoryModal";
 import { notifySuccess, notifyError } from "../../utilities/toastUtilities";
-import { getAllMemories, createMemory } from "./services/memoryServices";
+import {
+  getAllMemories,
+  createMemory,
+  deleteMemory,
+} from "./services/memoryServices";
 import { PRIMARY_SHADES } from "../../utilities/globalStyles";
 import { PageContainer } from "../style";
 import {
@@ -25,6 +29,8 @@ const Memories = () => {
     useContext(AuthContext);
   const [isCreateMemoryModalOpen, setIsCreateMemoryModalOpen] = useState(false);
   const [isCreationLoading, setIsCreationLoading] = useState(false);
+  const [isDeletionLoading, setDeleletionLoading] = useState(false);
+  const [isUpdatingLoading, setIsUpdatingLoading] = useState(false);
 
   const queryClient = useQueryClient();
 
@@ -37,7 +43,7 @@ const Memories = () => {
     getAllMemories(familyId)
   );
   // Mutations
-  const mutation = useMutation(createMemory, {
+  const createMutation = useMutation(createMemory, {
     onSuccess: () => {
       // Invalidate and refetch
       setIsCreateMemoryModalOpen(false);
@@ -54,12 +60,28 @@ const Memories = () => {
     },
   });
 
-  const hanldeCreateMemory = async (memoryValues) => {
-    mutation.mutate(memoryValues);
+  const deleteMutation = useMutation(deleteMemory, {
+    onSuccess: () => {
+      // Invalidate and refetch
+      notifySuccess("Memory deleted successfully", "🏡");
+      queryClient.invalidateQueries("memories");
+      setDeleletionLoading(false);
+    },
+    onError: (err) => {
+      notifyError(err.response.data.message);
+      setDeleletionLoading(false);
+    },
+    onMutate: () => {
+      setDeleletionLoading(true);
+    },
+  });
+
+  const handleCreateMemory = async (memoryValues) => {
+    createMutation.mutate(memoryValues);
   };
 
   const handleDeleteMemory = (memoryId) => {
-    console.log(memoryId);
+    deleteMutation.mutate(memoryId);
   };
 
   const handleEditMemory = (memoryId) => {
@@ -79,11 +101,7 @@ const Memories = () => {
           </Link>
         </GoBackContainer>
         <MemoriesHeaderContainer>
-          <Typography
-            // sx={{ fontWeight: 500 }}
-            variant="h3"
-            color={PRIMARY_SHADES[1000]}
-          >
+          <Typography variant="h3" color={PRIMARY_SHADES[1000]}>
             {memoryQuery?.data?.length
               ? `${memoryQuery.data[0].family.title} memories`
               : "No memories yet"}
@@ -112,7 +130,7 @@ const Memories = () => {
       <CreateMemoryModal
         isOpen={isCreateMemoryModalOpen}
         handleClose={() => setIsCreateMemoryModalOpen(false)}
-        onCreate={hanldeCreateMemory}
+        onCreate={handleCreateMemory}
         loading={isCreationLoading}
         familyId={familyId}
       />
