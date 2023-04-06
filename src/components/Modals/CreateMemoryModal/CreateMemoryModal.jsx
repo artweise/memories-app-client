@@ -139,6 +139,7 @@ const CreateMemoryModal = ({
             loading ||
             Object.values(memoryValues).every((element) => isEmpty(element))
           }
+          loading={loading}
         >
           Create
         </Button>

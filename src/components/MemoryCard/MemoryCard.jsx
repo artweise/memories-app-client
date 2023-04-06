@@ -1,17 +1,92 @@
-import { Typography } from "@mui/material";
+import { Typography, IconButton, Chip, Tooltip } from "@mui/material";
+import EditRoundedIcon from "@mui/icons-material/EditRounded";
+import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 
 import { formatDateString } from "../../utilities/dateUtilities";
-import { StyledMemoryCard } from "./style";
+import {
+  StyledMemoryCard,
+  TitleAndButtons,
+  ActionButtonsContainer,
+  FlexRow,
+  TagsContainer,
+  iconButtonStyles,
+  boldTextStyles,
+  subTextStyles,
+} from "./style";
+import { NEUTRAL_SHADES } from "../../utilities/globalStyles";
 
-const MemoryCard = ({ memory }) => {
+const MemoryCard = ({ memory, handleDelete, handleEdit }) => {
   return (
     <StyledMemoryCard>
-      {memory?.title && <Typography>{memory.title}</Typography>}
-      {memory?.publication && <Typography>{memory.publication}</Typography>}
-      <Typography>Date: {formatDateString(memory.date)}</Typography>
-      {memory?.place && <Typography>Place: {memory.place}</Typography>}
+      <TitleAndButtons>
+        <Typography variant="h6" sx={boldTextStyles}>
+          {memory?.title ? memory.title : ""}
+        </Typography>
+        <ActionButtonsContainer>
+          <IconButton
+            onClick={() => handleDelete(memory._id)}
+            sx={iconButtonStyles}
+          >
+            <DeleteRoundedIcon color={NEUTRAL_SHADES[700]} />
+          </IconButton>
+          <IconButton
+            onClick={() => handleEdit(memory._id)}
+            sx={iconButtonStyles}
+          >
+            <EditRoundedIcon color={NEUTRAL_SHADES[700]} />
+          </IconButton>
+        </ActionButtonsContainer>
+      </TitleAndButtons>
+
+      <Typography variant="body1" sx={boldTextStyles} gutterBottom>
+        {formatDateString(memory.date)}
+      </Typography>
+
+      {memory?.publication && (
+        <Typography gutterBottom>{memory.publication}</Typography>
+      )}
+
+      {memory?.place && (
+        <FlexRow>
+          <Typography sx={boldTextStyles} gutterBottom>
+            Place:
+          </Typography>
+          <Typography sx={subTextStyles} gutterBottom>
+            {memory.place}
+          </Typography>
+        </FlexRow>
+      )}
+
       {/* if value is array in order to use short syntax with && --> length should be boolean --> !! before. Otherwise it will render 0 */}
-      {!!memory?.tags?.length && <Typography>Tags: {memory.tags}</Typography>}
+      {!!memory?.tags?.length && (
+        <TagsContainer>
+          <Typography sx={{ ...boldTextStyles, alignSelf: "center" }}>
+            Tags:
+          </Typography>
+          {/* show only 4 tags */}
+          <FlexRow>
+            {memory.tags.slice(0, 4).map((tag) => (
+              <Chip label={tag} />
+            ))}
+            {/* if there are more then 4 tags show tooltip with the rest of tags*/}
+            {memory.tags.length > 4 && (
+              <Tooltip
+                title={
+                  <div>
+                    {memory.tags.slice(4).map((tag) => (
+                      <Typography>{tag}</Typography>
+                    ))}
+                  </div>
+                }
+                placement="top"
+              >
+                {/* the amount of the rest tags (length - 4)*/}
+                <Chip label={`+ ${memory.tags.length - 4}`} />
+              </Tooltip>
+            )}
+          </FlexRow>
+        </TagsContainer>
+      )}
     </StyledMemoryCard>
   );
 };
