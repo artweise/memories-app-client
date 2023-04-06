@@ -32,7 +32,7 @@ const MemoryCard = ({ memory, handleDelete, handleEdit, currentUserId }) => {
               <DeleteRoundedIcon color={NEUTRAL_SHADES[700]} />
             </IconButton>
             <IconButton
-              onClick={() => handleEdit(memory._id)}
+              onClick={() => handleEdit(memory)}
               sx={iconButtonStyles}
             >
               <EditRoundedIcon color={NEUTRAL_SHADES[700]} />
@@ -68,16 +68,16 @@ const MemoryCard = ({ memory, handleDelete, handleEdit, currentUserId }) => {
           </Typography>
           {/* show only 4 tags */}
           <FlexRow>
-            {memory.tags.slice(0, 4).map((tag) => (
-              <Chip label={tag} />
+            {memory.tags.slice(0, 4).map((tag, index) => (
+              <Chip key={index} label={tag} />
             ))}
             {/* if there are more then 4 tags show tooltip with the rest of tags*/}
             {memory.tags.length > 4 && (
               <Tooltip
                 title={
                   <div>
-                    {memory.tags.slice(4).map((tag) => (
-                      <Typography>{tag}</Typography>
+                    {memory.tags.slice(4).map((tag, index) => (
+                      <Typography key={index}>{tag}</Typography>
                     ))}
                   </div>
                 }

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Autocomplete,
   TextField,
@@ -18,12 +18,16 @@ import DatePickerComponent from "../../DatePickerComponent/DatePickerComponent";
 import { formatToISO } from "../../../utilities/dateUtilities";
 import { StyledForm, formControlStyle } from "../style";
 
-const CreateMemoryModal = ({
+const CreateEditMemoryModal = ({
   isOpen,
   onCreate,
+  onUpdate,
   handleClose,
   loading,
   familyId,
+  isEditMode,
+  memoryToUpdateValues,
+  memoryToUpdateId,
 }) => {
   const [memoryValues, setMemoryValues] = useState({
     title: "",
@@ -47,7 +51,9 @@ const CreateMemoryModal = ({
 
   const onSubmitForm = (event) => {
     event.preventDefault();
+    // take the state and create copy object, add familyId to the object
     let values = { ...memoryValues, familyId };
+    // initialize date variable
     let date;
     // if the date was not added  - set todays's date in ISO format
     if (!values.date) {
@@ -56,10 +62,12 @@ const CreateMemoryModal = ({
     } else {
       date = formatToISO(values.date);
     }
+    // add the date in the ISO format to the object
     values = { ...values, date };
-
-    // send request
-    onCreate(values);
+    // send request to update/create memory
+    isEditMode
+      ? onUpdate({ memoryId: memoryToUpdateId, data: values }) // one parameter - object with two keys: memoryId and data, where memoryId - memoryId to update, and data - your object
+      : onCreate(values); // one parameter - just the values
     // clear form
     clearMemoryValues();
   };
@@ -86,19 +94,27 @@ const CreateMemoryModal = ({
     }
   };
 
+  // If isEditMode - set the form values to the memoryToUpdateValues received from props
+  useEffect(() => {
+    if (isEditMode && memoryToUpdateValues) {
+      setMemoryValues(memoryToUpdateValues);
+    }
+  }, [isEditMode, memoryToUpdateValues]);
+
   return (
     <ModalComponent
       isOpen={isOpen}
       handleClose={() => onClose()}
-      title="Create new memory"
+      title={isEditMode ? "Edit memory" : "Create new memory"}
     >
       <StyledForm onSubmit={(event) => onSubmitForm(event)}>
         <FormGroup>
           <FormControlLabel
+            checked={memoryValues.isPrivate}
             onChange={(event) =>
               setMemoryValues({
                 ...memoryValues,
-                isPrivate: event.target.value ? true : false,
+                isPrivate: event.target.checked,
               })
             }
             control={<Switch />}
@@ -117,7 +133,7 @@ const CreateMemoryModal = ({
         </FormControl>
         <FormControl sx={formControlStyle}>
           <DatePickerComponent
-            value={memoryValues.date}
+            date={memoryValues.date}
             setDate={(date) => {
               setMemoryValues({ ...memoryValues, date });
             }}
@@ -182,16 +198,15 @@ const CreateMemoryModal = ({
           type="submit"
           isFormButton={true}
           disabled={
-            loading ||
-            Object.values(memoryValues).every((element) => isEmpty(element))
+            loading || (!memoryValues.title && !memoryValues.publication)
           }
           loading={loading}
         >
-          Create
+          {isEditMode ? "Update" : "Create"}
         </Button>
       </StyledForm>
     </ModalComponent>
   );
 };
 
-export default CreateMemoryModal;
+export default CreateEditMemoryModal;
