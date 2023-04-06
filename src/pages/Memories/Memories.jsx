@@ -15,6 +15,7 @@ import {
   getAllMemories,
   createMemory,
   deleteMemory,
+  updateMemory,
 } from "./services/memoryServices";
 import { PRIMARY_SHADES } from "../../utilities/globalStyles";
 import { PageContainer } from "../style";
@@ -30,16 +31,13 @@ const Memories = () => {
   const [isCreateEditMemoryModalOpen, setIsCreateEditMemoryModalOpen] =
     useState(false);
   const [isCreationLoading, setIsCreationLoading] = useState(false);
-  const [isDeletionLoading, setDeleletionLoading] = useState(false);
-  const [isUpdatingLoading, setIsUpdatingLoading] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
-  const [currentMemory, setCurrentMemory] = useState(null);
+  const [memoryToUpdateValues, setMemoryToUpdateValues] = useState(null);
+  const [memoryToUpdateId, setMemoryToUpdateId] = useState(null);
 
   const queryClient = useQueryClient();
 
   const { familyId } = useParams();
-
-  // Access the client
 
   // Queries
   const memoryQuery = useQuery(["memories", familyId], () =>
@@ -66,32 +64,48 @@ const Memories = () => {
   const deleteMutation = useMutation(deleteMemory, {
     onSuccess: () => {
       // Invalidate and refetch
-      notifySuccess("Memory deleted successfully", "🏡");
+      notifySuccess("Memory deleted successfully", "🌚");
       queryClient.invalidateQueries("memories");
-      setDeleletionLoading(false);
     },
     onError: (err) => {
       notifyError(err.response.data.message);
-      setDeleletionLoading(false);
-    },
-    onMutate: () => {
-      setDeleletionLoading(true);
     },
   });
 
+  const updateMutation = useMutation(updateMemory, {
+    onSuccess: () => {
+      // Invalidate and refetch
+      setIsCreateEditMemoryModalOpen(false);
+      notifySuccess("Memory updated successfully", "🍀");
+      queryClient.invalidateQueries("memories");
+    },
+    onError: (err) => {
+      notifyError(err.response.data.message);
+    },
+  });
+
+  // Send request and create memory
   const handleCreateMemory = async (memoryValues) => {
     createMutation.mutate(memoryValues);
   };
 
+  // Send request and delete memory
   const handleDeleteMemory = (memoryId) => {
     deleteMutation.mutate(memoryId);
   };
 
+  // Send request and update memory
+  const handleUpdateMemory = ({ memoryId, data }) => {
+    updateMutation.mutate({ memoryId, data });
+  };
+
+  // When user wants to edit memory
   const handleEditMemory = (memory) => {
-    console.log(memory);
+    // set isEditMode
     setIsEditMode(true);
     const date = new Date(memory.createdAt);
-    setCurrentMemory({
+    // format api data to form data
+    setMemoryToUpdateValues({
       date,
       title: memory?.title ? memory.title : "",
       publication: memory?.publication ? memory.publication : "",
@@ -99,13 +113,17 @@ const Memories = () => {
       place: memory?.place ? memory.place : "",
       isPrivate: memory?.owner ? true : false,
     });
+    setMemoryToUpdateId(memory._id);
+    // open CreateEditModal with current memory formatted data for the state
     setIsCreateEditMemoryModalOpen(true);
   };
 
+  // close CreateEditModal, and clear memoryToUpdate if is in edit mode
   const handleCloseCreateEditModal = () => {
     if (isEditMode) {
       setIsEditMode(false);
-      setCurrentMemory(null);
+      setMemoryToUpdateValues(null);
+      setMemoryToUpdateId(null);
     }
     setIsCreateEditMemoryModalOpen(false);
   };
@@ -155,10 +173,12 @@ const Memories = () => {
         isOpen={isCreateEditMemoryModalOpen}
         handleClose={handleCloseCreateEditModal}
         onCreate={handleCreateMemory}
+        onUpdate={handleUpdateMemory}
         loading={isCreationLoading}
         familyId={familyId}
         isEditMode={isEditMode}
-        currentMemory={currentMemory}
+        memoryToUpdateValues={memoryToUpdateValues}
+        memoryToUpdateId={memoryToUpdateId}
       />
     </>
   );

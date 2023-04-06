@@ -21,11 +21,13 @@ import { StyledForm, formControlStyle } from "../style";
 const CreateEditMemoryModal = ({
   isOpen,
   onCreate,
+  onUpdate,
   handleClose,
   loading,
   familyId,
   isEditMode,
-  currentMemory,
+  memoryToUpdateValues,
+  memoryToUpdateId,
 }) => {
   const [memoryValues, setMemoryValues] = useState({
     title: "",
@@ -49,7 +51,9 @@ const CreateEditMemoryModal = ({
 
   const onSubmitForm = (event) => {
     event.preventDefault();
+    // take the state and create copy object, add familyId to the object
     let values = { ...memoryValues, familyId };
+    // initialize date variable
     let date;
     // if the date was not added  - set todays's date in ISO format
     if (!values.date) {
@@ -58,10 +62,12 @@ const CreateEditMemoryModal = ({
     } else {
       date = formatToISO(values.date);
     }
+    // add the date in the ISO format to the object
     values = { ...values, date };
-
-    // send request
-    onCreate(values);
+    // send request to update/create memory
+    isEditMode
+      ? onUpdate({ memoryId: memoryToUpdateId, data: values }) // one parameter - object with two keys: memoryId and data, where memoryId - memoryId to update, and data - your object
+      : onCreate(values); // one parameter - just the values
     // clear form
     clearMemoryValues();
   };
@@ -88,11 +94,12 @@ const CreateEditMemoryModal = ({
     }
   };
 
+  // If isEditMode - set the form values to the memoryToUpdateValues received from props
   useEffect(() => {
-    if (isEditMode && currentMemory) {
-      setMemoryValues(currentMemory);
+    if (isEditMode && memoryToUpdateValues) {
+      setMemoryValues(memoryToUpdateValues);
     }
-  }, [isEditMode, currentMemory]);
+  }, [isEditMode, memoryToUpdateValues]);
 
   return (
     <ModalComponent
