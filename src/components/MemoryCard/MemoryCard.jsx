@@ -22,7 +22,8 @@ const MemoryCard = ({ memory, handleDelete, handleEdit, currentUserId }) => {
         <Typography variant="h6" sx={boldTextStyles}>
           {memory?.title ? memory.title : ""}
         </Typography>
-        {currentUserId !== memory?.owner && (
+        {((memory.owner && currentUserId === memory.owner) ||
+          !memory?.owner) && (
           <ActionButtonsContainer>
             <IconButton
               onClick={() => handleDelete(memory._id)}

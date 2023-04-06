@@ -69,6 +69,23 @@ const CreateMemoryModal = ({
     handleClose();
   };
 
+  const handleTagsChange = (value, reason) => {
+    // When added new tag - add # before the new tag
+    if (reason === "createOption" || reason === "blur") {
+      const newTag = "#" + value[value.length - 1];
+      setMemoryValues({
+        ...memoryValues,
+        tags: [...memoryValues.tags, newTag],
+      });
+    } else {
+      // When removed one tag or all tags - update the state
+      setMemoryValues({
+        ...memoryValues,
+        tags: value,
+      });
+    }
+  };
+
   return (
     <ModalComponent
       isOpen={isOpen}
@@ -131,6 +148,35 @@ const CreateMemoryModal = ({
             }
           />
         </FormControl>
+        <FormControl sx={formControlStyle}>
+          <Autocomplete
+            autoFocus
+            multiple
+            value={memoryValues.tags}
+            id="new-family-tags"
+            clearOnEscape
+            clearOnBlur
+            freeSolo
+            blurOnSelect
+            autoSelect
+            options={memoryValues.tags}
+            // Adding # and saving new value to the state
+            onChange={(_, value, reason) => handleTagsChange(value, reason)}
+            renderTags={(value, getTagProps) =>
+              value.map((option, index) => (
+                <Chip
+                  variant="outlined"
+                  label={option}
+                  {...getTagProps({ index })}
+                />
+              ))
+            }
+            renderInput={(params) => (
+              <TextField {...params} label="Tags" placeholder="Add some tags" />
+            )}
+          />
+        </FormControl>
+
         <Button
           sx={{ mt: 2 }}
           type="submit"
