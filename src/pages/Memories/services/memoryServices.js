@@ -14,3 +14,10 @@ export const deleteMemory = async (memoryId) => {
   const res = await axios.delete(`/memory/${memoryId}`, getHeaders());
   if (res.status === 200) return res.data;
 };
+
+// one parameter - object
+// with two keys: memoryId and data
+export const updateMemory = async ({ memoryId, data }) => {
+  const res = await axios.put(`/memory/${memoryId}`, data, getHeaders());
+  if (res.status === 200) return res.data;
+};

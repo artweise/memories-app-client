@@ -8,6 +8,5 @@ export const getAllFamilies = async () => {
 
 export const createFamily = async (data) => {
   const res = await axios.post("/family", data, getHeaders());
-  console.log(res);
   if (res.status === 200) return res.data;
 };
