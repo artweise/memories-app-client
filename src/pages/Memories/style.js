@@ -16,3 +16,11 @@ export const MemoriesHeaderContainer = styled.div`
   justify-content: space-between;
   margin-bottom: 40px;
 `;
+
+export const GoBackContainer = styled.div`
+  margin: 0 auto;
+  width: 95vw;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+`;
