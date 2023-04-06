@@ -27,3 +27,18 @@ export const FlexRow = styled.div`
   display: flex;
   gap: 8px;
 `;
+
+export const iconButtonStyles = {
+  svg: { path: { fill: NEUTRAL_SHADES[700] } },
+};
+
+export const boldTextStyles = { fontWeight: 600 };
+
+export const subTextStyles = {
+  fontStyle: "italic",
+  color: `${NEUTRAL_SHADES[1000]}`,
+};
+
+export const TagsContainer = styled(FlexRow)`
+  slign-items: center;
+`;
