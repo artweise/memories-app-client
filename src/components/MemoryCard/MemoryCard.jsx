@@ -15,27 +15,30 @@ import {
 } from "./style";
 import { NEUTRAL_SHADES } from "../../utilities/globalStyles";
 
-const MemoryCard = ({ memory, handleDelete, handleEdit }) => {
+const MemoryCard = ({ memory, handleDelete, handleEdit, currentUserId }) => {
   return (
     <StyledMemoryCard>
       <TitleAndButtons>
         <Typography variant="h6" sx={boldTextStyles}>
           {memory?.title ? memory.title : ""}
         </Typography>
-        <ActionButtonsContainer>
-          <IconButton
-            onClick={() => handleDelete(memory._id)}
-            sx={iconButtonStyles}
-          >
-            <DeleteRoundedIcon color={NEUTRAL_SHADES[700]} />
-          </IconButton>
-          <IconButton
-            onClick={() => handleEdit(memory._id)}
-            sx={iconButtonStyles}
-          >
-            <EditRoundedIcon color={NEUTRAL_SHADES[700]} />
-          </IconButton>
-        </ActionButtonsContainer>
+        {((memory.owner && currentUserId === memory.owner) ||
+          !memory?.owner) && (
+          <ActionButtonsContainer>
+            <IconButton
+              onClick={() => handleDelete(memory._id)}
+              sx={iconButtonStyles}
+            >
+              <DeleteRoundedIcon color={NEUTRAL_SHADES[700]} />
+            </IconButton>
+            <IconButton
+              onClick={() => handleEdit(memory._id)}
+              sx={iconButtonStyles}
+            >
+              <EditRoundedIcon color={NEUTRAL_SHADES[700]} />
+            </IconButton>
+          </ActionButtonsContainer>
+        )}
       </TitleAndButtons>
 
       <Typography variant="body1" sx={boldTextStyles} gutterBottom>

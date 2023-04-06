@@ -25,7 +25,7 @@ import {
 } from "./style";
 
 const Memories = () => {
-  const { isLoggedIn, isLoading, token, currentFamily } =
+  const { isLoggedIn, isLoading, token, currentFamily, user } =
     useContext(AuthContext);
   const [isCreateMemoryModalOpen, setIsCreateMemoryModalOpen] = useState(false);
   const [isCreationLoading, setIsCreationLoading] = useState(false);
@@ -123,6 +123,7 @@ const Memories = () => {
                 memory={memory}
                 handleDelete={handleDeleteMemory}
                 handleEdit={handleEditMemory}
+                currentUserId={user?._id}
               />
             ))}
         </MemoriesContainer>
