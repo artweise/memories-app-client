@@ -5,7 +5,6 @@ import {
   Chip,
   FormHelperText,
   FormControl,
-  Typography,
 } from "@mui/material";
 
 import Button from "../../Button/Button";
