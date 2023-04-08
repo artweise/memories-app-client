@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
+import { QueryCache } from "react-query";
 import axios from "axios";
 
 // const urlAuth = process.env.REACT_APP_PROD_SERVER_AUTH;
@@ -17,6 +18,8 @@ function AuthProviderWrapper(props) {
   const [token, setToken] = useState("");
   const [currentFamily, setCurrentFamily] = useState("");
 
+  const queryCache = new QueryCache();
+
   // Function storeToken expects a JWT token as the argument and then stores it in the localStorage
   const storeToken = (token) => {
     localStorage.setItem("accessToken", token);
@@ -33,6 +36,7 @@ function AuthProviderWrapper(props) {
     setToken("");
     setCurrentFamily("");
     setUser(null);
+    queryCache.clear();
   };
 
   const logOutUser = () => {

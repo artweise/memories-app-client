@@ -63,3 +63,7 @@ export const avatarStyles = {
   height: 24,
   fontSize: "12px",
 };
+
+export const FamilyCardSkeleton = styled.div`
+  height: 22vw;
+`;
