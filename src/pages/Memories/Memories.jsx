@@ -162,15 +162,16 @@ const Memories = () => {
             </MemoriesHeaderContainer>
 
             <MemoriesContainer>
-              {memoryQuery.data.map((memory, index) => (
-                <MemoryCard
-                  key={index}
-                  memory={memory}
-                  handleDelete={handleDeleteMemory}
-                  handleEdit={handleEditMemory}
-                  currentUserId={user?._id}
-                />
-              ))}
+              {!!memoryQuery?.data?.length &&
+                memoryQuery.data.map((memory, index) => (
+                  <MemoryCard
+                    key={index}
+                    memory={memory}
+                    handleDelete={handleDeleteMemory}
+                    handleEdit={handleEditMemory}
+                    currentUserId={user?._id}
+                  />
+                ))}
             </MemoriesContainer>
           </>
         )}
