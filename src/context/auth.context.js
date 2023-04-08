@@ -30,6 +30,8 @@ function AuthProviderWrapper(props) {
   const clearState = () => {
     setIsLoggedIn(false);
     setIsLoading(false);
+    setToken("");
+    setCurrentFamily("");
     setUser(null);
   };
 
