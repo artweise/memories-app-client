@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 
 // const urlAuth = process.env.REACT_APP_PROD_SERVER_AUTH;
@@ -40,7 +40,7 @@ function AuthProviderWrapper(props) {
     clearState();
   };
 
-  const authenticateUser = async () => {
+  const authenticateUser = useCallback(async () => {
     // Get the stored token from the localStorage
     const storedToken = localStorage.getItem("accessToken");
 
@@ -64,14 +64,14 @@ function AuthProviderWrapper(props) {
       // If the token is not available (or is removed)
       clearState();
     }
-  };
+  }, []);
 
   useEffect(() => {
     const asyncAuthenticate = async () => {
       await authenticateUser();
     };
     asyncAuthenticate();
-  }, []);
+  }, [authenticateUser]);
 
   return (
     <AuthContext.Provider
