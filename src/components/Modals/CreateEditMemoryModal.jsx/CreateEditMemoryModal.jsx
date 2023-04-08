@@ -16,6 +16,7 @@ import Button from "../../Button/Button";
 import ModalComponent from "../Modal";
 import DatePickerComponent from "../../DatePickerComponent/DatePickerComponent";
 import { formatToISO } from "../../../utilities/dateUtilities";
+import { uploadFiles } from "../../../pages/Memories/services/memoryServices";
 import { StyledForm, formControlStyle } from "../style";
 
 const CreateEditMemoryModal = ({
@@ -37,6 +38,8 @@ const CreateEditMemoryModal = ({
     isPrivate: false,
     tags: [],
   });
+
+  const [galleryValues, setGalleryValues] = useState([]);
 
   const clearMemoryValues = () => {
     setMemoryValues({
@@ -92,6 +95,25 @@ const CreateEditMemoryModal = ({
         tags: value,
       });
     }
+  };
+
+  const handleUploadFiles = async () => {
+    try {
+      const res = await uploadFiles(galleryValues);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleUploadOneFile = (e) => {
+    const uploadData = new FormData();
+
+    uploadData.append("gallery", e.target.files[0]);
+
+    uploadFiles(uploadData).then((response) => {
+      setGalleryValues(response);
+      console.log(response);
+    });
   };
 
   // If isEditMode - set the form values to the memoryToUpdateValues received from props
@@ -164,6 +186,28 @@ const CreateEditMemoryModal = ({
             }
           />
         </FormControl>
+        <FormControl sx={formControlStyle}>
+          <input
+            type="file"
+            name="filefield"
+            multiple="multiple"
+            // onChange={(event) =>
+            //   setGalleryValues(Array.from(event.target.files))
+            // }
+            onChange={(event) => setGalleryValues(event.target.files[0])}
+          />
+          <div>
+            <Button onClick={handleUploadOneFile}>Upload</Button>
+          </div>
+        </FormControl>
+        {isEditMode && !!memoryValues?.gallery?.length && (
+          <div>
+            {memoryValues.gallery.map((file) => (
+              <img src={file} width="auto" height="50" />
+            ))}
+          </div>
+        )}
+
         <FormControl sx={formControlStyle}>
           <Autocomplete
             autoFocus

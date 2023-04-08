@@ -21,3 +21,11 @@ export const updateMemory = async ({ memoryId, data }) => {
   const res = await axios.put(`/memory/${memoryId}`, data, getHeaders());
   if (res.status === 200) return res.data;
 };
+
+export const uploadFiles = async (files) => {
+  const gallery = { gallery: files };
+  console.log(gallery);
+  const res = await axios.post("/upload", gallery, getHeaders());
+  console.log(res);
+  // if (res.status === 200) return res;
+};
