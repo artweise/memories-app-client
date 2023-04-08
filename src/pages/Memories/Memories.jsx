@@ -9,6 +9,7 @@ import Navbar from "../../components/Navbar/Navbar";
 import { AuthContext } from "../../context/auth.context";
 
 import MemoryCard from "../../components/MemoryCard/MemoryCard";
+import MemoriesPageSkeleton from "../../components/MemoriesPageSkeleton/MemoriesPageSkeleton";
 import CreateEditMemoryModal from "../../components/Modals/CreateEditMemoryModal.jsx/CreateEditMemoryModal";
 import { notifySuccess, notifyError } from "../../utilities/toastUtilities";
 import {
@@ -140,34 +141,39 @@ const Memories = () => {
             <Typography>Go back to families</Typography>
           </Link>
         </GoBackContainer>
-        <MemoriesHeaderContainer>
-          <Typography variant="h3" color={PRIMARY_SHADES[1000]}>
-            {memoryQuery?.data?.length
-              ? `${memoryQuery.data[0].family.title} memories`
-              : "No memories yet"}
-          </Typography>
-          <Button
-            onClick={() => setIsCreateEditMemoryModalOpen(true)}
-            disabled={!memoryQuery.status === "success" || isCreationLoading}
-            loading={isCreationLoading}
-          >
-            Add new memory
-          </Button>
-        </MemoriesHeaderContainer>
+        {memoryQuery.status === "loading" && <MemoriesPageSkeleton />}
+        {memoryQuery.status === "success" && (
+          <>
+            <MemoriesHeaderContainer>
+              <Typography variant="h3" color={PRIMARY_SHADES[1000]}>
+                {memoryQuery?.data?.length
+                  ? `${memoryQuery.data[0].family.title} memories`
+                  : "No memories yet"}
+              </Typography>
+              <Button
+                onClick={() => setIsCreateEditMemoryModalOpen(true)}
+                disabled={
+                  !memoryQuery.status === "success" || isCreationLoading
+                }
+                loading={isCreationLoading}
+              >
+                Add new memory
+              </Button>
+            </MemoriesHeaderContainer>
 
-        <MemoriesContainer>
-          {memoryQuery.status === "loading" && <div>LOADING</div>}
-          {memoryQuery.status === "success" &&
-            memoryQuery.data.map((memory, index) => (
-              <MemoryCard
-                key={index}
-                memory={memory}
-                handleDelete={handleDeleteMemory}
-                handleEdit={handleEditMemory}
-                currentUserId={user?._id}
-              />
-            ))}
-        </MemoriesContainer>
+            <MemoriesContainer>
+              {memoryQuery.data.map((memory, index) => (
+                <MemoryCard
+                  key={index}
+                  memory={memory}
+                  handleDelete={handleDeleteMemory}
+                  handleEdit={handleEditMemory}
+                  currentUserId={user?._id}
+                />
+              ))}
+            </MemoriesContainer>
+          </>
+        )}
       </PageContainer>
       <CreateEditMemoryModal
         isOpen={isCreateEditMemoryModalOpen}

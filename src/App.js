@@ -1,4 +1,4 @@
-import { Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 
 import IsPrivate from "./components/IsPrivate/IsPrivate";
@@ -8,7 +8,6 @@ import FormAuth from "./pages/SignupLogin/SignupLogin";
 import Families from "./pages/Families/Families";
 import "react-toastify/dist/ReactToastify.css";
 import Memories from "./pages/Memories/Memories";
-// import "./App.css";
 
 const App = () => {
   return (
