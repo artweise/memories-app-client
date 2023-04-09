@@ -38,6 +38,7 @@ const CreateEditMemoryModal = ({
     place: "",
     isPrivate: false,
     tags: [],
+    gallery: [],
   });
 
   const [galleryValues, setGalleryValues] = useState([]);
@@ -51,6 +52,7 @@ const CreateEditMemoryModal = ({
       place: "",
       isPrivate: false,
       tags: [],
+      // gallery: [],
     });
   };
 
@@ -110,7 +112,12 @@ const CreateEditMemoryModal = ({
       const res = await uploadFiles(formData);
       // TODO - save to the state for preview
       // TODO - and add to the form for the memory create
-      console.log("res", res);
+      // console.log("res", res.data);
+      const fileUrls = res.data.fileUrls;
+      setMemoryValues({
+        ...memoryValues,
+        gallery: [...memoryValues.gallery, ...fileUrls],
+      });
       setUploadLoading(false);
     } catch (e) {
       console.log(e);
@@ -189,13 +196,13 @@ const CreateEditMemoryModal = ({
           />
         </FormControl>
         {/* NEED TO CHANGE - FOR PREVIEW */}
-        {/* {isEditMode && !!memoryValues?.gallery?.length && (
+        {!!memoryValues?.gallery?.length && (
           <div>
             {memoryValues.gallery.map((file) => (
               <img src={file} width="auto" height="50" />
             ))}
           </div>
-        )} */}
+        )}
         <UploadContainer>
           <input
             type="file"
