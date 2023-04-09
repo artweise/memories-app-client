@@ -1,12 +1,12 @@
-import axios, { getHeaders } from "../../../config/axios.config";
+import axios, { getHeaders } from '../../../config/axios.config';
 
 export const getAllMemories = async (familyId) => {
-  const res = await axios.post("/memories", { familyId }, getHeaders());
+  const res = await axios.post('/memories', { familyId }, getHeaders());
   if (res.status === 200) return res.data;
 };
 
 export const createMemory = async (data) => {
-  const res = await axios.post("/memory", data, getHeaders());
+  const res = await axios.post('/memory', data, getHeaders());
   if (res.status === 200) return res.data;
 };
 
@@ -22,10 +22,6 @@ export const updateMemory = async ({ memoryId, data }) => {
   if (res.status === 200) return res.data;
 };
 
-export const uploadFiles = async (files) => {
-  const gallery = { gallery: files };
-  console.log(gallery);
-  const res = await axios.post("/upload", gallery, getHeaders());
-  console.log(res);
-  // if (res.status === 200) return res;
+export const uploadFiles = async (formData) => {
+  return axios.post('/upload', formData, getHeaders());
 };

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 import {
   Autocomplete,
   TextField,
@@ -9,15 +9,16 @@ import {
   Switch,
   FormControlLabel,
   FormGroup,
-} from "@mui/material";
-import { isEmpty } from "lodash";
+} from '@mui/material';
+import { isEmpty } from 'lodash';
 
-import Button from "../../Button/Button";
-import ModalComponent from "../Modal";
-import DatePickerComponent from "../../DatePickerComponent/DatePickerComponent";
-import { formatToISO } from "../../../utilities/dateUtilities";
-import { uploadFiles } from "../../../pages/Memories/services/memoryServices";
-import { StyledForm, formControlStyle } from "../style";
+import Button from '../../Button/Button';
+import ModalComponent from '../Modal';
+import DatePickerComponent from '../../DatePickerComponent/DatePickerComponent';
+import { formatToISO } from '../../../utilities/dateUtilities';
+import { uploadFiles } from '../../../pages/Memories/services/memoryServices';
+import { StyledForm, formControlStyle } from '../style';
+import { UploadContainer } from './style';
 
 const CreateEditMemoryModal = ({
   isOpen,
@@ -31,22 +32,23 @@ const CreateEditMemoryModal = ({
   memoryToUpdateId,
 }) => {
   const [memoryValues, setMemoryValues] = useState({
-    title: "",
-    publication: "",
+    title: '',
+    publication: '',
     date: null,
-    place: "",
+    place: '',
     isPrivate: false,
     tags: [],
   });
 
   const [galleryValues, setGalleryValues] = useState([]);
+  const [uploadLoading, setUploadLoading] = useState(false);
 
   const clearMemoryValues = () => {
     setMemoryValues({
-      title: "",
-      publication: "",
+      title: '',
+      publication: '',
       date: null,
-      place: "",
+      place: '',
       isPrivate: false,
       tags: [],
     });
@@ -82,8 +84,8 @@ const CreateEditMemoryModal = ({
 
   const handleTagsChange = (value, reason) => {
     // When added new tag - add # before the new tag
-    if (reason === "createOption" || reason === "blur") {
-      const newTag = "#" + value[value.length - 1];
+    if (reason === 'createOption' || reason === 'blur') {
+      const newTag = '#' + value[value.length - 1];
       setMemoryValues({
         ...memoryValues,
         tags: [...memoryValues.tags, newTag],
@@ -98,22 +100,22 @@ const CreateEditMemoryModal = ({
   };
 
   const handleUploadFiles = async () => {
-    try {
-      const res = await uploadFiles(galleryValues);
-    } catch (error) {
-      console.log(error);
+    const formData = new FormData();
+
+    for (let i = 0; i < galleryValues.length; i++) {
+      formData.append('gallery', galleryValues[i]);
     }
-  };
-
-  const handleUploadOneFile = (e) => {
-    const uploadData = new FormData();
-
-    uploadData.append("gallery", e.target.files[0]);
-
-    uploadFiles(uploadData).then((response) => {
-      setGalleryValues(response);
-      console.log(response);
-    });
+    setUploadLoading(true);
+    try {
+      const res = await uploadFiles(formData);
+      // TODO - save to the state for preview
+      // TODO - and add to the form for the memory create
+      console.log('res', res);
+      setUploadLoading(false);
+    } catch (e) {
+      console.log(e);
+      setUploadLoading(false);
+    }
   };
 
   // If isEditMode - set the form values to the memoryToUpdateValues received from props
@@ -127,7 +129,7 @@ const CreateEditMemoryModal = ({
     <ModalComponent
       isOpen={isOpen}
       handleClose={() => onClose()}
-      title={isEditMode ? "Edit memory" : "Create new memory"}
+      title={isEditMode ? 'Edit memory' : 'Create new memory'}
     >
       <StyledForm onSubmit={(event) => onSubmitForm(event)}>
         <FormGroup>
@@ -186,28 +188,34 @@ const CreateEditMemoryModal = ({
             }
           />
         </FormControl>
-        <FormControl sx={formControlStyle}>
-          <input
-            type="file"
-            name="filefield"
-            multiple="multiple"
-            // onChange={(event) =>
-            //   setGalleryValues(Array.from(event.target.files))
-            // }
-            onChange={(event) => setGalleryValues(event.target.files[0])}
-          />
-          <div>
-            <Button onClick={handleUploadOneFile}>Upload</Button>
-          </div>
-        </FormControl>
-        {isEditMode && !!memoryValues?.gallery?.length && (
+        {/* NEED TO CHANGE - FOR PREVIEW */}
+        {/* {isEditMode && !!memoryValues?.gallery?.length && (
           <div>
             {memoryValues.gallery.map((file) => (
               <img src={file} width="auto" height="50" />
             ))}
           </div>
-        )}
-
+        )} */}
+        <UploadContainer>
+          <input
+            type="file"
+            name="gallery"
+            multiple="multiple"
+            accept=".jpg, .jpeg, .png"
+            onChange={(event) => {
+              setGalleryValues(Array.from(event.target.files));
+            }}
+          />
+          <div>
+            <Button
+              disabled={uploadLoading || isEmpty(galleryValues)}
+              onClick={handleUploadFiles}
+              loading={uploadLoading}
+            >
+              Upload
+            </Button>
+          </div>
+        </UploadContainer>
         <FormControl sx={formControlStyle}>
           <Autocomplete
             autoFocus
@@ -242,11 +250,13 @@ const CreateEditMemoryModal = ({
           type="submit"
           isFormButton={true}
           disabled={
-            loading || (!memoryValues.title && !memoryValues.publication)
+            loading ||
+            uploadLoading ||
+            (!memoryValues.title && !memoryValues.publication)
           }
           loading={loading}
         >
-          {isEditMode ? "Update" : "Create"}
+          {isEditMode ? 'Update' : 'Create'}
         </Button>
       </StyledForm>
     </ModalComponent>
