@@ -204,9 +204,6 @@ const CreateEditMemoryModal = ({
             label="Publication"
             multiline
             rows={3}
-            // TODO show only peace of text...
-            // loadMoreFunction
-            // onClick={handleClickLoadMore}
             value={memoryValues.publication}
             onChange={(event) =>
               setMemoryValues({
