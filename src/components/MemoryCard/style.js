@@ -40,5 +40,9 @@ export const subTextStyles = {
 };
 
 export const TagsContainer = styled(FlexRow)`
-  slign-items: center;
+  align-items: center;
+`;
+export const FilesContainer = styled(FlexRow)`
+  align-items: end;
+  flex-wrap: wrap;
 `;
