@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import { useQuery, useQueryClient, useMutation } from "react-query";
 
@@ -11,6 +11,7 @@ import { getAllFamilies, createFamily } from "./services/familyServices";
 import { notifySuccess, notifyError } from "../../utilities/toastUtilities";
 import { PageContainer } from "../style";
 import { FamiliesContainer } from "./style";
+import FamiliesSkeleton from "../../components/FamilyCard/FamiliesSkeleton";
 
 const Families = () => {
   const { isLoggedIn, isLoading, token, setCurrentFamily } =
@@ -50,18 +51,24 @@ const Families = () => {
       <Navbar />
       <PageContainer>
         <FamiliesContainer>
-          {familyQuery.status === "loading" && <div>LOADING</div>}
-          {familyQuery.status === "success" &&
-            familyQuery?.data?.map((family) => (
-              <Link
-                onClick={() => setCurrentFamily(family._id)}
-                to={`/memories/${family._id}`}
-                key={family._id}
-              >
-                <FamilyCard family={family} />
-              </Link>
+          {familyQuery.status === "loading" &&
+            [...Array(2).keys()].map((el, index) => (
+              <FamiliesSkeleton key={index} />
             ))}
-          <FamilyCardEmpty onClick={() => setIsCreateModalOpen(true)} />
+          {familyQuery.status === "success" && (
+            <>
+              {familyQuery?.data?.map((family) => (
+                <Link
+                  onClick={() => setCurrentFamily(family._id)}
+                  to={`/memories/${family._id}`}
+                  key={family._id}
+                >
+                  <FamilyCard family={family} />
+                </Link>
+              ))}
+              <FamilyCardEmpty onClick={() => setIsCreateModalOpen(true)} />
+            </>
+          )}
         </FamiliesContainer>
       </PageContainer>
       <CreateFamilyModal
