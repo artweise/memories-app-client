@@ -24,10 +24,14 @@ const MemoryCard = ({ memory, handleDelete, handleEdit, currentUserId }) => {
   // a state to hold the number of characters to show initially in publication field
   const [publicationToShow, setPublicationToShow] = useState(800);
   const [filesToShow, setFilesToShow] = useState(8);
+  const [showAllFiles, setShowAllFiles] = useState(false);
 
+  // handleFilesToShow function updates the showAllFiles state to be false
+  // when the number of files to show is equal to the length of the gallery array
   const handleFilesToShow = () => {
-    setFilesToShow(true);
+    setShowAllFiles(filesToShow === memory.gallery.length ? false : true);
   };
+
   return (
     <StyledMemoryCard>
       <TitleAndButtons>
@@ -60,6 +64,7 @@ const MemoryCard = ({ memory, handleDelete, handleEdit, currentUserId }) => {
       <Publication>
         {memory?.publication && (
           <Typography gutterBottom>
+            {/* if memory.publication.length <= 800 */}
             {publicationToShow >= memory.publication.length
               ? memory.publication
               : memory.publication.slice(0, publicationToShow) + "..."}
@@ -91,31 +96,24 @@ const MemoryCard = ({ memory, handleDelete, handleEdit, currentUserId }) => {
 
       {!!memory?.gallery?.length && (
         <FilesContainer>
-          {memory.gallery.slice(0, filesToShow).map((file, index) => (
-            <FlexRow key={index}>
-              <img src={file} width="auto" height="200" alt="preview" />
-            </FlexRow>
-          ))}
+          {/* 'if showAllFiles is true' ? memory.gallery.length 'if showAllFiles is false': filesToShow */}
+          {memory.gallery
+            .slice(0, showAllFiles ? memory.gallery.length : filesToShow)
+            .map((file, index) => (
+              <FlexRow key={index}>
+                <img src={file} width="auto" height="200" alt="preview" />
+              </FlexRow>
+            ))}
 
-          {/* if there are more then 8 photos/videos show tooltip with the rest of files*/}
-          {memory.gallery.length > 8 && (
-            <Tooltip
-              disableHoverListener
-              title={
-                <div>
-                  {memory.gallery.slice(filesToShow).map((file, index) => (
-                    <Typography key={index}>{file}</Typography>
-                  ))}
-                </div>
-              }
-              onClick={() => setFilesToShow(memory.gallery.length)}
-            >
-              {/* the amount of the rest files (length - 8)*/}
-              <Chip
-                label={`+ ${memory.gallery.length - filesToShow}`}
-                clickable
-              />
-            </Tooltip>
+          {/* the condition in the FilesContainer div checks if there are more than 
+          filesToShow files AND showAllFiles is false. If both conditions are true, 
+          show the Chip with the number of remaining files */}
+          {memory?.gallery?.length > filesToShow && !showAllFiles && (
+            <Chip
+              label={`+ ${memory.gallery.length - filesToShow}`}
+              clickable
+              onClick={handleFilesToShow}
+            />
           )}
         </FilesContainer>
       )}
