@@ -1,3 +1,4 @@
+import { useState, useContext } from "react";
 import {
   AppBar,
   Toolbar,
@@ -11,33 +12,25 @@ import {
   Tooltip,
   MenuItem,
 } from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
-import AdbIcon from "@mui/icons-material/Adb";
-import { useState, useContext } from "react";
+import Diversity1RoundedIcon from "@mui/icons-material/Diversity1Rounded";
 import { useNavigate } from "react-router-dom";
+
 import { AuthContext } from "../../context/auth.context";
 import { PRIMARY_SHADES } from "../../utilities/globalStyles";
+import { titleStyles } from "./style";
 
-// const pages = ["Products", "Pricing", "Blog"];
-const settings = ["Profile", "Families"];
+const settings = [{ text: "My families", link: "/families" }];
 
 const Navbar = () => {
-  const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
 
   // Subscribe to the AuthContext to gain access to
   // the values from AuthContext.Provider `value` prop
   const { isLoggedIn, user, logOutUser } = useContext(AuthContext);
   const navigate = useNavigate();
-  const handleOpenNavMenu = (event) => {
-    setAnchorElNav(event.currentTarget);
-  };
+
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
-  };
-
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
   };
 
   const handleCloseUserMenu = () => {
@@ -48,52 +41,39 @@ const Navbar = () => {
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           {/* LOGO */}
-          <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
+          <Diversity1RoundedIcon
+            sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
+          />
           {/* APPLICATION TITLE */}
           <Typography
             variant="h6"
             noWrap
             component="a"
             href="/"
-            sx={{
-              mr: 2,
-              display: { xs: "none", md: "flex" },
-              fontFamily: "monospace",
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "inherit",
-              textDecoration: "none",
-            }}
+            sx={titleStyles}
           >
             FamilyMemories
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             {/* LOGO */}
-            <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
+            <Diversity1RoundedIcon
+              sx={{ display: { xs: "flex", md: "none" }, mr: 1 }}
+            />
           </Box>
 
-          {!isLoggedIn && (
-            <>
-              <Button color="inherit" onClick={() => navigate("/signup")}>
-                Sign Up
-              </Button>
-            </>
-          )}
-
-          {isLoggedIn && (
-            <>
+          <Box sx={{ flexGrow: 0, marginLeft: "auto" }}>
+            {isLoggedIn ? (
               <Box sx={{ flexGrow: 0 }}>
                 <Tooltip title="Open settings">
                   <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                    <Avatar
-                      alt="Remy Sharp"
-                      src="/static/images/avatar/2.jpg"
-                    />
+                    <Avatar>
+                      {user && user.username.slice(0, 1).toUpperCase()}
+                    </Avatar>
                   </IconButton>
                 </Tooltip>
                 <Menu
-                  sx={{ mt: "45px" }}
+                  sx={{ mt: "45px", mr: "10px" }}
                   id="menu-appbar"
                   anchorEl={anchorElUser}
                   anchorOrigin={{
@@ -108,26 +88,40 @@ const Navbar = () => {
                   open={Boolean(anchorElUser)}
                   onClose={handleCloseUserMenu}
                 >
-                  {settings.map((setting) => (
-                    <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                      <Typography textAlign="center">{setting}</Typography>
+                  {settings.map((setting, index) => (
+                    <MenuItem
+                      key={index}
+                      onClick={
+                        // if link was provided - navigate, else do not do anything
+                        setting?.link
+                          ? () => navigate(`${setting.link}`)
+                          : undefined
+                      }
+                    >
+                      <Typography sx={{ paddingRight: "16px" }}>
+                        {setting.text}
+                      </Typography>
                     </MenuItem>
                   ))}
-                  <Typography textAlign="center">
-                    <Button
-                      onClick={() => {
-                        logOutUser();
-                        navigate("/login");
-                      }}
-                    >
-                      Logout
-                    </Button>
-                    {user && user.username}
-                  </Typography>
+                  <MenuItem
+                    sx={{ height: "32px" }}
+                    onClick={() => {
+                      logOutUser();
+                      navigate("/login");
+                    }}
+                  >
+                    <Typography color={PRIMARY_SHADES[700]} variant="body2">
+                      Log out
+                    </Typography>
+                  </MenuItem>
                 </Menu>
               </Box>
-            </>
-          )}
+            ) : (
+              <Button color="inherit" onClick={() => navigate("/login")}>
+                Log in
+              </Button>
+            )}
+          </Box>
         </Toolbar>
       </Container>
     </AppBar>

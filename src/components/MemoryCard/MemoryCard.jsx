@@ -9,6 +9,7 @@ import {
   ActionButtonsContainer,
   FlexRow,
   TagsContainer,
+  FilesContainer,
   iconButtonStyles,
   boldTextStyles,
   subTextStyles,
@@ -58,6 +59,37 @@ const MemoryCard = ({ memory, handleDelete, handleEdit, currentUserId }) => {
             {memory.place}
           </Typography>
         </FlexRow>
+      )}
+
+      {!!memory?.gallery?.length && (
+        <FilesContainer>
+          {memory.gallery.slice(0, 8).map((file, index) => (
+            <FlexRow key={index}>
+              <img src={file} width="auto" height="200" alt="preview" />
+            </FlexRow>
+          ))}
+          {/* if there are more then 8 photos/videos show tooltip with the rest of files*/}
+          {memory.gallery.length > 8 && (
+            <Tooltip
+              disableHoverListener
+              title={
+                <div>
+                  {memory.gallery.slice(8).map((file, index) => (
+                    <Typography key={index}>{file}</Typography>
+                  ))}
+                </div>
+              }
+            >
+              {/* the amount of the rest files (length - 8)*/}
+              <Chip
+                label={`+ ${memory.gallery.length - 8}`}
+                // TODO loadMoreFunction
+                // onClick={handleClickLoadMore}
+                clickable
+              />
+            </Tooltip>
+          )}
+        </FilesContainer>
       )}
 
       {/* if value is array in order to use short syntax with && --> length should be boolean --> !! before. Otherwise it will render 0 */}

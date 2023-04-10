@@ -1,30 +1,25 @@
 import { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
 
 import {
-  Button,
-  Box,
   TextField,
   IconButton,
   InputLabel,
   OutlinedInput,
   InputAdornment,
   FormControl,
+  Typography,
 } from "@mui/material";
 import { AuthContext } from "../../context/auth.context";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Navbar from "../../components/Navbar/Navbar";
+import Button from "../../components/Button/Button";
+import { signup, login } from "./services/authServices";
 import { notifySuccess, notifyError } from "../../utilities/toastUtilities";
-import "./style.css";
-
-const urlAuth =
-  process.env.NODE_ENV === "production"
-    ? process.env.REACT_APP_PROD_SERVER_AUTH
-    : process.env.REACT_APP_DEV_SERVER_AUTH;
-
-// const urlAuth = process.env.REACT_APP_PROD_SERVER_AUTH;
+import { PageContainer } from "../style";
+import { Container, StyledForm, FlexRow } from "./style";
+import { PRIMARY_SHADES } from "../../utilities/globalStyles";
 
 const FormAuth = ({ title }) => {
   const [values, setValues] = useState({
@@ -34,6 +29,7 @@ const FormAuth = ({ title }) => {
     showPassword: false,
     msg: "",
   });
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
   const { storeToken, authenticateUser } = useContext(AuthContext);
@@ -47,9 +43,7 @@ const FormAuth = ({ title }) => {
       showPassword: !values.showPassword,
     });
   };
-  const handleSubmit = (event) => {
-    event.preventDefault();
-  };
+
   const handleNavigation = () => {
     setValues({
       ...values,
@@ -59,14 +53,28 @@ const FormAuth = ({ title }) => {
       msg: "",
     });
   };
-  const handleAction = async (action) => {
+
+  const showErrorMsg = (msg) => {
+    setValues({
+      ...values,
+      username: "",
+      email: "",
+      password: "",
+      msg,
+    });
+    notifyError(msg);
+  };
+  const handleAction = async (event, action) => {
+    event.preventDefault();
     if (action === "Sign Up") {
+      const data = {
+        username: values.username,
+        email: values.email,
+        password: values.password,
+      };
+      setLoading(true);
       try {
-        let response = await axios.post(`${urlAuth}/signup`, {
-          username: values.username,
-          email: values.email,
-          password: values.password,
-        });
+        const response = await signup(data);
         setValues({
           ...values,
           username: "",
@@ -74,25 +82,21 @@ const FormAuth = ({ title }) => {
           password: "",
           msg: response.data.message,
         });
+        setLoading(false);
         notifySuccess("Signed up successfully. Please log in");
-
         navigate("/login");
       } catch (e) {
-        setValues({
-          ...values,
-          msg: e.response.data.message,
-          username: "",
-          email: "",
-          password: "",
-        });
-        notifyError(e.response.data.message);
+        setLoading(false);
+        showErrorMsg(e.response.data.message);
       }
     } else if (action === "Log In") {
       try {
-        const response = await axios.post(`${urlAuth}/login`, {
+        const data = {
           email: values.email,
           password: values.password,
-        });
+        };
+        setLoading(true);
+        const response = await login(data);
         setValues({
           ...values,
           email: "",
@@ -101,18 +105,14 @@ const FormAuth = ({ title }) => {
         // Save the token in the localStorage.
         storeToken(response.data.accessToken);
         // Verify the token by sending a request
-        // to the server's JWT validation endpoint.
+        // to the server"s JWT validation endpoint.
         await authenticateUser();
         notifySuccess("Logged in successfully.");
+        setLoading(false);
         navigate("/families");
       } catch (e) {
-        setValues({
-          ...values,
-          email: "",
-          password: "",
-          msg: e.response.data.message,
-        });
-        notifyError(e.response.data.message);
+        setLoading(false);
+        showErrorMsg(e.response.data.message);
       }
     }
   };
@@ -120,10 +120,13 @@ const FormAuth = ({ title }) => {
   return (
     <>
       <Navbar />
-      <main className="page">
-        <div className="container">
+      <PageContainer>
+        <Container>
           <h2>{title}</h2>
-          <Box className="form" component="form" autoComplete="off">
+          <StyledForm
+            autoComplete="off"
+            onSubmit={(event) => handleAction(event, title)}
+          >
             {title === "Sign Up" && (
               <TextField
                 required
@@ -159,7 +162,7 @@ const FormAuth = ({ title }) => {
                     <IconButton
                       aria-label="toggle password visibility"
                       onClick={handleClickShowPassword}
-                      onSubmit={handleSubmit}
+                      onSubmit={(event) => event.preventDefault()}
                       edge="end"
                     >
                       {values.showPassword ? <VisibilityOff /> : <Visibility />}
@@ -170,26 +173,38 @@ const FormAuth = ({ title }) => {
               />
             </FormControl>
             <Button
-              className="form-button"
-              onClick={() => handleAction(title)}
-              variant="contained"
-              sx={{ m: 1 }}
+              type="submit"
+              sx={{ mt: 3, mb: 1 }}
+              loading={loading}
+              disabled={
+                loading ||
+                (title === "Sign Up" &&
+                  !values.username &&
+                  !values.email &&
+                  !values.password) ||
+                (title === "Log In" && !values.email) ||
+                !values.password
+              }
             >
-              {title === "Sign Up" ? <>Sign Up</> : <>Log In</>}
+              {title === "Sign Up" ? "Sign Up" : "Log In"}
             </Button>
             <div style={{ marginTop: "0.5rem" }} onClick={handleNavigation}>
               {title === "Sign Up" ? (
-                <Link to="/login">Log In</Link>
+                <Link to="/login">
+                  <Typography color={PRIMARY_SHADES[700]}>Log In</Typography>
+                </Link>
               ) : (
-                <>
-                  <span>No account? </span>
-                  <Link to="/signup">Sign Up</Link>
-                </>
+                <FlexRow>
+                  <Typography>No account? </Typography>
+                  <Link to="/signup">
+                    <Typography color={PRIMARY_SHADES[700]}>Sign Up</Typography>
+                  </Link>
+                </FlexRow>
               )}
             </div>
-          </Box>
-        </div>
-      </main>
+          </StyledForm>
+        </Container>
+      </PageContainer>
     </>
   );
 };

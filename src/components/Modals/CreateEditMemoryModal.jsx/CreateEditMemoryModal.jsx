@@ -10,13 +10,22 @@ import {
   FormControlLabel,
   FormGroup,
 } from "@mui/material";
+import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import { isEmpty } from "lodash";
 
 import Button from "../../Button/Button";
 import ModalComponent from "../Modal";
 import DatePickerComponent from "../../DatePickerComponent/DatePickerComponent";
 import { formatToISO } from "../../../utilities/dateUtilities";
+import { uploadFiles } from "../../../pages/Memories/services/memoryServices";
+import { notifySuccess, notifyError } from "../../../utilities/toastUtilities";
 import { StyledForm, formControlStyle } from "../style";
+import {
+  UploadContainer,
+  UploadedData,
+  Files,
+  CloseRoundedIconStyles,
+} from "./style";
 
 const CreateEditMemoryModal = ({
   isOpen,
@@ -36,7 +45,12 @@ const CreateEditMemoryModal = ({
     place: "",
     isPrivate: false,
     tags: [],
+    gallery: [],
   });
+
+  const [galleryValues, setGalleryValues] = useState([]);
+  const [imagePreviews, setImagePreviews] = useState([]);
+  const [uploadLoading, setUploadLoading] = useState(false);
 
   const clearMemoryValues = () => {
     setMemoryValues({
@@ -46,7 +60,13 @@ const CreateEditMemoryModal = ({
       place: "",
       isPrivate: false,
       tags: [],
+      gallery: [],
     });
+  };
+
+  const clearGalleryValues = () => {
+    setGalleryValues([]);
+    setImagePreviews([]);
   };
 
   const onSubmitForm = (event) => {
@@ -91,6 +111,35 @@ const CreateEditMemoryModal = ({
         ...memoryValues,
         tags: value,
       });
+    }
+  };
+
+  const handleUploadFiles = async () => {
+    const formData = new FormData();
+
+    if (galleryValues.length > 10) {
+      notifyError("You are only allowed to upload a maximum of 10 files", "🔖");
+      return;
+    }
+
+    for (let i = 0; i < galleryValues.length; i++) {
+      formData.append("gallery", galleryValues[i]);
+    }
+    setUploadLoading(true);
+    try {
+      const res = await uploadFiles(formData);
+      const fileUrls = res.data.fileUrls;
+      setImagePreviews([...imagePreviews, ...fileUrls]);
+      // Add the file URLs to the memory values
+      setMemoryValues({
+        ...memoryValues,
+        gallery: [...memoryValues.gallery, ...fileUrls],
+      });
+      setUploadLoading(false);
+      clearGalleryValues(); // clear input field values
+    } catch (e) {
+      console.log(e);
+      setUploadLoading(false);
     }
   };
 
@@ -155,6 +204,9 @@ const CreateEditMemoryModal = ({
             label="Publication"
             multiline
             rows={3}
+            // TODO show only peace of text...
+            // loadMoreFunction
+            // onClick={handleClickLoadMore}
             value={memoryValues.publication}
             onChange={(event) =>
               setMemoryValues({
@@ -164,6 +216,56 @@ const CreateEditMemoryModal = ({
             }
           />
         </FormControl>
+
+        <div>
+          {!!memoryValues?.gallery?.length && (
+            <UploadedData>
+              {memoryValues.gallery.map((file, index) => (
+                <Files key={index}>
+                  <img src={file} width="auto" height="100" alt="preview" />
+                  <CloseRoundedIcon
+                    sx={CloseRoundedIconStyles}
+                    fontSize="small"
+                    onClick={() => {
+                      const newGallery = [...memoryValues.gallery];
+                      newGallery.splice(index, 1);
+                      setMemoryValues({
+                        ...memoryValues,
+                        gallery: newGallery,
+                      });
+                      const newPreviews = [...imagePreviews];
+                      newPreviews.splice(index, 1);
+                      setImagePreviews(newPreviews);
+                    }}
+                  />
+                </Files>
+              ))}
+            </UploadedData>
+          )}
+        </div>
+
+        <UploadContainer>
+          <input
+            type="file"
+            name="gallery"
+            multiple="multiple"
+            // accept=".jpg, .jpeg, .png"
+            accept="image/*,audio/*,video/*,.pdf"
+            onChange={(event) => {
+              setGalleryValues(Array.from(event.target.files));
+            }}
+          />
+          <div>
+            <Button
+              disabled={uploadLoading || isEmpty(galleryValues)}
+              onClick={handleUploadFiles}
+              loading={uploadLoading}
+            >
+              Upload
+            </Button>
+          </div>
+        </UploadContainer>
+        <Typography variant="subtitle2">maximum 10 files at once</Typography>
         <FormControl sx={formControlStyle}>
           <Autocomplete
             autoFocus
@@ -198,7 +300,9 @@ const CreateEditMemoryModal = ({
           type="submit"
           isFormButton={true}
           disabled={
-            loading || (!memoryValues.title && !memoryValues.publication)
+            loading ||
+            uploadLoading ||
+            (!memoryValues.title && !memoryValues.publication)
           }
           loading={loading}
         >
