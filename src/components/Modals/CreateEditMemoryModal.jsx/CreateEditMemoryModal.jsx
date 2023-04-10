@@ -17,7 +17,7 @@ import Button from "../../Button/Button";
 import ModalComponent from "../Modal";
 import DatePickerComponent from "../../DatePickerComponent/DatePickerComponent";
 import { formatToISO } from "../../../utilities/dateUtilities";
-import { uploadFiles } from "../../../pages/Memories/services/memoryServices";
+import { uploadFiles } from "../../../sevices/memoryService";
 import { notifySuccess, notifyError } from "../../../utilities/toastUtilities";
 import { StyledForm, formControlStyle } from "../style";
 import {

@@ -17,7 +17,7 @@ import {
   createMemory,
   deleteMemory,
   updateMemory,
-} from "./services/memoryServices";
+} from "../../sevices/memoryService";
 import { PRIMARY_SHADES } from "../../utilities/globalStyles";
 import { PageContainer } from "../style";
 import {
