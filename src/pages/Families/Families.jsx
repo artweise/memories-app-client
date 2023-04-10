@@ -7,7 +7,7 @@ import Navbar from "../../components/Navbar/Navbar";
 import FamilyCard from "../../components/FamilyCard/FamilyCard";
 import FamilyCardEmpty from "../../components/FamilyCard/FamilyCardEmpty";
 import CreateFamilyModal from "../../components/Modals/CreateFamilyModal/CreateFamilyModal";
-import { getAllFamilies, createFamily } from "./services/familyServices";
+import { getAllFamilies, createFamily } from "../../sevices/familyService";
 import { notifySuccess, notifyError } from "../../utilities/toastUtilities";
 import { PageContainer } from "../style";
 import { FamiliesContainer } from "./style";
