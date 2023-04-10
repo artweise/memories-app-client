@@ -23,6 +23,10 @@ export const ActionButtonsContainer = styled.div`
   margin-left: auto;
 `;
 
+export const Publication = styled.div`
+  height: 60%;
+`;
+
 export const FlexRow = styled.div`
   display: flex;
   gap: 8px;
