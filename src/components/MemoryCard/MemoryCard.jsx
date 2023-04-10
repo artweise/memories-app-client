@@ -10,13 +10,20 @@ import {
   FlexRow,
   TagsContainer,
   FilesContainer,
+  StyledImg,
   iconButtonStyles,
   boldTextStyles,
   subTextStyles,
 } from "./style";
 import { NEUTRAL_SHADES } from "../../utilities/globalStyles";
 
-const MemoryCard = ({ memory, handleDelete, handleEdit, currentUserId }) => {
+const MemoryCard = ({
+  memory,
+  handleDelete,
+  handleEdit,
+  currentUserId,
+  handleOpenPreview,
+}) => {
   return (
     <StyledMemoryCard>
       <TitleAndButtons>
@@ -65,7 +72,13 @@ const MemoryCard = ({ memory, handleDelete, handleEdit, currentUserId }) => {
         <FilesContainer>
           {memory.gallery.slice(0, 8).map((file, index) => (
             <FlexRow key={index}>
-              <img src={file} width="auto" height="200" alt="preview" />
+              <StyledImg
+                src={file}
+                width="auto"
+                height="200"
+                alt="preview"
+                onClick={() => handleOpenPreview(file)}
+              />
             </FlexRow>
           ))}
           {/* if there are more then 8 photos/videos show tooltip with the rest of files*/}
