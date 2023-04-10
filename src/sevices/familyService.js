@@ -1,4 +1,4 @@
-import axios, { getHeaders } from "../../../config/axios.config";
+import axios, { getHeaders } from "../config/axios.config";
 
 export const getAllFamilies = async () => {
   const res = await axios.get("/families", getHeaders());
