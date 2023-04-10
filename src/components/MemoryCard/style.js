@@ -50,3 +50,7 @@ export const FilesContainer = styled(FlexRow)`
   align-items: end;
   flex-wrap: wrap;
 `;
+
+export const StyledImg = styled.img`
+  cursor: pointer;
+`;

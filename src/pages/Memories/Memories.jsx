@@ -25,17 +25,19 @@ import {
   MemoriesHeaderContainer,
   GoBackContainer,
 } from "./style";
+import PreviewModal from "../../components/Modals/PreviewModal/PreviewModal";
 
 const Memories = () => {
-  const { isLoggedIn, isLoading, token, currentFamily, user } =
+  const { user } =
     useContext(AuthContext);
   const [isCreateEditMemoryModalOpen, setIsCreateEditMemoryModalOpen] =
     useState(false);
+  const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
   const [isCreationLoading, setIsCreationLoading] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
   const [memoryToUpdateValues, setMemoryToUpdateValues] = useState(null);
   const [memoryToUpdateId, setMemoryToUpdateId] = useState(null);
-
+  const [fileUrl, setFileUrl] = useState("");
   const queryClient = useQueryClient();
 
   const { familyId } = useParams();
@@ -129,6 +131,11 @@ const Memories = () => {
     setIsCreateEditMemoryModalOpen(false);
   };
 
+  const handleOpenPreview = (fileUrl) => {
+    setFileUrl(fileUrl);
+    setIsPreviewModalOpen(true);
+  };
+
   return (
     <>
       <Navbar />
@@ -170,6 +177,7 @@ const Memories = () => {
                     handleDelete={handleDeleteMemory}
                     handleEdit={handleEditMemory}
                     currentUserId={user?._id}
+                    handleOpenPreview={handleOpenPreview}
                   />
                 ))}
             </MemoriesContainer>
@@ -186,6 +194,13 @@ const Memories = () => {
         isEditMode={isEditMode}
         memoryToUpdateValues={memoryToUpdateValues}
         memoryToUpdateId={memoryToUpdateId}
+      />
+      <PreviewModal
+        isOpen={isPreviewModalOpen}
+        fileUrl={fileUrl}
+        handleClose={() => {
+          setIsPreviewModalOpen(false);
+        }}
       />
     </>
   );

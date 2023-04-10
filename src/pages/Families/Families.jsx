@@ -11,7 +11,7 @@ import { getAllFamilies, createFamily } from "../../sevices/familyService";
 import { notifySuccess, notifyError } from "../../utilities/toastUtilities";
 import { PageContainer } from "../style";
 import { FamiliesContainer } from "./style";
-import FamiliesSkeleton from "../../components/FamilyCard/FamiliesSkeleton";
+import FamilyCardSkeleton from "../../components/FamilyCard/FamilyCardSkeleton";
 
 const Families = () => {
   const { isLoggedIn, isLoading, token, setCurrentFamily } =
@@ -53,7 +53,7 @@ const Families = () => {
         <FamiliesContainer>
           {familyQuery.status === "loading" &&
             [...Array(2).keys()].map((el, index) => (
-              <FamiliesSkeleton key={index} />
+              <FamilyCardSkeleton key={index} />
             ))}
           {familyQuery.status === "success" && (
             <>

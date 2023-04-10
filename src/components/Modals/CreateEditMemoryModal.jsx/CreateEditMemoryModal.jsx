@@ -19,12 +19,15 @@ import DatePickerComponent from "../../DatePickerComponent/DatePickerComponent";
 import { formatToISO } from "../../../utilities/dateUtilities";
 import { uploadFiles } from "../../../sevices/memoryService";
 import { notifySuccess, notifyError } from "../../../utilities/toastUtilities";
-import { StyledForm, formControlStyle } from "../style";
+import { formControlStyle } from "../style";
 import {
+  FormContentContainer,
   UploadContainer,
   UploadedData,
   Files,
   CloseRoundedIconStyles,
+  DuoContainer,
+  formControlStyleDuo,
 } from "./style";
 
 const CreateEditMemoryModal = ({
@@ -156,142 +159,156 @@ const CreateEditMemoryModal = ({
       handleClose={() => onClose()}
       title={isEditMode ? "Edit memory" : "Create new memory"}
     >
-      <StyledForm onSubmit={(event) => onSubmitForm(event)}>
-        <FormGroup>
-          <FormControlLabel
-            checked={memoryValues.isPrivate}
-            onChange={(event) =>
-              setMemoryValues({
-                ...memoryValues,
-                isPrivate: event.target.checked,
-              })
-            }
-            control={<Switch />}
-            label="Private"
-          />
-        </FormGroup>
-        <FormControl sx={formControlStyle}>
-          <TextField
-            id="memory-title"
-            label="Title"
-            value={memoryValues.title}
-            onChange={(event) =>
-              setMemoryValues({ ...memoryValues, title: event.target.value })
-            }
-          />
-        </FormControl>
-        <FormControl sx={formControlStyle}>
-          <DatePickerComponent
-            date={memoryValues.date}
-            setDate={(date) => {
-              setMemoryValues({ ...memoryValues, date });
-            }}
-          />
-        </FormControl>
-        <FormControl sx={formControlStyle}>
-          <TextField
-            id="memory-place"
-            label="Place"
-            value={memoryValues.place}
-            onChange={(event) =>
-              setMemoryValues({ ...memoryValues, place: event.target.value })
-            }
-          />
-        </FormControl>
-        <FormControl sx={formControlStyle}>
-          <TextField
-            id="memory-publication"
-            label="Publication"
-            multiline
-            rows={3}
-            value={memoryValues.publication}
-            onChange={(event) =>
-              setMemoryValues({
-                ...memoryValues,
-                publication: event.target.value,
-              })
-            }
-          />
-        </FormControl>
+      <form onSubmit={(event) => onSubmitForm(event)}>
+        <FormContentContainer>
+          <FormGroup>
+            <FormControlLabel
+              checked={memoryValues.isPrivate}
+              onChange={(event) =>
+                setMemoryValues({
+                  ...memoryValues,
+                  isPrivate: event.target.checked,
+                })
+              }
+              control={<Switch />}
+              label="Private"
+            />
+          </FormGroup>
+          <DuoContainer>
+            <FormControl sx={formControlStyleDuo}>
+              <TextField
+                id="memory-title"
+                label="Title"
+                value={memoryValues.title}
+                onChange={(event) =>
+                  setMemoryValues({
+                    ...memoryValues,
+                    title: event.target.value,
+                  })
+                }
+              />
+            </FormControl>
+            <FormControl sx={formControlStyleDuo}>
+              <DatePickerComponent
+                date={memoryValues.date}
+                setDate={(date) => {
+                  setMemoryValues({ ...memoryValues, date });
+                }}
+              />
+            </FormControl>
+          </DuoContainer>
 
-        <div>
-          {!!memoryValues?.gallery?.length && (
-            <UploadedData>
-              {memoryValues.gallery.map((file, index) => (
-                <Files key={index}>
-                  <img src={file} width="auto" height="100" alt="preview" />
-                  <CloseRoundedIcon
-                    sx={CloseRoundedIconStyles}
-                    fontSize="small"
-                    onClick={() => {
-                      const newGallery = [...memoryValues.gallery];
-                      newGallery.splice(index, 1);
-                      setMemoryValues({
-                        ...memoryValues,
-                        gallery: newGallery,
-                      });
-                      const newPreviews = [...imagePreviews];
-                      newPreviews.splice(index, 1);
-                      setImagePreviews(newPreviews);
-                    }}
-                  />
-                </Files>
-              ))}
-            </UploadedData>
-          )}
-        </div>
+          <FormControl sx={formControlStyle}>
+            <TextField
+              id="memory-place"
+              label="Place"
+              value={memoryValues.place}
+              onChange={(event) =>
+                setMemoryValues({ ...memoryValues, place: event.target.value })
+              }
+            />
+          </FormControl>
+          <FormControl sx={formControlStyle}>
+            <TextField
+              id="memory-publication"
+              label="Publication"
+              multiline
+              rows={6}
+              // TODO show only peace of text...
+              // loadMoreFunction
+              // onClick={handleClickLoadMore}
+              value={memoryValues.publication}
+              onChange={(event) =>
+                setMemoryValues({
+                  ...memoryValues,
+                  publication: event.target.value,
+                })
+              }
+            />
+          </FormControl>
 
-        <UploadContainer>
-          <input
-            type="file"
-            name="gallery"
-            multiple="multiple"
-            // accept=".jpg, .jpeg, .png"
-            accept="image/*,audio/*,video/*,.pdf"
-            onChange={(event) => {
-              setGalleryValues(Array.from(event.target.files));
-            }}
-          />
           <div>
-            <Button
-              disabled={uploadLoading || isEmpty(galleryValues)}
-              onClick={handleUploadFiles}
-              loading={uploadLoading}
-            >
-              Upload
-            </Button>
-          </div>
-        </UploadContainer>
-        <Typography variant="subtitle2">maximum 10 files at once</Typography>
-        <FormControl sx={formControlStyle}>
-          <Autocomplete
-            autoFocus
-            multiple
-            value={memoryValues.tags}
-            id="new-family-tags"
-            clearOnEscape
-            clearOnBlur
-            freeSolo
-            blurOnSelect
-            autoSelect
-            options={memoryValues.tags}
-            // Adding # and saving new value to the state
-            onChange={(_, value, reason) => handleTagsChange(value, reason)}
-            renderTags={(value, getTagProps) =>
-              value.map((option, index) => (
-                <Chip
-                  variant="outlined"
-                  label={option}
-                  {...getTagProps({ index })}
-                />
-              ))
-            }
-            renderInput={(params) => (
-              <TextField {...params} label="Tags" placeholder="Add some tags" />
+            {!!memoryValues?.gallery?.length && (
+              <UploadedData>
+                {memoryValues.gallery.map((file, index) => (
+                  <Files key={index}>
+                    <img src={file} width="auto" height="100" alt="preview" />
+                    <CloseRoundedIcon
+                      sx={CloseRoundedIconStyles}
+                      fontSize="small"
+                      onClick={() => {
+                        const newGallery = [...memoryValues.gallery];
+                        newGallery.splice(index, 1);
+                        setMemoryValues({
+                          ...memoryValues,
+                          gallery: newGallery,
+                        });
+                        const newPreviews = [...imagePreviews];
+                        newPreviews.splice(index, 1);
+                        setImagePreviews(newPreviews);
+                      }}
+                    />
+                  </Files>
+                ))}
+              </UploadedData>
             )}
-          />
-        </FormControl>
+          </div>
 
+          <UploadContainer>
+            <input
+              type="file"
+              name="gallery"
+              multiple="multiple"
+              // accept=".jpg, .jpeg, .png"
+              accept="image/*,audio/*,video/*,.pdf"
+              onChange={(event) => {
+                setGalleryValues(Array.from(event.target.files));
+              }}
+            />
+            <div>
+              <Button
+                disabled={uploadLoading || isEmpty(galleryValues)}
+                onClick={handleUploadFiles}
+                loading={uploadLoading}
+              >
+                Upload
+              </Button>
+            </div>
+          </UploadContainer>
+          <Typography variant="subtitle2">*maximum 10 files at once</Typography>
+          <FormControl sx={formControlStyle}>
+            <Autocomplete
+              autoFocus
+              multiple
+              value={memoryValues.tags}
+              id="new-family-tags"
+              clearOnEscape
+              clearOnBlur
+              freeSolo
+              blurOnSelect
+              autoSelect
+              options={memoryValues.tags}
+              // Adding # and saving new value to the state
+              onChange={(_, value, reason) => handleTagsChange(value, reason)}
+              renderTags={(value, getTagProps) =>
+                value.map((option, index) => (
+                  <Chip
+                    variant="outlined"
+                    label={option}
+                    {...getTagProps({ index })}
+                  />
+                ))
+              }
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Tags"
+                  placeholder="Add some tags"
+                />
+              )}
+            />
+          </FormControl>
+        </FormContentContainer>
         <Button
           sx={{ mt: 2 }}
           type="submit"
@@ -305,7 +322,7 @@ const CreateEditMemoryModal = ({
         >
           {isEditMode ? "Update" : "Create"}
         </Button>
-      </StyledForm>
+      </form>
     </ModalComponent>
   );
 };
