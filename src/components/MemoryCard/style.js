@@ -19,9 +19,6 @@ export const TitleAndButtons = styled.div`
   display: flex;
   justify-content: space-between;
 `;
-export const ActionButtonsContainer = styled.div`
-  margin-left: auto;
-`;
 
 export const Publication = styled.div`
   height: 60%;
@@ -31,10 +28,6 @@ export const FlexRow = styled.div`
   display: flex;
   gap: 8px;
 `;
-
-export const iconButtonStyles = {
-  svg: { path: { fill: NEUTRAL_SHADES[1000] } },
-};
 
 export const boldTextStyles = { fontWeight: 600 };
 

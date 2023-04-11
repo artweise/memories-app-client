@@ -1,31 +1,18 @@
 import { useState } from "react";
 
-import {
-  Typography,
-  IconButton,
-  Chip,
-  Tooltip,
-  SvgIcon,
-  MenuItem,
-  Menu,
-  ListItemIcon,
-} from "@mui/material";
-import EditRoundedIcon from "@mui/icons-material/EditRounded";
-import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
-import MoreVertRoundedIcon from "@mui/icons-material/MoreVertRounded";
+import { Typography, Chip, Tooltip, SvgIcon } from "@mui/material";
 import KeyboardDoubleArrowRightRoundedIcon from "@mui/icons-material/KeyboardDoubleArrowRightRounded";
 
+import MemoryMenu from "../MemoryMenu/MemoryMenu";
 import { formatDateString } from "../../utilities/dateUtilities";
 import {
   StyledMemoryCard,
   TitleAndButtons,
-  ActionButtonsContainer,
   Publication,
   FlexRow,
   TagsContainer,
   FilesContainer,
   StyledImg,
-  iconButtonStyles,
   boldTextStyles,
   subTextStyles,
 } from "./style";
@@ -40,7 +27,6 @@ const MemoryCard = ({
   // a state to hold the number of characters to show initially in publication field
   const [publicationToShow, setPublicationToShow] = useState(800);
   const [showAllFiles, setShowAllFiles] = useState(false);
-  const [anchorEl, setAnchorEl] = useState(null);
 
   // handleFilesToShow function updates the showAllFiles state to be false
   // when the number of files to show is equal to the length of the gallery array
@@ -56,51 +42,15 @@ const MemoryCard = ({
         <Typography variant="h6" sx={boldTextStyles}>
           {memory?.title ? memory.title : ""}
         </Typography>
+
+        {/* Show ptions menu if the current user is the owner or owner does not exist*/}
         {((memory.owner && currentUserId === memory.owner) ||
           !memory?.owner) && (
-          <ActionButtonsContainer>
-            <IconButton
-              onClick={(event) => setAnchorEl(event.currentTarget)}
-              sx={iconButtonStyles}
-            >
-              <MoreVertRoundedIcon />
-            </IconButton>
-            <Menu
-              anchorEl={anchorEl}
-              open={Boolean(anchorEl)}
-              onClose={() => setAnchorEl(null)}
-              PaperProps={{
-                style: {
-                  width: "128px",
-                },
-              }}
-            >
-              {/* Handle Edit */}
-              <MenuItem
-                onClick={() => {
-                  setAnchorEl(null);
-                  handleEdit(memory);
-                }}
-              >
-                <ListItemIcon sx={iconButtonStyles}>
-                  <EditRoundedIcon fontSize="small" />
-                </ListItemIcon>
-                <Typography variant="inherit">Edit</Typography>
-              </MenuItem>
-              {/* Handle Delete */}
-              <MenuItem
-                onClick={() => {
-                  setAnchorEl(null);
-                  handleDelete(memory._id);
-                }}
-              >
-                <ListItemIcon sx={iconButtonStyles}>
-                  <DeleteRoundedIcon fontSize="small" />
-                </ListItemIcon>
-                <Typography variant="inherit">Delete</Typography>
-              </MenuItem>
-            </Menu>
-          </ActionButtonsContainer>
+          <MemoryMenu
+            handleDelete={handleDelete}
+            handleEdit={handleEdit}
+            memory={memory}
+          />
         )}
       </TitleAndButtons>
 
