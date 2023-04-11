@@ -43,7 +43,7 @@ const MemoryCard = ({
           {memory?.title ? memory.title : ""}
         </Typography>
 
-        {/* Show ptions menu if the current user is the owner or owner does not exist*/}
+        {/* Show options menu if the current user is the owner, or owner does not exist*/}
         {((memory.owner && currentUserId === memory.owner) ||
           !memory?.owner) && (
           <MemoryMenu

@@ -46,15 +46,21 @@ const Families = () => {
     mutation.mutate(familyValues);
   };
 
+  // Components
+  const renderFamiliesSkeleton = () => {
+    return [...Array(2).keys()].map((el, index) => (
+      <FamilyCardSkeleton key={index} />
+    ));
+  };
+
   return (
     <>
       <Navbar />
       <PageContainer>
         <FamiliesContainer>
-          {familyQuery.status === "loading" &&
-            [...Array(2).keys()].map((el, index) => (
-              <FamilyCardSkeleton key={index} />
-            ))}
+          
+          {familyQuery.status === "loading" && renderFamiliesSkeleton()}
+
           {familyQuery.status === "success" && (
             <>
               {familyQuery?.data?.map((family) => (
