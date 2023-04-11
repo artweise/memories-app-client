@@ -14,8 +14,8 @@ import { FamiliesContainer } from "./style";
 import FamilyCardSkeleton from "../../components/FamilyCard/FamilyCardSkeleton";
 
 const Families = () => {
-  const { isLoggedIn, isLoading, token, setCurrentFamily } =
-    useContext(AuthContext);
+  const { setCurrentFamily } = useContext(AuthContext);
+
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isCreationLoading, setIsCreationLoading] = useState(false);
 
@@ -46,7 +46,7 @@ const Families = () => {
     mutation.mutate(familyValues);
   };
 
-  // Components
+  // Skeleton
   const renderFamiliesSkeleton = () => {
     return [...Array(2).keys()].map((el, index) => (
       <FamilyCardSkeleton key={index} />

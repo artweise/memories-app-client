@@ -1,22 +1,26 @@
 import styled from "styled-components";
-import { NEUTRAL_SHADES } from "../../utilities/globalStyles";
 
-export const MemoriesContainer = styled.div`
+export const Container = styled.div`
   display: flex;
-  flex-direction: column;
-  margin: 0 auto 48px;
   width: 60vw;
+  margin: 0 auto;
+`;
+
+export const MemoriesContainer = styled(Container)`
+  flex-direction: column;
+  margin-bottom: 48px;
   gap: 24px;
 `;
 
-export const MemoriesHeaderContainer = styled.div`
-  display: flex;
-  margin: 0 auto;
-  width: 60vw;
+export const MemoriesHeaderContainer = styled(Container)`
   align-items: center;
   justify-content: space-between;
   margin-bottom: 40px;
   padding-block: 16px;
+`;
+
+export const MembersContainer = styled(Container)`
+  margin-bottom: 16px;
 `;
 
 export const GoBackContainer = styled.div`

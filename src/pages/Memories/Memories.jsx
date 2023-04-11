@@ -1,16 +1,18 @@
 import { useState, useContext, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
-import { Typography, IconButton } from "@mui/material";
+import { Typography, IconButton, Popover } from "@mui/material";
 import { useQuery, useQueryClient, useMutation } from "react-query";
 import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
+import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
 
+import { AuthContext } from "../../context/auth.context";
 import Button from "../../components/Button/Button";
 import Navbar from "../../components/Navbar/Navbar";
-import { AuthContext } from "../../context/auth.context";
-
 import MemoryCard from "../../components/MemoryCard/MemoryCard";
+import AvatarAndUsername from "../../components/AvatarAndUsername/AvatarAndUsername";
 import MemoriesPageSkeleton from "../../components/MemoriesPageSkeleton/MemoriesPageSkeleton";
 import CreateEditMemoryModal from "../../components/Modals/CreateEditMemoryModal.jsx/CreateEditMemoryModal";
+import PreviewModal from "../../components/Modals/PreviewModal/PreviewModal";
 import { notifySuccess, notifyError } from "../../utilities/toastUtilities";
 import {
   getAllMemories,
@@ -19,14 +21,14 @@ import {
   updateMemory,
 } from "../../sevices/memoryService";
 import { getFamilyById } from "../../sevices/familyService";
-import { PRIMARY_SHADES } from "../../utilities/globalStyles";
+import { PRIMARY_SHADES, SUCCESS_SHADES } from "../../utilities/globalStyles";
 import { PageContainer } from "../style";
 import {
   MemoriesContainer,
   MemoriesHeaderContainer,
   GoBackContainer,
+  MembersContainer,
 } from "./style";
-import PreviewModal from "../../components/Modals/PreviewModal/PreviewModal";
 
 const Memories = () => {
   const { user, currentFamily, setCurrentFamily } = useContext(AuthContext);
@@ -141,10 +143,9 @@ const Memories = () => {
     const fetchFamily = async () => {
       try {
         const family = await getFamilyById(familyId);
-        console.log(family);
         setCurrentFamily(family);
       } catch (err) {
-        console.log(err);
+        throw new Error("Could not fetch family");
       }
     };
     if (!currentFamily?._id || currentFamily?._id !== familyId) {
@@ -167,22 +168,22 @@ const Memories = () => {
         {memoryQuery.status === "loading" && <MemoriesPageSkeleton />}
         {memoryQuery.status === "success" && (
           <>
-            <MemoriesHeaderContainer>
-              <Typography variant="h4" color={PRIMARY_SHADES[1000]}>
-                {memoryQuery?.data?.length
-                  ? `${memoryQuery.data[0].family.title} memories`
-                  : "No memories yet"}
-              </Typography>
-              <Button
-                onClick={() => setIsCreateEditMemoryModalOpen(true)}
-                disabled={
-                  !memoryQuery.status === "success" || isCreationLoading
-                }
-                loading={isCreationLoading}
-              >
-                Add new memory
-              </Button>
-            </MemoriesHeaderContainer>
+              <MemoriesHeaderContainer>
+                <Typography variant="h4" color={PRIMARY_SHADES[1000]}>
+                  {memoryQuery?.data?.length
+                    ? `${memoryQuery.data[0].family.title} memories`
+                    : "No memories yet"}
+                </Typography>
+                <Button
+                  onClick={() => setIsCreateEditMemoryModalOpen(true)}
+                  disabled={
+                    !memoryQuery.status === "success" || isCreationLoading
+                  }
+                  loading={isCreationLoading}
+                >
+                  Add new memory
+                </Button>
+              </MemoriesHeaderContainer>
 
             <MemoriesContainer>
               {!!memoryQuery?.data?.length &&

@@ -48,24 +48,13 @@ export const MembersContainer = styled.div`
   height: 22%;
 `;
 
-export const AvatarAndUsername = styled.div`
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  &:not(:last-of-type) {
-    margin-bottom: 8px;
-  }
+export const StyledSkeletonCard = styled.div`
+  height: 24vw;
 `;
 
 export const paperPopoverStyles = { padding: "16px", borderRadius: "8px" };
 
-export const avatarStyles = {
-  bgcolor: PRIMARY_SHADES[800],
-  width: 24,
-  height: 24,
-  fontSize: "12px",
+export const popoverStyles = {
+  pointerEvents: "none",
+  padding: "16px",
 };
-
-export const StyledSkeletonCard = styled.div`
-  height: 24vw;
-`;

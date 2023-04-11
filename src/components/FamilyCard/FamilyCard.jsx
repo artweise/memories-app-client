@@ -1,15 +1,15 @@
 import { useState } from "react";
 import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
-import { Divider, Typography, Avatar, Popover, Tooltip } from "@mui/material";
+import { Divider, Typography, Popover, Tooltip } from "@mui/material";
 
+import AvatarAndUsername from "../AvatarAndUsername/AvatarAndUsername";
 import { SUCCESS_SHADES } from "../../utilities/globalStyles";
 import {
   StyledFamilyCard,
   Description,
   MembersContainer,
-  AvatarAndUsername,
   paperPopoverStyles,
-  avatarStyles,
+  popoverStyles,
 } from "./style";
 
 const FamilyCard = ({ family }) => {
@@ -68,10 +68,7 @@ const FamilyCard = ({ family }) => {
       </MembersContainer>
       <Popover
         id="mouse-over-popover"
-        sx={{
-          pointerEvents: "none",
-          padding: "16px",
-        }}
+        sx={popoverStyles}
         open={open}
         anchorEl={anchorEl}
         anchorOrigin={{
@@ -90,12 +87,7 @@ const FamilyCard = ({ family }) => {
       >
         {!!family?.members?.length &&
           family.members.map((member, index) => (
-            <AvatarAndUsername key={index}>
-              <Avatar sx={avatarStyles}>
-                {member.username.slice(0, 1).toUpperCase()}
-              </Avatar>
-              <div>{member.email}</div>
-            </AvatarAndUsername>
+            <AvatarAndUsername user={member} key={index} />
           ))}
       </Popover>
     </StyledFamilyCard>
