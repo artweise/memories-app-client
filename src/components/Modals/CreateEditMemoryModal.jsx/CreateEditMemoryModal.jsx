@@ -16,7 +16,6 @@ import { isEmpty } from "lodash";
 import Button from "../../Button/Button";
 import ModalComponent from "../Modal";
 import DatePickerComponent from "../../DatePickerComponent/DatePickerComponent";
-// import ImagePreview from "../../ImagePreview/ImagePreview";
 import { formatToISO } from "../../../utilities/dateUtilities";
 import { uploadFiles } from "../../../sevices/memoryService";
 import { notifySuccess, notifyError } from "../../../utilities/toastUtilities";
