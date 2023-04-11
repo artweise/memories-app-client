@@ -11,12 +11,9 @@ import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import MoreVertRoundedIcon from "@mui/icons-material/MoreVertRounded";
 
-import {
-  ActionButtonsContainer,
-  iconButtonStyles,
-} from "./style";
+import { ActionButtonsContainer, iconButtonStyles, paperStyles } from "./style";
 
-const MemoryMenu = (handleEdit, handleDelete, memory) => {
+const MemoryMenu = ({ handleEdit, handleDelete, memory }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   return (
     <ActionButtonsContainer>
@@ -31,9 +28,7 @@ const MemoryMenu = (handleEdit, handleDelete, memory) => {
         open={Boolean(anchorEl)}
         onClose={() => setAnchorEl(null)}
         PaperProps={{
-          style: {
-            width: "128px",
-          },
+          style: paperStyles,
         }}
       >
         {/* Handle Edit */}
@@ -65,4 +60,4 @@ const MemoryMenu = (handleEdit, handleDelete, memory) => {
   );
 };
 
-export default MemoryMenu
+export default MemoryMenu;

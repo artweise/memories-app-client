@@ -1,7 +1,7 @@
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext } from "react";
 import { Link, useParams } from "react-router-dom";
-import { Typography, IconButton } from "@mui/material";
 import { useQuery, useQueryClient, useMutation } from "react-query";
+import { Typography, IconButton } from "@mui/material";
 import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
 
 import { AuthContext } from "../../context/auth.context";
@@ -18,7 +18,6 @@ import {
   deleteMemory,
   updateMemory,
 } from "../../sevices/memoryService";
-import { getFamilyById } from "../../sevices/familyService";
 import { PRIMARY_SHADES, NEUTRAL_SHADES } from "../../utilities/globalStyles";
 import { PageContainer } from "../style";
 import {
@@ -32,7 +31,7 @@ import {
 } from "./style";
 
 const Memories = () => {
-  const { user, currentFamily, setCurrentFamily } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
   const [isCreateEditMemoryModalOpen, setIsCreateEditMemoryModalOpen] =
     useState(false);
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
@@ -41,7 +40,6 @@ const Memories = () => {
   const [memoryToUpdateValues, setMemoryToUpdateValues] = useState(null);
   const [memoryToUpdateId, setMemoryToUpdateId] = useState(null);
   const [fileUrl, setFileUrl] = useState("");
-  const [anchorEl, setAnchorEl] = useState(null);
   const queryClient = useQueryClient();
 
   const { familyId } = useParams();
@@ -140,21 +138,6 @@ const Memories = () => {
     setFileUrl(fileUrl);
     setIsPreviewModalOpen(true);
   };
-
-  // if the page was refreshed or user came to the page directy typing in the url - fetch current family
-  useEffect(() => {
-    const fetchFamily = async () => {
-      try {
-        const family = await getFamilyById(familyId);
-        setCurrentFamily(family);
-      } catch (err) {
-        throw new Error("Could not fetch family");
-      }
-    };
-    if (!currentFamily?._id || currentFamily?._id !== familyId) {
-      fetchFamily(familyId);
-    }
-  }, [currentFamily?._id, familyId, setCurrentFamily]);
 
   return (
     <>

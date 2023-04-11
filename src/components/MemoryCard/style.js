@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { NEUTRAL_SHADES } from "../../utilities/globalStyles";
+import { NEUTRAL_SHADES, PRIMARY_SHADES } from "../../utilities/globalStyles";
 
 export const StyledMemoryCard = styled.div`
   display: flex;
@@ -27,6 +27,7 @@ export const Publication = styled.div`
 export const FlexRow = styled.div`
   display: flex;
   gap: 8px;
+  align-items: center;
 `;
 
 export const boldTextStyles = { fontWeight: 600 };
@@ -38,6 +39,7 @@ export const subTextStyles = {
 
 export const TagsContainer = styled(FlexRow)`
   align-items: center;
+  margin-bottom: 8px;
 `;
 export const FilesContainer = styled(FlexRow)`
   align-items: end;
@@ -47,3 +49,10 @@ export const FilesContainer = styled(FlexRow)`
 export const StyledImg = styled.img`
   cursor: pointer;
 `;
+
+export const avatarStyles = {
+  bgcolor: PRIMARY_SHADES[800],
+  width: 24,
+  height: 24,
+  fontSize: "12px",
+};

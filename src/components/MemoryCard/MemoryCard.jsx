@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { Typography, Chip, Tooltip, SvgIcon } from "@mui/material";
+import { Typography, Chip, Tooltip, SvgIcon, Avatar } from "@mui/material";
 import KeyboardDoubleArrowRightRoundedIcon from "@mui/icons-material/KeyboardDoubleArrowRightRounded";
 
 import MemoryMenu from "../MemoryMenu/MemoryMenu";
@@ -15,6 +15,7 @@ import {
   StyledImg,
   boldTextStyles,
   subTextStyles,
+  avatarStyles,
 } from "./style";
 
 const MemoryCard = ({
@@ -57,6 +58,22 @@ const MemoryCard = ({
       <Typography variant="body1" sx={boldTextStyles} gutterBottom>
         {formatDateString(memory.date)}
       </Typography>
+
+      {memory?.createdBy?.email && (
+        <FlexRow style={{ alignItems: "baseline" }}>
+          <Typography sx={boldTextStyles} gutterBottom>
+            Created by:
+          </Typography>
+          <FlexRow>
+            <Avatar sx={avatarStyles}>
+              {memory?.createdBy?.username?.slice(0, 1).toUpperCase() || null}
+            </Avatar>
+            <Typography variant="body2">
+              {memory?.createdBy?.username || ""}
+            </Typography>
+          </FlexRow>
+        </FlexRow>
+      )}
 
       <Publication>
         {memory?.publication && (

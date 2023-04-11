@@ -8,3 +8,7 @@ export const ActionButtonsContainer = styled.div`
 export const iconButtonStyles = {
   svg: { path: { fill: NEUTRAL_SHADES[1000] } },
 };
+
+export const paperStyles = {
+  width: "128px",
+};
