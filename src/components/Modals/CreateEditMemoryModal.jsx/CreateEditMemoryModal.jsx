@@ -24,7 +24,7 @@ import {
   FormContentContainer,
   UploadContainer,
   UploadedData,
-  Files,
+  FilesContainer,
   CloseRoundedIconStyles,
   DuoContainer,
   formControlStyleDuo,
@@ -52,7 +52,6 @@ const CreateEditMemoryModal = ({
   });
 
   const [galleryValues, setGalleryValues] = useState([]);
-  const [imagePreviews, setImagePreviews] = useState([]);
   const [uploadLoading, setUploadLoading] = useState(false);
 
   const clearMemoryValues = () => {
@@ -69,7 +68,6 @@ const CreateEditMemoryModal = ({
 
   const clearGalleryValues = () => {
     setGalleryValues([]);
-    setImagePreviews([]);
   };
 
   const onSubmitForm = (event) => {
@@ -132,7 +130,7 @@ const CreateEditMemoryModal = ({
     try {
       const res = await uploadFiles(formData);
       const fileUrls = res.data.fileUrls;
-      setImagePreviews([...imagePreviews, ...fileUrls]);
+      setGalleryValues([...galleryValues, ...fileUrls]);
       // Add the file URLs to the memory values
       setMemoryValues({
         ...memoryValues,
@@ -145,6 +143,16 @@ const CreateEditMemoryModal = ({
       setUploadLoading(false);
     }
   };
+
+  // const handleDeleteFile = (fileToDelete) => {
+  //   let newGallery = memoryValues.gallery.filter((file) => {
+  //     return file !== fileToDelete;
+  //   });
+  //   setMemoryValues({
+  //     ...memoryValues,
+  //     gallery: newGallery,
+  //   });
+  // };
 
   // If isEditMode - set the form values to the memoryToUpdateValues received from props
   useEffect(() => {
@@ -214,9 +222,6 @@ const CreateEditMemoryModal = ({
               label="Publication"
               multiline
               rows={6}
-              // TODO show only peace of text...
-              // loadMoreFunction
-              // onClick={handleClickLoadMore}
               value={memoryValues.publication}
               onChange={(event) =>
                 setMemoryValues({
@@ -226,16 +231,18 @@ const CreateEditMemoryModal = ({
               }
             />
           </FormControl>
-
           <div>
             {!!memoryValues?.gallery?.length && (
               <UploadedData>
                 {memoryValues.gallery.map((file, index) => (
-                  <Files key={index}>
+                  <FilesContainer key={index}>
                     <img src={file} width="auto" height="100" alt="preview" />
                     <CloseRoundedIcon
                       sx={CloseRoundedIconStyles}
                       fontSize="small"
+                      // handleDeleteFile() doesn't work
+                      // onClick={handleDeletePreview}
+                      // onDelete={() => handleDeleteFile(file)}
                       onClick={() => {
                         const newGallery = [...memoryValues.gallery];
                         newGallery.splice(index, 1);
@@ -243,12 +250,9 @@ const CreateEditMemoryModal = ({
                           ...memoryValues,
                           gallery: newGallery,
                         });
-                        const newPreviews = [...imagePreviews];
-                        newPreviews.splice(index, 1);
-                        setImagePreviews(newPreviews);
                       }}
                     />
-                  </Files>
+                  </FilesContainer>
                 ))}
               </UploadedData>
             )}

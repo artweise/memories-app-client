@@ -117,6 +117,7 @@ const Memories = () => {
       tags: memory?.tags?.length ? memory.tags : [],
       place: memory?.place ? memory.place : "",
       isPrivate: memory?.owner ? true : false,
+      gallery: memory?.gallery?.length ? memory.gallery : [],
     });
     setMemoryToUpdateId(memory._id);
     // open CreateEditModal with current memory formatted data for the state

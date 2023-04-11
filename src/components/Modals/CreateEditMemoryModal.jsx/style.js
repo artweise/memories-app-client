@@ -16,7 +16,7 @@ export const UploadedData = styled.div`
   gap: 8px;
 `;
 
-export const Files = styled.div`
+export const FilesContainer = styled.div`
   position: relative;
   display: inline-block;
 `;
