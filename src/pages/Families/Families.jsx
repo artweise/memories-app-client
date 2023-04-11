@@ -58,14 +58,13 @@ const Families = () => {
       <Navbar />
       <PageContainer>
         <FamiliesContainer>
-          
           {familyQuery.status === "loading" && renderFamiliesSkeleton()}
 
           {familyQuery.status === "success" && (
             <>
               {familyQuery?.data?.map((family) => (
                 <Link
-                  onClick={() => setCurrentFamily(family._id)}
+                  onClick={() => setCurrentFamily(family)}
                   to={`/memories/${family._id}`}
                   key={family._id}
                 >

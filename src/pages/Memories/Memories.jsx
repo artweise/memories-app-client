@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Typography, IconButton } from "@mui/material";
 import { useQuery, useQueryClient, useMutation } from "react-query";
@@ -18,6 +18,7 @@ import {
   deleteMemory,
   updateMemory,
 } from "../../sevices/memoryService";
+import { getFamilyById } from "../../sevices/familyService";
 import { PRIMARY_SHADES } from "../../utilities/globalStyles";
 import { PageContainer } from "../style";
 import {
@@ -28,7 +29,7 @@ import {
 import PreviewModal from "../../components/Modals/PreviewModal/PreviewModal";
 
 const Memories = () => {
-  const { user } = useContext(AuthContext);
+  const { user, currentFamily, setCurrentFamily } = useContext(AuthContext);
   const [isCreateEditMemoryModalOpen, setIsCreateEditMemoryModalOpen] =
     useState(false);
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
@@ -134,6 +135,22 @@ const Memories = () => {
     setFileUrl(fileUrl);
     setIsPreviewModalOpen(true);
   };
+
+  // if the page was refreshed or user came to the page directy typing in the url - fetch current family
+  useEffect(() => {
+    const fetchFamily = async () => {
+      try {
+        const family = await getFamilyById(familyId);
+        console.log(family);
+        setCurrentFamily(family);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    if (!currentFamily?._id || currentFamily?._id !== familyId) {
+      fetchFamily(familyId);
+    }
+  }, [currentFamily?._id, familyId, setCurrentFamily]);
 
   return (
     <>
