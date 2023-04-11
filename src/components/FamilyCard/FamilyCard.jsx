@@ -7,8 +7,8 @@ import {
   StyledFamilyCard,
   Description,
   MembersContainer,
-  paperPopoverStyles,
   AvatarAndUsername,
+  paperPopoverStyles,
   popoverStyles,
   avatarStyles,
 } from "./style";
@@ -23,8 +23,6 @@ const FamilyCard = ({ family }) => {
   const handlePopoverClose = () => {
     setAnchorEl(null);
   };
-
-  const open = Boolean(anchorEl);
 
   return (
     <StyledFamilyCard color={family.color}>
@@ -70,7 +68,7 @@ const FamilyCard = ({ family }) => {
       <Popover
         id="mouse-over-popover"
         sx={popoverStyles}
-        open={open}
+        open={Boolean(anchorEl)}
         anchorEl={anchorEl}
         anchorOrigin={{
           vertical: "top",

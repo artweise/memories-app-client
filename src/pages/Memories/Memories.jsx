@@ -1,15 +1,13 @@
 import { useState, useContext, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
-import { Typography, IconButton, Popover } from "@mui/material";
+import { Typography, IconButton } from "@mui/material";
 import { useQuery, useQueryClient, useMutation } from "react-query";
 import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
-import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
 
 import { AuthContext } from "../../context/auth.context";
 import Button from "../../components/Button/Button";
 import Navbar from "../../components/Navbar/Navbar";
 import MemoryCard from "../../components/MemoryCard/MemoryCard";
-import AvatarAndUsername from "../../components/AvatarAndUsername/AvatarAndUsername";
 import MemoriesPageSkeleton from "../../components/MemoriesPageSkeleton/MemoriesPageSkeleton";
 import CreateEditMemoryModal from "../../components/Modals/CreateEditMemoryModal.jsx/CreateEditMemoryModal";
 import PreviewModal from "../../components/Modals/PreviewModal/PreviewModal";
@@ -21,13 +19,16 @@ import {
   updateMemory,
 } from "../../sevices/memoryService";
 import { getFamilyById } from "../../sevices/familyService";
-import { PRIMARY_SHADES, SUCCESS_SHADES } from "../../utilities/globalStyles";
+import { PRIMARY_SHADES, NEUTRAL_SHADES } from "../../utilities/globalStyles";
 import { PageContainer } from "../style";
 import {
-  MemoriesContainer,
+  MemoryCardsContainer,
   MemoriesHeaderContainer,
   GoBackContainer,
-  MembersContainer,
+  TotalContainer,
+  Container,
+  MemoriesContainer,
+  SideMenu,
 } from "./style";
 
 const Memories = () => {
@@ -40,6 +41,7 @@ const Memories = () => {
   const [memoryToUpdateValues, setMemoryToUpdateValues] = useState(null);
   const [memoryToUpdateId, setMemoryToUpdateId] = useState(null);
   const [fileUrl, setFileUrl] = useState("");
+  const [anchorEl, setAnchorEl] = useState(null);
   const queryClient = useQueryClient();
 
   const { familyId } = useParams();
@@ -168,7 +170,8 @@ const Memories = () => {
         </GoBackContainer>
         {memoryQuery.status === "loading" && <MemoriesPageSkeleton />}
         {memoryQuery.status === "success" && (
-          <>
+          <Container>
+            <MemoriesContainer>
               <MemoriesHeaderContainer>
                 <Typography variant="h4" color={PRIMARY_SHADES[1000]}>
                   {memoryQuery?.data?.length
@@ -181,25 +184,34 @@ const Memories = () => {
                     !memoryQuery.status === "success" || isCreationLoading
                   }
                   loading={isCreationLoading}
+                  sx={{ minWidth: "200px" }}
                 >
                   Add new memory
                 </Button>
               </MemoriesHeaderContainer>
+              {!!memoryQuery?.data?.length && (
+                <TotalContainer>
+                  <Typography color={NEUTRAL_SHADES[900]}>
+                    {memoryQuery.data.length} memories
+                  </Typography>
+                </TotalContainer>
+              )}
 
-            <MemoriesContainer>
-              {!!memoryQuery?.data?.length &&
-                memoryQuery.data.map((memory, index) => (
-                  <MemoryCard
-                    key={index}
-                    memory={memory}
-                    handleDelete={handleDeleteMemory}
-                    handleEdit={handleEditMemory}
-                    currentUserId={user?._id}
-                    handleOpenPreview={handleOpenPreview}
-                  />
-                ))}
+              <MemoryCardsContainer>
+                {!!memoryQuery?.data?.length &&
+                  memoryQuery.data.map((memory, index) => (
+                    <MemoryCard
+                      key={index}
+                      memory={memory}
+                      handleDelete={handleDeleteMemory}
+                      handleEdit={handleEditMemory}
+                      currentUserId={user?._id}
+                      handleOpenPreview={handleOpenPreview}
+                    />
+                  ))}
+              </MemoryCardsContainer>
             </MemoriesContainer>
-          </>
+          </Container>
         )}
       </PageContainer>
       <CreateEditMemoryModal
