@@ -33,7 +33,7 @@ export const FlexRow = styled.div`
 `;
 
 export const iconButtonStyles = {
-  svg: { path: { fill: NEUTRAL_SHADES[700] } },
+  svg: { path: { fill: NEUTRAL_SHADES[1000] } },
 };
 
 export const boldTextStyles = { fontWeight: 600 };

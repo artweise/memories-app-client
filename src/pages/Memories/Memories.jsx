@@ -28,8 +28,7 @@ import {
 import PreviewModal from "../../components/Modals/PreviewModal/PreviewModal";
 
 const Memories = () => {
-  const { user } =
-    useContext(AuthContext);
+  const { user } = useContext(AuthContext);
   const [isCreateEditMemoryModalOpen, setIsCreateEditMemoryModalOpen] =
     useState(false);
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
@@ -152,7 +151,7 @@ const Memories = () => {
         {memoryQuery.status === "success" && (
           <>
             <MemoriesHeaderContainer>
-              <Typography variant="h3" color={PRIMARY_SHADES[1000]}>
+              <Typography variant="h4" color={PRIMARY_SHADES[1000]}>
                 {memoryQuery?.data?.length
                   ? `${memoryQuery.data[0].family.title} memories`
                   : "No memories yet"}

@@ -16,10 +16,7 @@ export const MemoriesHeaderContainer = styled.div`
   align-items: center;
   justify-content: space-between;
   margin-bottom: 40px;
-  border: 1px solid ${NEUTRAL_SHADES[500]};
-  background: ${NEUTRAL_SHADES.WHITE};
-  padding: 16px;
-  border-radius: 8px;
+  padding-block: 16px;
 `;
 
 export const GoBackContainer = styled.div`

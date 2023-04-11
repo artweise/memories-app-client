@@ -1,8 +1,18 @@
 import { useState } from "react";
 
-import { Typography, IconButton, Chip, Tooltip, SvgIcon } from "@mui/material";
+import {
+  Typography,
+  IconButton,
+  Chip,
+  Tooltip,
+  SvgIcon,
+  MenuItem,
+  Menu,
+  ListItemIcon,
+} from "@mui/material";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
+import MoreVertRoundedIcon from "@mui/icons-material/MoreVertRounded";
 import KeyboardDoubleArrowRightRoundedIcon from "@mui/icons-material/KeyboardDoubleArrowRightRounded";
 
 import { formatDateString } from "../../utilities/dateUtilities";
@@ -19,7 +29,6 @@ import {
   boldTextStyles,
   subTextStyles,
 } from "./style";
-import { NEUTRAL_SHADES } from "../../utilities/globalStyles";
 
 const MemoryCard = ({
   memory,
@@ -31,6 +40,7 @@ const MemoryCard = ({
   // a state to hold the number of characters to show initially in publication field
   const [publicationToShow, setPublicationToShow] = useState(800);
   const [showAllFiles, setShowAllFiles] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
 
   // handleFilesToShow function updates the showAllFiles state to be false
   // when the number of files to show is equal to the length of the gallery array
@@ -50,17 +60,46 @@ const MemoryCard = ({
           !memory?.owner) && (
           <ActionButtonsContainer>
             <IconButton
-              onClick={() => handleDelete(memory._id)}
+              onClick={(event) => setAnchorEl(event.currentTarget)}
               sx={iconButtonStyles}
             >
-              <DeleteRoundedIcon color={NEUTRAL_SHADES[700]} />
+              <MoreVertRoundedIcon />
             </IconButton>
-            <IconButton
-              onClick={() => handleEdit(memory)}
-              sx={iconButtonStyles}
+            <Menu
+              anchorEl={anchorEl}
+              open={Boolean(anchorEl)}
+              onClose={() => setAnchorEl(null)}
+              PaperProps={{
+                style: {
+                  width: "128px",
+                },
+              }}
             >
-              <EditRoundedIcon color={NEUTRAL_SHADES[700]} />
-            </IconButton>
+              {/* Handle Edit */}
+              <MenuItem
+                onClick={() => {
+                  setAnchorEl(null);
+                  handleEdit(memory);
+                }}
+              >
+                <ListItemIcon sx={iconButtonStyles}>
+                  <EditRoundedIcon fontSize="small" />
+                </ListItemIcon>
+                <Typography variant="inherit">Edit</Typography>
+              </MenuItem>
+              {/* Handle Delete */}
+              <MenuItem
+                onClick={() => {
+                  setAnchorEl(null);
+                  handleDelete(memory._id);
+                }}
+              >
+                <ListItemIcon sx={iconButtonStyles}>
+                  <DeleteRoundedIcon fontSize="small" />
+                </ListItemIcon>
+                <Typography variant="inherit">Delete</Typography>
+              </MenuItem>
+            </Menu>
           </ActionButtonsContainer>
         )}
       </TitleAndButtons>
