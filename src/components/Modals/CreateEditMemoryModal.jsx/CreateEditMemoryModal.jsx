@@ -26,20 +26,22 @@ import {
   UploadedData,
   FilesContainer,
   DuoContainer,
+  StyledImg,
   formControlStyleDuo,
   closeRoundedIconStyles,
 } from "./style";
 
 const CreateEditMemoryModal = ({
   isOpen,
-  onCreate,
-  onUpdate,
-  handleClose,
   loading,
   familyId,
   isEditMode,
   memoryToUpdateValues,
   memoryToUpdateId,
+  onCreate,
+  onUpdate,
+  handleClose,
+  handleOpenPreview,
 }) => {
   const [memoryValues, setMemoryValues] = useState({
     title: "",
@@ -238,7 +240,11 @@ const CreateEditMemoryModal = ({
               <UploadedData>
                 {memoryValues.gallery.map((file, index) => (
                   <FilesContainer key={index}>
-                    <img src={file} width="auto" height="100" alt="preview" />
+                    <StyledImg
+                      src={file}
+                      alt="preview"
+                      onClick={() => handleOpenPreview(file)}
+                    />
                     <CloseRoundedIcon
                       sx={closeRoundedIconStyles}
                       fontSize="small"
