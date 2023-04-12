@@ -47,7 +47,7 @@ export const FilesContainer = styled(FlexRow)`
 `;
 
 export const StyledImg = styled.img`
-  cursor: pointer;
+  cursor: zoom-in;
 `;
 
 export const avatarStyles = {

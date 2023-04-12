@@ -21,13 +21,14 @@ export const FilesContainer = styled.div`
   display: inline-block;
 `;
 
-export const CloseRoundedIconStyles = {
+export const closeRoundedIconStyles = {
   position: "absolute",
   top: 2,
   right: 2,
   backgroundColor: NEUTRAL_SHADES.WHITE,
   color: NEUTRAL_SHADES[1100],
   borderRadius: "20%",
+  cursor: "pointer",
 };
 
 export const formControlStyleDuo = {
