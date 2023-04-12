@@ -29,7 +29,7 @@ export const DuoContainer = styled.div`
 export const FormContentContainer = styled.div`
   width: 600px;
   overflow-y: scroll;
-  max-height: 70vh;
+  max-height: 80vh;
   padding-right: 8px;
   margin-right: -16px;
   ::-webkit-scrollbar {
@@ -68,4 +68,11 @@ export const formControlStyleDuo = {
   width: "100%",
   marginTop: "16px",
   flex: 1,
+};
+
+export const notificationStyles = {
+  display: "flex",
+  alignItems: "center",
+  gap: "4px",
+  marginBottom: "8px",
 };
