@@ -21,21 +21,6 @@ export const FilesContainer = styled.div`
   display: inline-block;
 `;
 
-export const CloseRoundedIconStyles = {
-  position: "absolute",
-  top: 2,
-  right: 2,
-  backgroundColor: NEUTRAL_SHADES.WHITE,
-  color: NEUTRAL_SHADES[1100],
-  borderRadius: "20%",
-};
-
-export const formControlStyleDuo = {
-  width: "100%",
-  marginTop: "16px",
-  flex: 1,
-};
-
 export const DuoContainer = styled.div`
   display: flex;
   gap: 16px;
@@ -62,3 +47,25 @@ export const FormContentContainer = styled.div`
     background: ${NEUTRAL_SHADES[600]}90;
   }
 `;
+
+export const StyledImg = styled.img`
+  width: auto;
+  height: 100px;
+  cursor: zoom-in;
+`;
+
+export const closeRoundedIconStyles = {
+  position: "absolute",
+  top: 2,
+  right: 2,
+  backgroundColor: NEUTRAL_SHADES.WHITE,
+  color: NEUTRAL_SHADES[1100],
+  borderRadius: "20%",
+  cursor: "pointer",
+};
+
+export const formControlStyleDuo = {
+  width: "100%",
+  marginTop: "16px",
+  flex: 1,
+};

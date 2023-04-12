@@ -199,14 +199,15 @@ const Memories = () => {
       </PageContainer>
       <CreateEditMemoryModal
         isOpen={isCreateEditMemoryModalOpen}
-        handleClose={handleCloseCreateEditModal}
-        onCreate={handleCreateMemory}
-        onUpdate={handleUpdateMemory}
         loading={isCreationLoading}
         familyId={familyId}
         isEditMode={isEditMode}
         memoryToUpdateValues={memoryToUpdateValues}
         memoryToUpdateId={memoryToUpdateId}
+        handleClose={handleCloseCreateEditModal}
+        onCreate={handleCreateMemory}
+        onUpdate={handleUpdateMemory}
+        handleOpenPreview={handleOpenPreview}
       />
       <PreviewModal
         isOpen={isPreviewModalOpen}
