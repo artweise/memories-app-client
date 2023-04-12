@@ -1,15 +1,18 @@
 import Button from "../../Button/Button";
 import ModalComponent from "../Modal";
 import { Typography } from "@mui/material";
+import { isFunction } from "lodash";
 
-import { Container } from "./style";
+import { Container, ButtonContainer } from "./style";
 
 const ConfirmActionModal = ({
   onClose,
   isOpen,
   onConfirm,
+  onCancel,
   loading = false,
   actionName = "",
+  cancelName = "",
   actionString = "",
   explanation = "",
 }) => {
@@ -20,9 +23,16 @@ const ConfirmActionModal = ({
           {actionString ? actionString : "Are you sure?"}
         </Typography>
         {explanation && <Typography>{explanation}</Typography>}
-        <Button onClick={onConfirm} loading={loading}>
-          {actionName ? actionName : "Confirm"}
-        </Button>
+        <ButtonContainer>
+          {isFunction(onCancel) && (
+            <Button variant="text" onClick={onCancel}>
+              {cancelName ? cancelName : "Cancel"}
+            </Button>
+          )}
+          <Button onClick={onConfirm} loading={loading}>
+            {actionName ? actionName : "Confirm"}
+          </Button>
+        </ButtonContainer>
       </Container>
     </ModalComponent>
   );

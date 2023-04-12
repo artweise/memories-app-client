@@ -3,7 +3,6 @@ import {
   Autocomplete,
   TextField,
   Chip,
-  FormHelperText,
   FormControl,
   Typography,
   Switch,
@@ -11,10 +10,12 @@ import {
   FormGroup,
 } from "@mui/material";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
-import { isEmpty } from "lodash";
+import ErrorOutlineRoundedIcon from "@mui/icons-material/ErrorOutlineRounded";
+import { isEmpty, difference } from "lodash";
 
 import Button from "../../Button/Button";
 import ModalComponent from "../Modal";
+import ConfirmActionModal from "../ConfirmActionModal/ConfirmActionModal";
 import DatePickerComponent from "../../DatePickerComponent/DatePickerComponent";
 import { formatToISO } from "../../../utilities/dateUtilities";
 import { uploadFiles } from "../../../sevices/memoryService";
@@ -29,6 +30,7 @@ import {
   StyledImg,
   formControlStyleDuo,
   closeRoundedIconStyles,
+  notificationStyles,
 } from "./style";
 
 const CreateEditMemoryModal = ({
@@ -52,11 +54,13 @@ const CreateEditMemoryModal = ({
     tags: [],
     gallery: [],
   });
-
   const [galleryValues, setGalleryValues] = useState([]);
   const [uploadLoading, setUploadLoading] = useState(false);
+  // we need this state in order to compare files arrays afterwards, and understand if there are any new files uploaded
+  const [memoryGalleryInitial, setMemoryGalleryInitial] = useState([]);
+  const [isConfirmCloseModalOpen, setIsConfirmCloseModalOpen] = useState(false);
 
-  const clearMemoryValues = () => {
+  const clearState = () => {
     setMemoryValues({
       title: "",
       publication: "",
@@ -66,14 +70,16 @@ const CreateEditMemoryModal = ({
       tags: [],
       gallery: [],
     });
-  };
-
-  const clearGalleryValues = () => {
     setGalleryValues([]);
+    setUploadLoading(false);
+    setMemoryGalleryInitial([]);
+    setIsConfirmCloseModalOpen(false);
   };
 
   const onSubmitForm = (event) => {
-    event.preventDefault();
+    if (event) {
+      event.preventDefault();
+    }
     // take the state and create copy object, add familyId to the object
     let values = { ...memoryValues, familyId };
     // initialize date variable
@@ -92,12 +98,22 @@ const CreateEditMemoryModal = ({
       ? onUpdate({ memoryId: memoryToUpdateId, data: values }) // one parameter - object with two keys: memoryId and data, where memoryId - memoryId to update, and data - your object
       : onCreate(values); // one parameter - just the values
     // clear form
-    clearMemoryValues();
+    clearState();
   };
 
   const onClose = () => {
-    clearMemoryValues();
-    handleClose();
+    if (loading || uploadLoading) return;
+    // check if have new files that were uploaded
+    // The lodash 'difference' method returns an array of values that are present in the first array, but not in the rest of the arrays passed as arguments.
+    // e.g. const newElements = _.difference(newArray, oldArray);
+    const newElements = difference(memoryValues.gallery, memoryGalleryInitial);
+    if (newElements.length) {
+      // if there are new files - open confirm close modal
+      setIsConfirmCloseModalOpen(true);
+    } else {
+      clearState();
+      handleClose();
+    }
   };
 
   const handleTagsChange = (value, reason) => {
@@ -139,7 +155,7 @@ const CreateEditMemoryModal = ({
         gallery: [...memoryValues.gallery, ...fileUrls],
       });
       setUploadLoading(false);
-      clearGalleryValues(); // clear input field values
+      setGalleryValues([]); // clear files input
     } catch (e) {
       console.log(e);
       setUploadLoading(false);
@@ -147,7 +163,7 @@ const CreateEditMemoryModal = ({
   };
 
   const handleRemoveUploadedFile = (indexToRemove) => {
-    // const newGallery = [...memoryValues.gallery];
+    // OLD - const newGallery = [...memoryValues.gallery];
     // newGallery.splice(index, 1);
     const newGallery = [...memoryValues.gallery].filter(
       (value, index) => index !== indexToRemove
@@ -162,6 +178,12 @@ const CreateEditMemoryModal = ({
   useEffect(() => {
     if (isEditMode && memoryToUpdateValues) {
       setMemoryValues(memoryToUpdateValues);
+      // we save the values to the state in the beginning in order to compare arrays afterwards, and understand if there are any new files were uploaded
+      setMemoryGalleryInitial(
+        memoryToUpdateValues?.gallery?.length
+          ? memoryToUpdateValues.gallery
+          : []
+      );
     }
   }, [isEditMode, memoryToUpdateValues]);
 
@@ -256,7 +278,6 @@ const CreateEditMemoryModal = ({
               </UploadedData>
             )}
           </div>
-
           <UploadContainer>
             <input
               type="file"
@@ -278,7 +299,10 @@ const CreateEditMemoryModal = ({
               </Button>
             </div>
           </UploadContainer>
-          <Typography variant="subtitle2">*maximum 10 files at once</Typography>
+          <Typography variant="subtitle2" sx={notificationStyles}>
+            <ErrorOutlineRoundedIcon fontSize="small" />
+            *maximum 10 files at once
+          </Typography>
           <FormControl sx={formControlStyle}>
             <Autocomplete
               autoFocus
@@ -328,6 +352,19 @@ const CreateEditMemoryModal = ({
           </Button>
         </FormContentContainer>
       </form>
+      <ConfirmActionModal
+        loading={loading}
+        onClose={() => setIsConfirmCloseModalOpen(false)}
+        isOpen={isConfirmCloseModalOpen}
+        actionName="Save and close"
+        cancelName="Continue"
+        actionString="You have new files 🖼"
+        explanation="Please save the memory before you close the window"
+        onConfirm={onSubmitForm}
+        onCancel={() => {
+          setIsConfirmCloseModalOpen(false);
+        }}
+      />
     </ModalComponent>
   );
 };
