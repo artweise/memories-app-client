@@ -1,25 +1,22 @@
 import { useState } from "react";
 
-import { Typography, IconButton, Chip, Tooltip, SvgIcon } from "@mui/material";
-import EditRoundedIcon from "@mui/icons-material/EditRounded";
-import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
+import { Typography, Chip, Tooltip, SvgIcon, Avatar } from "@mui/material";
 import KeyboardDoubleArrowRightRoundedIcon from "@mui/icons-material/KeyboardDoubleArrowRightRounded";
 
+import MemoryMenu from "../MemoryMenu/MemoryMenu";
 import { formatDateString } from "../../utilities/dateUtilities";
 import {
   StyledMemoryCard,
   TitleAndButtons,
-  ActionButtonsContainer,
   Publication,
   FlexRow,
   TagsContainer,
   FilesContainer,
   StyledImg,
-  iconButtonStyles,
   boldTextStyles,
   subTextStyles,
+  avatarStyles,
 } from "./style";
-import { NEUTRAL_SHADES } from "../../utilities/globalStyles";
 
 const MemoryCard = ({
   memory,
@@ -46,28 +43,37 @@ const MemoryCard = ({
         <Typography variant="h6" sx={boldTextStyles}>
           {memory?.title ? memory.title : ""}
         </Typography>
+
+        {/* Show options menu if the current user is the owner, or owner does not exist*/}
         {((memory.owner && currentUserId === memory.owner) ||
           !memory?.owner) && (
-          <ActionButtonsContainer>
-            <IconButton
-              onClick={() => handleDelete(memory._id)}
-              sx={iconButtonStyles}
-            >
-              <DeleteRoundedIcon color={NEUTRAL_SHADES[700]} />
-            </IconButton>
-            <IconButton
-              onClick={() => handleEdit(memory)}
-              sx={iconButtonStyles}
-            >
-              <EditRoundedIcon color={NEUTRAL_SHADES[700]} />
-            </IconButton>
-          </ActionButtonsContainer>
+          <MemoryMenu
+            handleDelete={handleDelete}
+            handleEdit={handleEdit}
+            memory={memory}
+          />
         )}
       </TitleAndButtons>
 
       <Typography variant="body1" sx={boldTextStyles} gutterBottom>
         {formatDateString(memory.date)}
       </Typography>
+
+      {memory?.createdBy?.email && (
+        <FlexRow style={{ alignItems: "baseline" }}>
+          <Typography sx={boldTextStyles} gutterBottom>
+            Created by:
+          </Typography>
+          <FlexRow>
+            <Avatar sx={avatarStyles}>
+              {memory?.createdBy?.username?.slice(0, 1).toUpperCase() || null}
+            </Avatar>
+            <Typography variant="body2">
+              {memory?.createdBy?.username || ""}
+            </Typography>
+          </FlexRow>
+        </FlexRow>
+      )}
 
       <Publication>
         {memory?.publication && (

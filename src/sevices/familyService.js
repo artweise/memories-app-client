@@ -10,3 +10,8 @@ export const createFamily = async (data) => {
   const res = await axios.post("/family", data, getHeaders());
   if (res.status === 200) return res.data;
 };
+
+export const getFamilyById = async (familyId) => {
+  const res = await axios.get(`/families/${familyId}`, getHeaders());
+  if (res.status === 200) return res.data;
+};

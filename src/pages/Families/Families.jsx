@@ -1,8 +1,7 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useQuery, useQueryClient, useMutation } from "react-query";
 
-import { AuthContext } from "../../context/auth.context";
 import Navbar from "../../components/Navbar/Navbar";
 import FamilyCard from "../../components/FamilyCard/FamilyCard";
 import FamilyCardEmpty from "../../components/FamilyCard/FamilyCardEmpty";
@@ -14,8 +13,6 @@ import { FamiliesContainer } from "./style";
 import FamilyCardSkeleton from "../../components/FamilyCard/FamilyCardSkeleton";
 
 const Families = () => {
-  const { isLoggedIn, isLoading, token, setCurrentFamily } =
-    useContext(AuthContext);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isCreationLoading, setIsCreationLoading] = useState(false);
 
@@ -46,23 +43,24 @@ const Families = () => {
     mutation.mutate(familyValues);
   };
 
+  // Skeleton
+  const renderFamiliesSkeleton = () => {
+    return [...Array(2).keys()].map((el, index) => (
+      <FamilyCardSkeleton key={index} />
+    ));
+  };
+
   return (
     <>
       <Navbar />
       <PageContainer>
         <FamiliesContainer>
-          {familyQuery.status === "loading" &&
-            [...Array(2).keys()].map((el, index) => (
-              <FamilyCardSkeleton key={index} />
-            ))}
+          {familyQuery.status === "loading" && renderFamiliesSkeleton()}
+
           {familyQuery.status === "success" && (
             <>
               {familyQuery?.data?.map((family) => (
-                <Link
-                  onClick={() => setCurrentFamily(family._id)}
-                  to={`/memories/${family._id}`}
-                  key={family._id}
-                >
+                <Link to={`/memories/${family._id}`} key={family._id}>
                   <FamilyCard family={family} />
                 </Link>
               ))}

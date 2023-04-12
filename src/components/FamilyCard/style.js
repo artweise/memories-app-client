@@ -48,6 +48,10 @@ export const MembersContainer = styled.div`
   height: 22%;
 `;
 
+export const StyledSkeletonCard = styled.div`
+  height: 24vw;
+`;
+
 export const AvatarAndUsername = styled.div`
   display: flex;
   gap: 8px;
@@ -57,8 +61,6 @@ export const AvatarAndUsername = styled.div`
   }
 `;
 
-export const paperPopoverStyles = { padding: "16px", borderRadius: "8px" };
-
 export const avatarStyles = {
   bgcolor: PRIMARY_SHADES[800],
   width: 24,
@@ -66,6 +68,9 @@ export const avatarStyles = {
   fontSize: "12px",
 };
 
-export const StyledSkeletonCard = styled.div`
-  height: 24vw;
-`;
+export const paperPopoverStyles = { padding: "16px", borderRadius: "8px" };
+
+export const popoverStyles = {
+  pointerEvents: "none",
+  padding: "16px",
+};
