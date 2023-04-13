@@ -1,17 +1,5 @@
 import { useRef, useEffect } from "react";
-// import { Parser } from "html-to-react";
-
 import "./style.css";
-
-// const rawHTML = `
-// <div>
-// <main>
-// <!-- GRADIENT BACKGROUND -->
-// <canvas id="gradient-canvas"></canvas>
-// </main>
-// // <script src="gradient.js"></script>
-// </div>
-// `;
 
 const Canvas = (props) => {
   const canvasRef = useRef(null);
@@ -27,25 +15,18 @@ const Canvas = (props) => {
       canvas.width,
       canvas.height
     );
-    gradient.addColorStop(0.4, "#26A871");
-    gradient.addColorStop(0.6, "#5F10C5");
-    gradient.addColorStop(0.8, "#ef008f");
+    gradient.addColorStop(0.4, "#7743C9");
+    gradient.addColorStop(0.6, "#F4BA40");
+    gradient.addColorStop(0.7, "#51b98d");
 
     // fill rectangle with gradient
     context.fillStyle = gradient;
     context.fillRect(0, 0, canvas.width, canvas.height);
   }, []);
 
-  //   useEffect(() => {
-  //     const canvas = canvasRef.current;
-  //     const context = canvas.getContext("2d");
-  //     gradient(canvas, context);
-  //   }, []);
-
   return (
     <div>
       <canvas id="gradient-canvas" ref={canvasRef} {...props} />
-      {/* {Parser().parse(rawHTML)} */}
     </div>
   );
 };
