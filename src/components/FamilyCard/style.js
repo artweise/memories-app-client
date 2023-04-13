@@ -7,7 +7,7 @@ import {
 
 export const StyledFamilyCard = styled.div`
   ${({ color = SUCCESS_SHADES[300] }) => css`
-    height: 22vw;
+    height: 24vw;
     background: ${NEUTRAL_SHADES.WHITE};
     box-shadow: 4px 4px 16px 4px #d4d4d4;
     border-radius: 16px;
@@ -48,14 +48,18 @@ export const MembersContainer = styled.div`
   height: 22%;
 `;
 
+export const StyledSkeletonCard = styled.div`
+  height: 24vw;
+`;
+
 export const AvatarAndUsername = styled.div`
   display: flex;
   gap: 8px;
   align-items: center;
-  margin-bottom: 4px;
+  &:not(:last-of-type) {
+    margin-bottom: 8px;
+  }
 `;
-
-export const paperPopoverStyles = { padding: "16px", borderRadius: "8px" };
 
 export const avatarStyles = {
   bgcolor: PRIMARY_SHADES[800],
@@ -64,6 +68,9 @@ export const avatarStyles = {
   fontSize: "12px",
 };
 
-export const FamilyCardSkeleton = styled.div`
-  height: 22vw;
-`;
+export const paperPopoverStyles = { padding: "16px", borderRadius: "8px" };
+
+export const popoverStyles = {
+  pointerEvents: "none",
+  padding: "16px",
+};

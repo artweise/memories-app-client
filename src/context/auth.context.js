@@ -16,7 +16,6 @@ function AuthProviderWrapper(props) {
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState(null);
   const [token, setToken] = useState("");
-  const [currentFamily, setCurrentFamily] = useState("");
 
   const queryCache = new QueryCache();
 
@@ -34,7 +33,6 @@ function AuthProviderWrapper(props) {
     setIsLoggedIn(false);
     setIsLoading(false);
     setToken("");
-    setCurrentFamily("");
     setUser(null);
     queryCache.clear();
   };
@@ -89,8 +87,6 @@ function AuthProviderWrapper(props) {
         authenticateUser,
         logOutUser,
         token,
-        currentFamily,
-        setCurrentFamily,
       }}
     >
       {props.children}

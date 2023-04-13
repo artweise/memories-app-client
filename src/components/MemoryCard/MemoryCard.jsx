@@ -1,44 +1,57 @@
-import { Typography, IconButton, Chip, Tooltip } from "@mui/material";
-import EditRoundedIcon from "@mui/icons-material/EditRounded";
-import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
+import { useState } from "react";
 
+import { Typography, Chip, Tooltip, SvgIcon, Avatar } from "@mui/material";
+import KeyboardDoubleArrowRightRoundedIcon from "@mui/icons-material/KeyboardDoubleArrowRightRounded";
+
+import MemoryMenu from "../MemoryMenu/MemoryMenu";
 import { formatDateString } from "../../utilities/dateUtilities";
 import {
   StyledMemoryCard,
   TitleAndButtons,
-  ActionButtonsContainer,
+  Publication,
   FlexRow,
   TagsContainer,
   FilesContainer,
-  iconButtonStyles,
+  StyledImg,
   boldTextStyles,
   subTextStyles,
+  avatarStyles,
 } from "./style";
-import { NEUTRAL_SHADES } from "../../utilities/globalStyles";
 
-const MemoryCard = ({ memory, handleDelete, handleEdit, currentUserId }) => {
+const MemoryCard = ({
+  memory,
+  handleDelete,
+  handleEdit,
+  currentUserId,
+  handleOpenPreview,
+}) => {
+  // a state to hold the number of characters to show initially in publication field
+  const [publicationToShow, setPublicationToShow] = useState(800);
+  const [showAllFiles, setShowAllFiles] = useState(false);
+
+  // handleFilesToShow function updates the showAllFiles state to be false
+  // when the number of files to show is equal to the length of the gallery array
+  const handleFilesToShow = () => {
+    setShowAllFiles(filesToShow === memory.gallery.length ? false : true);
+  };
+
+  const filesToShow = 6;
+
   return (
     <StyledMemoryCard>
       <TitleAndButtons>
         <Typography variant="h6" sx={boldTextStyles}>
           {memory?.title ? memory.title : ""}
         </Typography>
+
+        {/* Show options menu if the current user is the owner, or owner does not exist*/}
         {((memory.owner && currentUserId === memory.owner) ||
           !memory?.owner) && (
-          <ActionButtonsContainer>
-            <IconButton
-              onClick={() => handleDelete(memory._id)}
-              sx={iconButtonStyles}
-            >
-              <DeleteRoundedIcon color={NEUTRAL_SHADES[700]} />
-            </IconButton>
-            <IconButton
-              onClick={() => handleEdit(memory)}
-              sx={iconButtonStyles}
-            >
-              <EditRoundedIcon color={NEUTRAL_SHADES[700]} />
-            </IconButton>
-          </ActionButtonsContainer>
+          <MemoryMenu
+            handleDelete={handleDelete}
+            handleEdit={handleEdit}
+            memory={memory}
+          />
         )}
       </TitleAndButtons>
 
@@ -46,9 +59,43 @@ const MemoryCard = ({ memory, handleDelete, handleEdit, currentUserId }) => {
         {formatDateString(memory.date)}
       </Typography>
 
-      {memory?.publication && (
-        <Typography gutterBottom>{memory.publication}</Typography>
+      {memory?.createdBy?.email && (
+        <FlexRow style={{ alignItems: "baseline" }}>
+          <Typography sx={boldTextStyles} gutterBottom>
+            Created by:
+          </Typography>
+          <FlexRow>
+            <Avatar sx={avatarStyles}>
+              {memory?.createdBy?.username?.slice(0, 1).toUpperCase() || null}
+            </Avatar>
+            <Typography variant="body2">
+              {memory?.createdBy?.username || ""}
+            </Typography>
+          </FlexRow>
+        </FlexRow>
       )}
+
+      <Publication>
+        {memory?.publication && (
+          <Typography gutterBottom>
+            {/* if memory.publication.length <= 800 */}
+            {publicationToShow >= memory.publication.length
+              ? memory.publication
+              : memory.publication.slice(0, publicationToShow) + "..."}
+            {publicationToShow < memory.publication.length && (
+              <Tooltip title="Load more">
+                <SvgIcon color="action" fontSize="small">
+                  <KeyboardDoubleArrowRightRoundedIcon
+                    onClick={() =>
+                      setPublicationToShow(memory.publication.length)
+                    }
+                  />
+                </SvgIcon>
+              </Tooltip>
+            )}
+          </Typography>
+        )}
+      </Publication>
 
       {memory?.place && (
         <FlexRow>
@@ -63,31 +110,30 @@ const MemoryCard = ({ memory, handleDelete, handleEdit, currentUserId }) => {
 
       {!!memory?.gallery?.length && (
         <FilesContainer>
-          {memory.gallery.slice(0, 8).map((file, index) => (
-            <FlexRow key={index}>
-              <img src={file} width="auto" height="200" alt="preview" />
-            </FlexRow>
-          ))}
-          {/* if there are more then 8 photos/videos show tooltip with the rest of files*/}
-          {memory.gallery.length > 8 && (
-            <Tooltip
-              disableHoverListener
-              title={
-                <div>
-                  {memory.gallery.slice(8).map((file, index) => (
-                    <Typography key={index}>{file}</Typography>
-                  ))}
-                </div>
-              }
-            >
-              {/* the amount of the rest files (length - 8)*/}
-              <Chip
-                label={`+ ${memory.gallery.length - 8}`}
-                // TODO loadMoreFunction
-                // onClick={handleClickLoadMore}
-                clickable
-              />
-            </Tooltip>
+          {/* 'if showAllFiles is true' ? memory.gallery.length 'if showAllFiles is false': filesToShow */}
+          {memory.gallery
+            .slice(0, showAllFiles ? memory.gallery.length : filesToShow)
+            .map((file, index) => (
+              <FlexRow key={index}>
+                <StyledImg
+                  src={file}
+                  width="auto"
+                  height="170"
+                  alt="preview"
+                  onClick={() => handleOpenPreview(file)}
+                />
+              </FlexRow>
+            ))}
+
+          {/* the condition in the FilesContainer div checks if there are more than 
+          filesToShow files AND showAllFiles is false. If both conditions are true, 
+          show the Chip with the number of remaining files */}
+          {memory?.gallery?.length > filesToShow && !showAllFiles && (
+            <Chip
+              label={`+ ${memory.gallery.length - filesToShow}`}
+              clickable
+              onClick={handleFilesToShow}
+            />
           )}
         </FilesContainer>
       )}

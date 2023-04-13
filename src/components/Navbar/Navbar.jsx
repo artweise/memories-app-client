@@ -13,7 +13,7 @@ import {
   MenuItem,
 } from "@mui/material";
 import Diversity1RoundedIcon from "@mui/icons-material/Diversity1Rounded";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 import { AuthContext } from "../../context/auth.context";
 import { PRIMARY_SHADES } from "../../utilities/globalStyles";
@@ -28,6 +28,7 @@ const Navbar = () => {
   // the values from AuthContext.Provider `value` prop
   const { isLoggedIn, user, logOutUser } = useContext(AuthContext);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
@@ -36,13 +37,22 @@ const Navbar = () => {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+
+  const isMainPage = location.pathname === "/";
+
   return (
-    <AppBar position="fixed" sx={{ background: PRIMARY_SHADES[700] }}>
+    <AppBar
+      position="fixed"
+      sx={{
+        background: isMainPage ? "transparent" : PRIMARY_SHADES[700],
+        boxShadow: "none",
+      }}
+    >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           {/* LOGO */}
           <Diversity1RoundedIcon
-            sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
+            sx={{ display: { xs: "none", md: "flex" }, mr: 1, ml: 4 }}
           />
           {/* APPLICATION TITLE */}
           <Typography
@@ -64,7 +74,7 @@ const Navbar = () => {
 
           <Box sx={{ flexGrow: 0, marginLeft: "auto" }}>
             {isLoggedIn ? (
-              <Box sx={{ flexGrow: 0 }}>
+              <Box sx={{ flexGrow: 0, mr: 4 }}>
                 <Tooltip title="Open settings">
                   <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                     <Avatar>
@@ -117,7 +127,11 @@ const Navbar = () => {
                 </Menu>
               </Box>
             ) : (
-              <Button color="inherit" onClick={() => navigate("/login")}>
+              <Button
+                color="inherit"
+                sx={{ mr: 4 }}
+                onClick={() => navigate("/login")}
+              >
                 Log in
               </Button>
             )}

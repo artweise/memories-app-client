@@ -1,6 +1,6 @@
 import { useState } from "react";
 import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
-import { Divider, Typography, Avatar, Popover } from "@mui/material";
+import { Divider, Typography, Popover, Tooltip, Avatar } from "@mui/material";
 
 import { SUCCESS_SHADES } from "../../utilities/globalStyles";
 import {
@@ -9,6 +9,7 @@ import {
   MembersContainer,
   AvatarAndUsername,
   paperPopoverStyles,
+  popoverStyles,
   avatarStyles,
 } from "./style";
 
@@ -23,8 +24,6 @@ const FamilyCard = ({ family }) => {
     setAnchorEl(null);
   };
 
-  const open = Boolean(anchorEl);
-
   return (
     <StyledFamilyCard color={family.color}>
       <Typography variant="h5" sx={{ mb: 2 }} noWrap={true}>
@@ -33,9 +32,23 @@ const FamilyCard = ({ family }) => {
       <Description>
         {family?.description && (
           <Typography variant="body1" gutterBottom>
-            {family.description.length > 100
-              ? family.description.slice(0, 100) + "..."
-              : family.description}
+            {family?.description?.length > 100 ? (
+              <>
+                {family.description.slice(0, 100)}
+                <Tooltip
+                  title={
+                    family?.description?.length > 100
+                      ? family.description.slice(100)
+                      : ""
+                  }
+                  placement="top"
+                >
+                  <span>...</span>
+                </Tooltip>
+              </>
+            ) : (
+              family?.description || ""
+            )}
           </Typography>
         )}
       </Description>
@@ -54,11 +67,8 @@ const FamilyCard = ({ family }) => {
       </MembersContainer>
       <Popover
         id="mouse-over-popover"
-        sx={{
-          pointerEvents: "none",
-          padding: "16px",
-        }}
-        open={open}
+        sx={popoverStyles}
+        open={Boolean(anchorEl)}
         anchorEl={anchorEl}
         anchorOrigin={{
           vertical: "top",
@@ -78,7 +88,7 @@ const FamilyCard = ({ family }) => {
           family.members.map((member, index) => (
             <AvatarAndUsername key={index}>
               <Avatar sx={avatarStyles}>
-                {member.username.slice(0, 2).toUpperCase()}
+                {member?.username?.slice(0, 1).toUpperCase() || ""}
               </Avatar>
               <div>{member.email}</div>
             </AvatarAndUsername>

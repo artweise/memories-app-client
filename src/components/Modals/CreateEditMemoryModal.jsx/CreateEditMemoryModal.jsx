@@ -3,7 +3,6 @@ import {
   Autocomplete,
   TextField,
   Chip,
-  FormHelperText,
   FormControl,
   Typography,
   Switch,
@@ -11,32 +10,40 @@ import {
   FormGroup,
 } from "@mui/material";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
-import { isEmpty } from "lodash";
+import ErrorOutlineRoundedIcon from "@mui/icons-material/ErrorOutlineRounded";
+import { isEmpty, difference } from "lodash";
 
 import Button from "../../Button/Button";
 import ModalComponent from "../Modal";
+import ConfirmActionModal from "../ConfirmActionModal/ConfirmActionModal";
 import DatePickerComponent from "../../DatePickerComponent/DatePickerComponent";
 import { formatToISO } from "../../../utilities/dateUtilities";
-import { uploadFiles } from "../../../pages/Memories/services/memoryServices";
+import { uploadFiles } from "../../../sevices/memoryService";
 import { notifySuccess, notifyError } from "../../../utilities/toastUtilities";
-import { StyledForm, formControlStyle } from "../style";
+import { formControlStyle } from "../style";
 import {
+  FormContentContainer,
   UploadContainer,
   UploadedData,
-  Files,
-  CloseRoundedIconStyles,
+  FilesContainer,
+  DuoContainer,
+  StyledImg,
+  formControlStyleDuo,
+  closeRoundedIconStyles,
+  notificationStyles,
 } from "./style";
 
 const CreateEditMemoryModal = ({
   isOpen,
-  onCreate,
-  onUpdate,
-  handleClose,
   loading,
   familyId,
   isEditMode,
   memoryToUpdateValues,
   memoryToUpdateId,
+  onCreate,
+  onUpdate,
+  handleClose,
+  handleOpenPreview,
 }) => {
   const [memoryValues, setMemoryValues] = useState({
     title: "",
@@ -47,12 +54,13 @@ const CreateEditMemoryModal = ({
     tags: [],
     gallery: [],
   });
-
   const [galleryValues, setGalleryValues] = useState([]);
-  const [imagePreviews, setImagePreviews] = useState([]);
   const [uploadLoading, setUploadLoading] = useState(false);
+  // we need this state in order to compare files arrays afterwards, and understand if there are any new files uploaded
+  const [memoryGalleryInitial, setMemoryGalleryInitial] = useState([]);
+  const [isConfirmCloseModalOpen, setIsConfirmCloseModalOpen] = useState(false);
 
-  const clearMemoryValues = () => {
+  const clearState = () => {
     setMemoryValues({
       title: "",
       publication: "",
@@ -62,15 +70,16 @@ const CreateEditMemoryModal = ({
       tags: [],
       gallery: [],
     });
-  };
-
-  const clearGalleryValues = () => {
     setGalleryValues([]);
-    setImagePreviews([]);
+    setUploadLoading(false);
+    setMemoryGalleryInitial([]);
+    setIsConfirmCloseModalOpen(false);
   };
 
   const onSubmitForm = (event) => {
-    event.preventDefault();
+    if (event) {
+      event.preventDefault();
+    }
     // take the state and create copy object, add familyId to the object
     let values = { ...memoryValues, familyId };
     // initialize date variable
@@ -89,12 +98,22 @@ const CreateEditMemoryModal = ({
       ? onUpdate({ memoryId: memoryToUpdateId, data: values }) // one parameter - object with two keys: memoryId and data, where memoryId - memoryId to update, and data - your object
       : onCreate(values); // one parameter - just the values
     // clear form
-    clearMemoryValues();
+    clearState();
   };
 
   const onClose = () => {
-    clearMemoryValues();
-    handleClose();
+    if (loading || uploadLoading) return;
+    // check if have new files that were uploaded
+    // The lodash 'difference' method returns an array of values that are present in the first array, but not in the rest of the arrays passed as arguments.
+    // e.g. const newElements = _.difference(newArray, oldArray);
+    const newElements = difference(memoryValues.gallery, memoryGalleryInitial);
+    if (newElements.length) {
+      // if there are new files - open confirm close modal
+      setIsConfirmCloseModalOpen(true);
+    } else {
+      clearState();
+      handleClose();
+    }
   };
 
   const handleTagsChange = (value, reason) => {
@@ -129,24 +148,40 @@ const CreateEditMemoryModal = ({
     try {
       const res = await uploadFiles(formData);
       const fileUrls = res.data.fileUrls;
-      setImagePreviews([...imagePreviews, ...fileUrls]);
+      setGalleryValues([...galleryValues, ...fileUrls]);
       // Add the file URLs to the memory values
       setMemoryValues({
         ...memoryValues,
         gallery: [...memoryValues.gallery, ...fileUrls],
       });
       setUploadLoading(false);
-      clearGalleryValues(); // clear input field values
+      setGalleryValues([]); // clear files input
     } catch (e) {
       console.log(e);
       setUploadLoading(false);
     }
   };
 
+  const handleRemoveUploadedFile = (indexToRemove) => {
+    const newGallery = [...memoryValues.gallery].filter(
+      (value, index) => index !== indexToRemove
+    );
+    setMemoryValues({
+      ...memoryValues,
+      gallery: newGallery,
+    });
+  };
+
   // If isEditMode - set the form values to the memoryToUpdateValues received from props
   useEffect(() => {
     if (isEditMode && memoryToUpdateValues) {
       setMemoryValues(memoryToUpdateValues);
+      // we save the values to the state in the beginning in order to compare arrays afterwards, and understand if there are any new files were uploaded
+      setMemoryGalleryInitial(
+        memoryToUpdateValues?.gallery?.length
+          ? memoryToUpdateValues.gallery
+          : []
+      );
     }
   }, [isEditMode, memoryToUpdateValues]);
 
@@ -156,159 +191,178 @@ const CreateEditMemoryModal = ({
       handleClose={() => onClose()}
       title={isEditMode ? "Edit memory" : "Create new memory"}
     >
-      <StyledForm onSubmit={(event) => onSubmitForm(event)}>
-        <FormGroup>
-          <FormControlLabel
-            checked={memoryValues.isPrivate}
-            onChange={(event) =>
-              setMemoryValues({
-                ...memoryValues,
-                isPrivate: event.target.checked,
-              })
-            }
-            control={<Switch />}
-            label="Private"
-          />
-        </FormGroup>
-        <FormControl sx={formControlStyle}>
-          <TextField
-            id="memory-title"
-            label="Title"
-            value={memoryValues.title}
-            onChange={(event) =>
-              setMemoryValues({ ...memoryValues, title: event.target.value })
-            }
-          />
-        </FormControl>
-        <FormControl sx={formControlStyle}>
-          <DatePickerComponent
-            date={memoryValues.date}
-            setDate={(date) => {
-              setMemoryValues({ ...memoryValues, date });
-            }}
-          />
-        </FormControl>
-        <FormControl sx={formControlStyle}>
-          <TextField
-            id="memory-place"
-            label="Place"
-            value={memoryValues.place}
-            onChange={(event) =>
-              setMemoryValues({ ...memoryValues, place: event.target.value })
-            }
-          />
-        </FormControl>
-        <FormControl sx={formControlStyle}>
-          <TextField
-            id="memory-publication"
-            label="Publication"
-            multiline
-            rows={3}
-            // TODO show only peace of text...
-            // loadMoreFunction
-            // onClick={handleClickLoadMore}
-            value={memoryValues.publication}
-            onChange={(event) =>
-              setMemoryValues({
-                ...memoryValues,
-                publication: event.target.value,
-              })
-            }
-          />
-        </FormControl>
+      <form onSubmit={(event) => onSubmitForm(event)}>
+        <FormContentContainer>
+          <FormGroup>
+            <FormControlLabel
+              checked={memoryValues.isPrivate}
+              onChange={(event) =>
+                setMemoryValues({
+                  ...memoryValues,
+                  isPrivate: event.target.checked,
+                })
+              }
+              control={<Switch />}
+              label="Private"
+            />
+          </FormGroup>
+          <DuoContainer>
+            <FormControl sx={formControlStyleDuo}>
+              <TextField
+                id="memory-title"
+                label="Title"
+                value={memoryValues.title}
+                onChange={(event) =>
+                  setMemoryValues({
+                    ...memoryValues,
+                    title: event.target.value,
+                  })
+                }
+              />
+            </FormControl>
+            <FormControl sx={formControlStyleDuo}>
+              <DatePickerComponent
+                date={memoryValues.date}
+                setDate={(date) => {
+                  setMemoryValues({ ...memoryValues, date });
+                }}
+              />
+            </FormControl>
+          </DuoContainer>
 
-        <div>
-          {!!memoryValues?.gallery?.length && (
-            <UploadedData>
-              {memoryValues.gallery.map((file, index) => (
-                <Files key={index}>
-                  <img src={file} width="auto" height="100" alt="preview" />
-                  <CloseRoundedIcon
-                    sx={CloseRoundedIconStyles}
-                    fontSize="small"
-                    onClick={() => {
-                      const newGallery = [...memoryValues.gallery];
-                      newGallery.splice(index, 1);
-                      setMemoryValues({
-                        ...memoryValues,
-                        gallery: newGallery,
-                      });
-                      const newPreviews = [...imagePreviews];
-                      newPreviews.splice(index, 1);
-                      setImagePreviews(newPreviews);
-                    }}
-                  />
-                </Files>
-              ))}
-            </UploadedData>
-          )}
-        </div>
-
-        <UploadContainer>
-          <input
-            type="file"
-            name="gallery"
-            multiple="multiple"
-            // accept=".jpg, .jpeg, .png"
-            accept="image/*,audio/*,video/*,.pdf"
-            onChange={(event) => {
-              setGalleryValues(Array.from(event.target.files));
-            }}
-          />
+          <FormControl sx={formControlStyle}>
+            <TextField
+              id="memory-place"
+              label="Place"
+              value={memoryValues.place}
+              onChange={(event) =>
+                setMemoryValues({ ...memoryValues, place: event.target.value })
+              }
+            />
+          </FormControl>
+          <FormControl sx={formControlStyle}>
+            <TextField
+              id="memory-publication"
+              label="Publication"
+              multiline
+              rows={6}
+              value={memoryValues.publication}
+              onChange={(event) =>
+                setMemoryValues({
+                  ...memoryValues,
+                  publication: event.target.value,
+                })
+              }
+            />
+          </FormControl>
           <div>
-            <Button
-              disabled={uploadLoading || isEmpty(galleryValues)}
-              onClick={handleUploadFiles}
-              loading={uploadLoading}
-            >
-              Upload
-            </Button>
-          </div>
-        </UploadContainer>
-        <Typography variant="subtitle2">maximum 10 files at once</Typography>
-        <FormControl sx={formControlStyle}>
-          <Autocomplete
-            autoFocus
-            multiple
-            value={memoryValues.tags}
-            id="new-family-tags"
-            clearOnEscape
-            clearOnBlur
-            freeSolo
-            blurOnSelect
-            autoSelect
-            options={memoryValues.tags}
-            // Adding # and saving new value to the state
-            onChange={(_, value, reason) => handleTagsChange(value, reason)}
-            renderTags={(value, getTagProps) =>
-              value.map((option, index) => (
-                <Chip
-                  variant="outlined"
-                  label={option}
-                  {...getTagProps({ index })}
-                />
-              ))
-            }
-            renderInput={(params) => (
-              <TextField {...params} label="Tags" placeholder="Add some tags" />
+            {!!memoryValues?.gallery?.length && (
+              <UploadedData>
+                {memoryValues.gallery.map((file, index) => (
+                  <FilesContainer key={index}>
+                    <StyledImg
+                      src={file}
+                      alt="preview"
+                      onClick={() => handleOpenPreview(file)}
+                    />
+                    <CloseRoundedIcon
+                      sx={closeRoundedIconStyles}
+                      fontSize="small"
+                      // remove uploaded file from the array
+                      onClick={() => handleRemoveUploadedFile(index)}
+                    />
+                  </FilesContainer>
+                ))}
+              </UploadedData>
             )}
-          />
-        </FormControl>
-
-        <Button
-          sx={{ mt: 2 }}
-          type="submit"
-          isFormButton={true}
-          disabled={
-            loading ||
-            uploadLoading ||
-            (!memoryValues.title && !memoryValues.publication)
-          }
-          loading={loading}
-        >
-          {isEditMode ? "Update" : "Create"}
-        </Button>
-      </StyledForm>
+          </div>
+          <UploadContainer>
+            <input
+              type="file"
+              name="gallery"
+              multiple="multiple"
+              // accept=".jpg, .jpeg, .png"
+              accept="image/*,audio/*,video/*,.pdf"
+              onChange={(event) => {
+                setGalleryValues(Array.from(event.target.files));
+              }}
+            />
+            <div>
+              <Button
+                disabled={uploadLoading || isEmpty(galleryValues)}
+                onClick={handleUploadFiles}
+                loading={uploadLoading}
+              >
+                Upload
+              </Button>
+            </div>
+          </UploadContainer>
+          <Typography variant="subtitle2" sx={notificationStyles}>
+            <ErrorOutlineRoundedIcon fontSize="small" />
+            *maximum 10 files at once
+          </Typography>
+          <FormControl sx={formControlStyle}>
+            <Autocomplete
+              autoFocus
+              multiple
+              value={memoryValues.tags}
+              id="new-family-tags"
+              clearOnEscape
+              clearOnBlur
+              freeSolo
+              blurOnSelect
+              autoSelect
+              options={memoryValues.tags}
+              // Adding # and saving new value to the state
+              onChange={(_, value, reason) => handleTagsChange(value, reason)}
+              renderTags={(value, getTagProps) =>
+                value.map((option, index) => (
+                  <Chip
+                    variant="outlined"
+                    label={option}
+                    {...getTagProps({ index })}
+                  />
+                ))
+              }
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Tags"
+                  placeholder="Add some tags"
+                />
+              )}
+            />
+          </FormControl>
+          <Button
+            sx={{ mt: 2 }}
+            type="submit"
+            isFormButton={true}
+            disabled={
+              loading ||
+              uploadLoading ||
+              (!memoryValues.title &&
+                !memoryValues.publication &&
+                isEmpty(memoryValues.gallery))
+            }
+            loading={loading}
+          >
+            {isEditMode ? "Update" : "Create"}
+          </Button>
+        </FormContentContainer>
+      </form>
+      <ConfirmActionModal
+        loading={loading}
+        onClose={() => setIsConfirmCloseModalOpen(false)}
+        isOpen={isConfirmCloseModalOpen}
+        actionName="Save and close"
+        cancelName="Continue"
+        actionString="You have new files 🖼"
+        explanation="Please save the memory before you close the window"
+        onConfirm={onSubmitForm}
+        onCancel={() => {
+          setIsConfirmCloseModalOpen(false);
+        }}
+      />
     </ModalComponent>
   );
 };

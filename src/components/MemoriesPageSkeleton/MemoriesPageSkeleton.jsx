@@ -1,31 +1,38 @@
 import { Skeleton } from "@mui/material";
 
 import { MemoriesHeaderSkeleton } from "./style";
-import { MemoriesContainer } from "../../pages/Memories/style";
+import {
+  MemoryCardsContainer,
+  Container,
+  MemoriesContainer,
+} from "../../pages/Memories/style";
 
 const MemoriesPageSkeleton = () => {
   return (
-    <div>
-      <MemoriesHeaderSkeleton>
-        <Skeleton
-          variant="rectangular"
-          width="100%"
-          height="100%"
-          style={{ borderRadius: "8px" }}
-        />
-      </MemoriesHeaderSkeleton>
+    <Container>
       <MemoriesContainer>
-        {[...Array(3).keys()].map((el, index) => (
+        <MemoriesHeaderSkeleton>
           <Skeleton
             variant="rectangular"
-            width="60vw"
-            height="216px"
+            width="100%"
+            height="100%"
             style={{ borderRadius: "8px" }}
-            key={index}
           />
-        ))}
+        </MemoriesHeaderSkeleton>
+
+        <MemoryCardsContainer>
+          {[...Array(3).keys()].map((el, index) => (
+            <Skeleton
+              variant="rectangular"
+              width="60vw"
+              height="216px"
+              style={{ borderRadius: "8px" }}
+              key={index}
+            />
+          ))}
+        </MemoryCardsContainer>
       </MemoriesContainer>
-    </div>
+    </Container>
   );
 };
 
