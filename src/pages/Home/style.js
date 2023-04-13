@@ -9,16 +9,6 @@ export const Container = styled.div`
   margin-left: 12px;
 `;
 
-// export const StyledForm = styled.form`
-//   display: flex;
-//   flex-direction: column;
-//   border: 2px solid ${PRIMARY_SHADES[800]};
-//   align-items: center;
-//   padding: 16px 16px 24px;
-//   margin-top: 16px;
-//   border-radius: 8px;
-// `;
-
 export const FlexLeft = styled.div`
   display: flex;
   flex-direction: column;
