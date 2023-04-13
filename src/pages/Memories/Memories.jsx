@@ -130,7 +130,7 @@ const Memories = () => {
   const handleEditMemory = (memory) => {
     // set isEditMode
     setIsEditMode(true);
-    const date = new Date(memory.createdAt);
+    const date = new Date(memory.date);
     // format api data to form data
     setMemoryToUpdateValues({
       date,
