@@ -1,4 +1,4 @@
-import axios, { getHeaders } from '../../../config/axios.config';
+import axios, { getHeaders } from '../config/axios.config';
 
 export const getAllMemories = async (familyId) => {
   const res = await axios.post('/memories', { familyId }, getHeaders());

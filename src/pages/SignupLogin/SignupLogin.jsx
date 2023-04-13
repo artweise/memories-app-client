@@ -15,7 +15,7 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Navbar from "../../components/Navbar/Navbar";
 import Button from "../../components/Button/Button";
-import { signup, login } from "./services/authServices";
+import { signup, login } from "../../sevices/authService";
 import { notifySuccess, notifyError } from "../../utilities/toastUtilities";
 import { PageContainer } from "../style";
 import { Container, StyledForm, FlexRow } from "./style";

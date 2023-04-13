@@ -82,7 +82,7 @@ export const GlobalStyle = createGlobalStyle`
     font-size: 16px;
   }
   body{
-    background-color: ${NEUTRAL_SHADES[150]};
+    background-color: ${NEUTRAL_SHADES[50]};
   }
   a {
     text-decoration: none;
