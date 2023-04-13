@@ -11,6 +11,7 @@ import MemoryCard from "../../components/MemoryCard/MemoryCard";
 import MemoriesPageSkeleton from "../../components/MemoriesPageSkeleton/MemoriesPageSkeleton";
 import CreateEditMemoryModal from "../../components/Modals/CreateEditMemoryModal.jsx/CreateEditMemoryModal";
 import PreviewModal from "../../components/Modals/PreviewModal/PreviewModal";
+import ConfirmActionModal from "../../components/Modals/ConfirmActionModal/ConfirmActionModal";
 import { notifySuccess, notifyError } from "../../utilities/toastUtilities";
 import {
   getAllMemories,
@@ -35,7 +36,10 @@ const Memories = () => {
   const [isCreateEditMemoryModalOpen, setIsCreateEditMemoryModalOpen] =
     useState(false);
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
-  const [isCreationLoading, setIsCreationLoading] = useState(false);
+  const [isConfirmDeleteModalOpen, setIsConfirmDeleteModalOpen] =
+    useState(false);
+  const [isCreateUpdateLoading, setIsCreateUpdateLoading] = useState(false);
+  const [isDeleteLoading, setIsDeleteLoading] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
   const [memoryToUpdateValues, setMemoryToUpdateValues] = useState(null);
   const [memoryToUpdateId, setMemoryToUpdateId] = useState(null);
@@ -55,14 +59,14 @@ const Memories = () => {
       setIsCreateEditMemoryModalOpen(false);
       notifySuccess("Memory created successfully", "🏡");
       queryClient.invalidateQueries("memories");
-      setIsCreationLoading(false);
+      setIsCreateUpdateLoading(false);
     },
     onError: (err) => {
       notifyError(err.response.data.message);
-      setIsCreationLoading(false);
+      setIsCreateUpdateLoading(false);
     },
     onMutate: () => {
-      setIsCreationLoading(true);
+      setIsCreateUpdateLoading(true);
     },
   });
 
@@ -71,9 +75,16 @@ const Memories = () => {
       // Invalidate and refetch
       notifySuccess("Memory deleted successfully", "🌚");
       queryClient.invalidateQueries("memories");
+      // Close confirm modal
+      setIsDeleteLoading(false);
+      setIsConfirmDeleteModalOpen(false);
     },
     onError: (err) => {
       notifyError(err.response.data.message);
+      setIsDeleteLoading(false);
+    },
+    onMutate: () => {
+      setIsDeleteLoading(true);
     },
   });
 
@@ -83,9 +94,14 @@ const Memories = () => {
       setIsCreateEditMemoryModalOpen(false);
       notifySuccess("Memory updated successfully", "🍀");
       queryClient.invalidateQueries("memories");
+      setIsCreateUpdateLoading(false);
     },
     onError: (err) => {
       notifyError(err.response.data.message);
+      setIsCreateUpdateLoading(false);
+    },
+    onMutate: () => {
+      setIsCreateUpdateLoading(true);
     },
   });
 
@@ -94,9 +110,15 @@ const Memories = () => {
     createMutation.mutate(memoryValues);
   };
 
+  // Open "Are you sure modal"
+  const handleConfirmDeleteMemory = (memoryId) => {
+    setMemoryToUpdateId(memoryId);
+    setIsConfirmDeleteModalOpen(true);
+  };
+
   // Send request and delete memory
-  const handleDeleteMemory = (memoryId) => {
-    deleteMutation.mutate(memoryId);
+  const handleDeleteMemory = () => {
+    deleteMutation.mutate(memoryToUpdateId);
   };
 
   // Send request and update memory
@@ -164,9 +186,9 @@ const Memories = () => {
                 <Button
                   onClick={() => setIsCreateEditMemoryModalOpen(true)}
                   disabled={
-                    !memoryQuery.status === "success" || isCreationLoading
+                    !memoryQuery.status === "success" || isCreateUpdateLoading
                   }
-                  loading={isCreationLoading}
+                  loading={isCreateUpdateLoading}
                   sx={{ minWidth: "200px" }}
                 >
                   Add new memory
@@ -186,7 +208,7 @@ const Memories = () => {
                     <MemoryCard
                       key={index}
                       memory={memory}
-                      handleDelete={handleDeleteMemory}
+                      handleDelete={handleConfirmDeleteMemory}
                       handleEdit={handleEditMemory}
                       currentUserId={user?._id}
                       handleOpenPreview={handleOpenPreview}
@@ -199,7 +221,7 @@ const Memories = () => {
       </PageContainer>
       <CreateEditMemoryModal
         isOpen={isCreateEditMemoryModalOpen}
-        loading={isCreationLoading}
+        loading={isCreateUpdateLoading}
         familyId={familyId}
         isEditMode={isEditMode}
         memoryToUpdateValues={memoryToUpdateValues}
@@ -215,6 +237,15 @@ const Memories = () => {
         handleClose={() => {
           setIsPreviewModalOpen(false);
         }}
+      />
+      <ConfirmActionModal
+        onClose={() => setIsConfirmDeleteModalOpen(false)}
+        isOpen={isConfirmDeleteModalOpen}
+        loading={isDeleteLoading}
+        actionName="Delete"
+        actionString="Are you sure you want to delete this memory? 😢"
+        explanation="It will be deleted for everybody in your family"
+        onConfirm={handleDeleteMemory}
       />
     </>
   );
