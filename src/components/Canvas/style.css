@@ -1,0 +1,14 @@
+canvas {
+    /* background-color: purple; */
+    width: 200%;
+    height: 970px;
+    transform: rotate(-10deg);
+    position: absolute;
+    top: -600px;
+    left: -50%;
+    z-index: -1;
+    --gradient-color-1: #26A871;
+    --gradient-color-2: #5F10C5;
+    --gradient-color-3: #ffba27;
+    --gradient-color-4: #ef008f;
+}
