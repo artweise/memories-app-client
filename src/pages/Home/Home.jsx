@@ -64,14 +64,14 @@ const Home = () => {
             </div>
           </FlexLeft>
 
-          {/* <FlexRight>
-            <img
+          <FlexRight>
+            {/* <img
               src={appImage}
               width="400px"
               border="1px solid #3D1084"
               alt="app screenshot"
-            />
-          </FlexRight> */}
+            /> */}
+          </FlexRight>
         </Container>
       </PageContainer>
     </>
