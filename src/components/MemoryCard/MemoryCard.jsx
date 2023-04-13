@@ -35,7 +35,7 @@ const MemoryCard = ({
     setShowAllFiles(filesToShow === memory.gallery.length ? false : true);
   };
 
-  const filesToShow = 4;
+  const filesToShow = 6;
 
   return (
     <StyledMemoryCard>

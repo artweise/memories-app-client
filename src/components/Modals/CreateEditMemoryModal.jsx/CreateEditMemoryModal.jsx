@@ -163,8 +163,6 @@ const CreateEditMemoryModal = ({
   };
 
   const handleRemoveUploadedFile = (indexToRemove) => {
-    // OLD - const newGallery = [...memoryValues.gallery];
-    // newGallery.splice(index, 1);
     const newGallery = [...memoryValues.gallery].filter(
       (value, index) => index !== indexToRemove
     );
