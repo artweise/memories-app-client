@@ -92,6 +92,7 @@ const Memories = () => {
     onSuccess: () => {
       // Invalidate and refetch
       setIsCreateEditMemoryModalOpen(false);
+      setIsEditMode(false);
       notifySuccess("Memory updated successfully", "🍀");
       queryClient.invalidateQueries("memories");
       setIsCreateUpdateLoading(false);
