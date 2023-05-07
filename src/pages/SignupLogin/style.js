@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-import { PRIMARY_SHADES } from "../../utilities/globalStyles";
+import { NEUTRAL_SHADES } from "../../utilities/globalStyles";
 
 export const Container = styled.div`
   display: flex;
@@ -13,7 +13,7 @@ export const Container = styled.div`
 export const StyledForm = styled.form`
   display: flex;
   flex-direction: column;
-  border: 2px solid ${PRIMARY_SHADES[800]};
+  border: 1px solid ${NEUTRAL_SHADES[600]};
   align-items: center;
   padding: 16px 16px 24px;
   margin-top: 16px;

@@ -1,6 +1,7 @@
 import { createGlobalStyle } from "styled-components";
+import { createTheme } from "@mui/material/styles";
 
-export const PRIMARY_SHADES = {
+export const PURPLE_SHADES = {
   50: "#ECECF0",
   100: "#F2EEF9",
   200: "#EEE7F8",
@@ -34,7 +35,7 @@ export const NEUTRAL_SHADES = {
   BLACK: "#000000",
 };
 
-export const SUCCESS_SHADES = {
+export const GREEN_SHADES = {
   50: "#E9F6F1",
   100: "#D4EEE3",
   200: "#A8DCC6",
@@ -46,7 +47,7 @@ export const SUCCESS_SHADES = {
   800: "#284029",
 };
 
-export const ERROR_SHADES = {
+export const RED_SHADES = {
   50: "#FCEBED",
   100: "#F8D6DB",
   200: "#F1ADB6",
@@ -58,7 +59,7 @@ export const ERROR_SHADES = {
   800: "#58141D",
 };
 
-export const WARNING_SHADES = {
+export const YELLOW_SHADES = {
   50: "#FDF8ED",
   100: "#F9EBCA",
   200: "#F5DEA7",
@@ -88,5 +89,15 @@ export const GlobalStyle = createGlobalStyle`
     text-decoration: none;
     color: ${NEUTRAL_SHADES.BLACK};
   }
-
 `;
+
+export const globalTheme = createTheme({
+  palette: {
+    primary: {
+      main: GREEN_SHADES[600],
+    },
+    secondary: {
+      main: PURPLE_SHADES[700],
+    },
+  },
+});

@@ -8,7 +8,7 @@ import Button from "../../components/Button/Button";
 
 import { FlexRight, FlexLeft, FlexRow, Container } from "./style";
 import { PageContainer } from "../style";
-import appImage from "../../assests/images/home.png";
+// import appImage from "../../assests/images/home.png";
 const Home = () => {
   const [values, setValues] = useState({
     username: "",

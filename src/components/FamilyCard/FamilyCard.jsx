@@ -2,7 +2,7 @@ import { useState } from "react";
 import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
 import { Divider, Typography, Popover, Tooltip, Avatar } from "@mui/material";
 
-import { SUCCESS_SHADES } from "../../utilities/globalStyles";
+import { GREEN_SHADES } from "../../utilities/globalStyles";
 import {
   StyledFamilyCard,
   Description,
@@ -36,11 +36,7 @@ const FamilyCard = ({ family }) => {
               <>
                 {family.description.slice(0, 100)}
                 <Tooltip
-                  title={
-                    family?.description?.length > 100
-                      ? family.description.slice(100)
-                      : ""
-                  }
+                  title={family?.description?.length > 100 ? family.description.slice(100) : ""}
                   placement="top"
                 >
                   <span>...</span>
@@ -54,15 +50,10 @@ const FamilyCard = ({ family }) => {
       </Description>
 
       <Divider light />
-      <MembersContainer
-        onMouseEnter={handlePopoverOpen}
-        onMouseLeave={handlePopoverClose}
-      >
-        <AccountCircleRoundedIcon sx={{ color: SUCCESS_SHADES[700] }} />
+      <MembersContainer onMouseEnter={handlePopoverOpen} onMouseLeave={handlePopoverClose}>
+        <AccountCircleRoundedIcon sx={{ color: GREEN_SHADES[700] }} />
         {!!family?.members?.length > 0 && (
-          <Typography variant="button">
-            {family.members.length} members
-          </Typography>
+          <Typography variant="button">{family.members.length} members</Typography>
         )}
       </MembersContainer>
       <Popover
@@ -87,9 +78,7 @@ const FamilyCard = ({ family }) => {
         {!!family?.members?.length &&
           family.members.map((member, index) => (
             <AvatarAndUsername key={index}>
-              <Avatar sx={avatarStyles}>
-                {member?.username?.slice(0, 1).toUpperCase() || ""}
-              </Avatar>
+              <Avatar sx={avatarStyles}>{member?.username?.slice(0, 1).toUpperCase() || ""}</Avatar>
               <div>{member.email}</div>
             </AvatarAndUsername>
           ))}
