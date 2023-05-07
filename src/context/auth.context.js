@@ -68,6 +68,7 @@ function AuthProviderWrapper(props) {
       // If the token is not available (or is removed)
       clearState();
     }
+    // eslint-disable-next-line
   }, []);
 
   useEffect(() => {

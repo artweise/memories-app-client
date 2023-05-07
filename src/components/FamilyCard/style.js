@@ -1,12 +1,8 @@
 import styled, { css } from "styled-components";
-import {
-  NEUTRAL_SHADES,
-  SUCCESS_SHADES,
-  PRIMARY_SHADES,
-} from "../../utilities/globalStyles";
+import { NEUTRAL_SHADES, GREEN_SHADES, PURPLE_SHADES } from "../../utilities/globalStyles";
 
 export const StyledFamilyCard = styled.div`
-  ${({ color = SUCCESS_SHADES[300] }) => css`
+  ${({ color = GREEN_SHADES[300] }) => css`
     height: 24vw;
     background: ${NEUTRAL_SHADES.WHITE};
     box-shadow: 4px 4px 16px 4px #d4d4d4;
@@ -62,7 +58,7 @@ export const AvatarAndUsername = styled.div`
 `;
 
 export const avatarStyles = {
-  bgcolor: PRIMARY_SHADES[800],
+  bgcolor: PURPLE_SHADES[800],
   width: 24,
   height: 24,
   fontSize: "12px",

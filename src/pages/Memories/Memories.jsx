@@ -19,7 +19,7 @@ import {
   deleteMemory,
   updateMemory,
 } from "../../sevices/memoryService";
-import { PRIMARY_SHADES, NEUTRAL_SHADES } from "../../utilities/globalStyles";
+import { PURPLE_SHADES, NEUTRAL_SHADES } from "../../utilities/globalStyles";
 import { PageContainer } from "../style";
 import {
   MemoryCardsContainer,
@@ -28,16 +28,14 @@ import {
   TotalContainer,
   Container,
   MemoriesContainer,
-  SideMenu,
+  // SideMenu,
 } from "./style";
 
 const Memories = () => {
   const { user } = useContext(AuthContext);
-  const [isCreateEditMemoryModalOpen, setIsCreateEditMemoryModalOpen] =
-    useState(false);
+  const [isCreateEditMemoryModalOpen, setIsCreateEditMemoryModalOpen] = useState(false);
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
-  const [isConfirmDeleteModalOpen, setIsConfirmDeleteModalOpen] =
-    useState(false);
+  const [isConfirmDeleteModalOpen, setIsConfirmDeleteModalOpen] = useState(false);
   const [isCreateUpdateLoading, setIsCreateUpdateLoading] = useState(false);
   const [isDeleteLoading, setIsDeleteLoading] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
@@ -49,9 +47,7 @@ const Memories = () => {
   const { familyId } = useParams();
 
   // Queries
-  const memoryQuery = useQuery(["memories", familyId], () =>
-    getAllMemories(familyId)
-  );
+  const memoryQuery = useQuery(["memories", familyId], () => getAllMemories(familyId));
   // Mutations
   const createMutation = useMutation(createMemory, {
     onSuccess: () => {
@@ -179,16 +175,14 @@ const Memories = () => {
           <Container>
             <MemoriesContainer>
               <MemoriesHeaderContainer>
-                <Typography variant="h4" color={PRIMARY_SHADES[1000]}>
+                <Typography variant="h4" color={PURPLE_SHADES[1000]}>
                   {memoryQuery?.data?.length
                     ? `${memoryQuery.data[0].family.title} memories`
                     : "No memories yet"}
                 </Typography>
                 <Button
                   onClick={() => setIsCreateEditMemoryModalOpen(true)}
-                  disabled={
-                    !memoryQuery.status === "success" || isCreateUpdateLoading
-                  }
+                  disabled={!memoryQuery.status === "success" || isCreateUpdateLoading}
                   loading={isCreateUpdateLoading}
                   sx={{ minWidth: "200px" }}
                 >

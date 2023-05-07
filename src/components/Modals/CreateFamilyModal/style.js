@@ -1,5 +1,5 @@
-import { ERROR_SHADES } from "../../../utilities/globalStyles";
+import { RED_SHADES } from "../../../utilities/globalStyles";
 
 export const helperTextStyle = {
-  color: ERROR_SHADES[600],
+  color: RED_SHADES[600],
 };

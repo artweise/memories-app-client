@@ -19,7 +19,7 @@ import ConfirmActionModal from "../ConfirmActionModal/ConfirmActionModal";
 import DatePickerComponent from "../../DatePickerComponent/DatePickerComponent";
 import { formatToISO } from "../../../utilities/dateUtilities";
 import { uploadFiles } from "../../../sevices/memoryService";
-import { notifySuccess, notifyError } from "../../../utilities/toastUtilities";
+import { notifyError } from "../../../utilities/toastUtilities";
 import { formControlStyle } from "../style";
 import {
   FormContentContainer,

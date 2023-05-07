@@ -19,7 +19,7 @@ import { signup, login } from "../../sevices/authService";
 import { notifySuccess, notifyError } from "../../utilities/toastUtilities";
 import { PageContainer } from "../style";
 import { Container, StyledForm, FlexRow } from "./style";
-import { PRIMARY_SHADES } from "../../utilities/globalStyles";
+import { PURPLE_SHADES } from "../../utilities/globalStyles";
 
 const FormAuth = ({ title }) => {
   const [values, setValues] = useState({
@@ -123,10 +123,7 @@ const FormAuth = ({ title }) => {
       <PageContainer>
         <Container>
           <h2>{title}</h2>
-          <StyledForm
-            autoComplete="off"
-            onSubmit={(event) => handleAction(event, title)}
-          >
+          <StyledForm autoComplete="off" onSubmit={(event) => handleAction(event, title)}>
             {title === "Sign Up" && (
               <TextField
                 required
@@ -178,10 +175,7 @@ const FormAuth = ({ title }) => {
               loading={loading}
               disabled={
                 loading ||
-                (title === "Sign Up" &&
-                  !values.username &&
-                  !values.email &&
-                  !values.password) ||
+                (title === "Sign Up" && !values.username && !values.email && !values.password) ||
                 (title === "Log In" && !values.email) ||
                 !values.password
               }
@@ -191,13 +185,13 @@ const FormAuth = ({ title }) => {
             <div style={{ marginTop: "0.5rem" }} onClick={handleNavigation}>
               {title === "Sign Up" ? (
                 <Link to="/login">
-                  <Typography color={PRIMARY_SHADES[700]}>Log In</Typography>
+                  <Typography color={PURPLE_SHADES[700]}>Log In</Typography>
                 </Link>
               ) : (
                 <FlexRow>
                   <Typography>No account? </Typography>
                   <Link to="/signup">
-                    <Typography color={PRIMARY_SHADES[700]}>Sign Up</Typography>
+                    <Typography color={PURPLE_SHADES[700]}>Sign Up</Typography>
                   </Link>
                 </FlexRow>
               )}

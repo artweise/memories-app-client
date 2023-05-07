@@ -1,4 +1,6 @@
-import { StyledButton, formButtonStyles } from "./style";
+import LoadingButton from "@mui/lab/LoadingButton";
+
+import { formButtonStyles } from "./style";
 
 const Button = ({
   children,
@@ -12,7 +14,7 @@ const Button = ({
   disabled = false,
 }) => {
   return (
-    <StyledButton
+    <LoadingButton
       variant={variant}
       sx={isFormButton ? { ...sx, ...formButtonStyles } : { ...sx }}
       type={type}
@@ -28,7 +30,7 @@ const Button = ({
       nested inside any HTML element, such as a <span>: */}
       {/* https://mui.com/material-ui/react-button/ */}
       <span>{children}</span>
-    </StyledButton>
+    </LoadingButton>
   );
 };
 
