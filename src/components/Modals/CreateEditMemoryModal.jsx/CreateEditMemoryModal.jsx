@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 import {
   Autocomplete,
   TextField,
@@ -8,19 +8,19 @@ import {
   Switch,
   FormControlLabel,
   FormGroup,
-} from "@mui/material";
-import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
-import ErrorOutlineRoundedIcon from "@mui/icons-material/ErrorOutlineRounded";
-import { isEmpty, difference } from "lodash";
+} from '@mui/material';
+import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
+import ErrorOutlineRoundedIcon from '@mui/icons-material/ErrorOutlineRounded';
+import { isEmpty, difference } from 'lodash';
 
-import Button from "../../Button/Button";
-import ModalComponent from "../Modal";
-import ConfirmActionModal from "../ConfirmActionModal/ConfirmActionModal";
-import DatePickerComponent from "../../DatePickerComponent/DatePickerComponent";
-import { formatToISO } from "../../../utilities/dateUtilities";
-import { uploadFiles } from "../../../sevices/memoryService";
-import { notifyError } from "../../../utilities/toastUtilities";
-import { formControlStyle } from "../style";
+import Button from '../../AppComponents/Button/Button';
+import ModalComponent from '../Modal';
+import ConfirmActionModal from '../ConfirmActionModal/ConfirmActionModal';
+import DatePickerComponent from '../../AppComponents/DatePickerComponent/DatePickerComponent';
+import { formatToISO } from '../../../utilities/dateUtilities';
+import { uploadFiles } from '../../../sevices/memoryService';
+import { notifyError } from '../../../utilities/toastUtilities';
+import { formControlStyle } from '../style';
 import {
   FormContentContainer,
   UploadContainer,
@@ -31,7 +31,7 @@ import {
   formControlStyleDuo,
   closeRoundedIconStyles,
   notificationStyles,
-} from "./style";
+} from './style';
 
 const CreateEditMemoryModal = ({
   isOpen,
@@ -46,10 +46,10 @@ const CreateEditMemoryModal = ({
   handleOpenPreview,
 }) => {
   const [memoryValues, setMemoryValues] = useState({
-    title: "",
-    publication: "",
+    title: '',
+    publication: '',
     date: null,
-    place: "",
+    place: '',
     isPrivate: false,
     tags: [],
     gallery: [],
@@ -62,10 +62,10 @@ const CreateEditMemoryModal = ({
 
   const clearState = () => {
     setMemoryValues({
-      title: "",
-      publication: "",
+      title: '',
+      publication: '',
       date: null,
-      place: "",
+      place: '',
       isPrivate: false,
       tags: [],
       gallery: [],
@@ -118,8 +118,8 @@ const CreateEditMemoryModal = ({
 
   const handleTagsChange = (value, reason) => {
     // When added new tag - add # before the new tag
-    if (reason === "createOption" || reason === "blur") {
-      const newTag = "#" + value[value.length - 1];
+    if (reason === 'createOption' || reason === 'blur') {
+      const newTag = '#' + value[value.length - 1];
       setMemoryValues({
         ...memoryValues,
         tags: [...memoryValues.tags, newTag],
@@ -137,12 +137,12 @@ const CreateEditMemoryModal = ({
     const formData = new FormData();
 
     if (galleryValues.length > 10) {
-      notifyError("You are only allowed to upload a maximum of 10 files", "🔖");
+      notifyError('You are only allowed to upload a maximum of 10 files', '🔖');
       return;
     }
 
     for (let i = 0; i < galleryValues.length; i++) {
-      formData.append("gallery", galleryValues[i]);
+      formData.append('gallery', galleryValues[i]);
     }
     setUploadLoading(true);
     try {
@@ -163,9 +163,7 @@ const CreateEditMemoryModal = ({
   };
 
   const handleRemoveUploadedFile = (indexToRemove) => {
-    const newGallery = [...memoryValues.gallery].filter(
-      (value, index) => index !== indexToRemove
-    );
+    const newGallery = [...memoryValues.gallery].filter((value, index) => index !== indexToRemove);
     setMemoryValues({
       ...memoryValues,
       gallery: newGallery,
@@ -178,9 +176,7 @@ const CreateEditMemoryModal = ({
       setMemoryValues(memoryToUpdateValues);
       // we save the values to the state in the beginning in order to compare arrays afterwards, and understand if there are any new files were uploaded
       setMemoryGalleryInitial(
-        memoryToUpdateValues?.gallery?.length
-          ? memoryToUpdateValues.gallery
-          : []
+        memoryToUpdateValues?.gallery?.length ? memoryToUpdateValues.gallery : []
       );
     }
   }, [isEditMode, memoryToUpdateValues]);
@@ -189,7 +185,7 @@ const CreateEditMemoryModal = ({
     <ModalComponent
       isOpen={isOpen}
       handleClose={() => onClose()}
-      title={isEditMode ? "Edit memory" : "Create new memory"}
+      title={isEditMode ? 'Edit memory' : 'Create new memory'}
     >
       <form onSubmit={(event) => onSubmitForm(event)}>
         <FormContentContainer>
@@ -203,14 +199,14 @@ const CreateEditMemoryModal = ({
                 })
               }
               control={<Switch />}
-              label="Private"
+              label='Private'
             />
           </FormGroup>
           <DuoContainer>
             <FormControl sx={formControlStyleDuo}>
               <TextField
-                id="memory-title"
-                label="Title"
+                id='memory-title'
+                label='Title'
                 value={memoryValues.title}
                 onChange={(event) =>
                   setMemoryValues({
@@ -232,18 +228,16 @@ const CreateEditMemoryModal = ({
 
           <FormControl sx={formControlStyle}>
             <TextField
-              id="memory-place"
-              label="Place"
+              id='memory-place'
+              label='Place'
               value={memoryValues.place}
-              onChange={(event) =>
-                setMemoryValues({ ...memoryValues, place: event.target.value })
-              }
+              onChange={(event) => setMemoryValues({ ...memoryValues, place: event.target.value })}
             />
           </FormControl>
           <FormControl sx={formControlStyle}>
             <TextField
-              id="memory-publication"
-              label="Publication"
+              id='memory-publication'
+              label='Publication'
               multiline
               rows={6}
               value={memoryValues.publication}
@@ -260,14 +254,10 @@ const CreateEditMemoryModal = ({
               <UploadedData>
                 {memoryValues.gallery.map((file, index) => (
                   <FilesContainer key={index}>
-                    <StyledImg
-                      src={file}
-                      alt="preview"
-                      onClick={() => handleOpenPreview(file)}
-                    />
+                    <StyledImg src={file} alt='preview' onClick={() => handleOpenPreview(file)} />
                     <CloseRoundedIcon
                       sx={closeRoundedIconStyles}
-                      fontSize="small"
+                      fontSize='small'
                       // remove uploaded file from the array
                       onClick={() => handleRemoveUploadedFile(index)}
                     />
@@ -278,11 +268,11 @@ const CreateEditMemoryModal = ({
           </div>
           <UploadContainer>
             <input
-              type="file"
-              name="gallery"
-              multiple="multiple"
+              type='file'
+              name='gallery'
+              multiple='multiple'
               // accept=".jpg, .jpeg, .png"
-              accept="image/*,audio/*,video/*,.pdf"
+              accept='image/*,audio/*,video/*,.pdf'
               onChange={(event) => {
                 setGalleryValues(Array.from(event.target.files));
               }}
@@ -297,8 +287,8 @@ const CreateEditMemoryModal = ({
               </Button>
             </div>
           </UploadContainer>
-          <Typography variant="subtitle2" sx={notificationStyles}>
-            <ErrorOutlineRoundedIcon fontSize="small" />
+          <Typography variant='subtitle2' sx={notificationStyles}>
+            <ErrorOutlineRoundedIcon fontSize='small' />
             *maximum 10 files at once
           </Typography>
           <FormControl sx={formControlStyle}>
@@ -306,7 +296,7 @@ const CreateEditMemoryModal = ({
               autoFocus
               multiple
               value={memoryValues.tags}
-              id="new-family-tags"
+              id='new-family-tags'
               clearOnEscape
               clearOnBlur
               freeSolo
@@ -317,36 +307,26 @@ const CreateEditMemoryModal = ({
               onChange={(_, value, reason) => handleTagsChange(value, reason)}
               renderTags={(value, getTagProps) =>
                 value.map((option, index) => (
-                  <Chip
-                    variant="outlined"
-                    label={option}
-                    {...getTagProps({ index })}
-                  />
+                  <Chip variant='outlined' label={option} {...getTagProps({ index })} />
                 ))
               }
               renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Tags"
-                  placeholder="Add some tags"
-                />
+                <TextField {...params} label='Tags' placeholder='Add some tags' />
               )}
             />
           </FormControl>
           <Button
             sx={{ mt: 2 }}
-            type="submit"
+            type='submit'
             isFormButton={true}
             disabled={
               loading ||
               uploadLoading ||
-              (!memoryValues.title &&
-                !memoryValues.publication &&
-                isEmpty(memoryValues.gallery))
+              (!memoryValues.title && !memoryValues.publication && isEmpty(memoryValues.gallery))
             }
             loading={loading}
           >
-            {isEditMode ? "Update" : "Create"}
+            {isEditMode ? 'Update' : 'Create'}
           </Button>
         </FormContentContainer>
       </form>
@@ -354,10 +334,10 @@ const CreateEditMemoryModal = ({
         loading={loading}
         onClose={() => setIsConfirmCloseModalOpen(false)}
         isOpen={isConfirmCloseModalOpen}
-        actionName="Save and close"
-        cancelName="Continue"
-        actionString="You have new files 🖼"
-        explanation="Please save the memory before you close the window"
+        actionName='Save and close'
+        cancelName='Continue'
+        actionString='You have new files 🖼'
+        explanation='Please save the memory before you close the window'
         onConfirm={onSubmitForm}
         onCancel={() => {
           setIsConfirmCloseModalOpen(false);
