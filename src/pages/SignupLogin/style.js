@@ -1,6 +1,6 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
-import { NEUTRAL_SHADES } from "../../utilities/globalStyles";
+import { NEUTRAL_SHADES } from '../../utilities/globalStyles';
 
 export const Container = styled.div`
   display: flex;
@@ -24,3 +24,7 @@ export const FlexRow = styled.div`
   display: flex;
   gap: 4px;
 `;
+
+export const textFieldStyled = { m: 1, width: '100%' };
+
+export const submitButtonStyles = { mt: 3, mb: 1 };

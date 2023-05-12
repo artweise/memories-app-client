@@ -12,6 +12,7 @@ import MemoriesPageSkeleton from '../../components/MemoriesPageSkeleton/Memories
 import CreateEditMemoryModal from '../../components/Modals/CreateEditMemoryModal.jsx/CreateEditMemoryModal';
 import PreviewModal from '../../components/Modals/PreviewModal/PreviewModal';
 import ConfirmActionModal from '../../components/Modals/ConfirmActionModal/ConfirmActionModal';
+import LinkTypography from '../../components/AppComponents/LinkTypography/LinkTypography';
 import { notifySuccess, notifyError } from '../../utilities/toastUtilities';
 import {
   getAllMemories,
@@ -167,7 +168,7 @@ const Memories = () => {
             <IconButton>
               <ArrowBackRoundedIcon />
             </IconButton>
-            <Typography>Go back to families</Typography>
+            <LinkTypography text='Go back to families' />
           </Link>
         </GoBackContainer>
         {memoryQuery.status === 'loading' && <MemoriesPageSkeleton />}
