@@ -1,26 +1,27 @@
-import { useState, useContext } from "react";
-import { Link, useParams } from "react-router-dom";
-import { useQuery, useQueryClient, useMutation } from "react-query";
-import { Typography, IconButton } from "@mui/material";
-import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
+import { useState, useContext } from 'react';
+import { Link, useParams } from 'react-router-dom';
+import { useQuery, useQueryClient, useMutation } from 'react-query';
+import { Typography, IconButton } from '@mui/material';
+import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded';
 
-import { AuthContext } from "../../context/auth.context";
-import Button from "../../components/Button/Button";
-import Navbar from "../../components/Navbar/Navbar";
-import MemoryCard from "../../components/MemoryCard/MemoryCard";
-import MemoriesPageSkeleton from "../../components/MemoriesPageSkeleton/MemoriesPageSkeleton";
-import CreateEditMemoryModal from "../../components/Modals/CreateEditMemoryModal.jsx/CreateEditMemoryModal";
-import PreviewModal from "../../components/Modals/PreviewModal/PreviewModal";
-import ConfirmActionModal from "../../components/Modals/ConfirmActionModal/ConfirmActionModal";
-import { notifySuccess, notifyError } from "../../utilities/toastUtilities";
+import { AuthContext } from '../../context/auth.context';
+import Button from '../../components/AppComponents/Button/Button';
+import Navbar from '../../components/Navbar/Navbar';
+import MemoryCard from '../../components/MemoryCard/MemoryCard';
+import MemoriesPageSkeleton from '../../components/MemoriesPageSkeleton/MemoriesPageSkeleton';
+import CreateEditMemoryModal from '../../components/Modals/CreateEditMemoryModal.jsx/CreateEditMemoryModal';
+import PreviewModal from '../../components/Modals/PreviewModal/PreviewModal';
+import ConfirmActionModal from '../../components/Modals/ConfirmActionModal/ConfirmActionModal';
+import LinkTypography from '../../components/AppComponents/LinkTypography/LinkTypography';
+import { notifySuccess, notifyError } from '../../utilities/toastUtilities';
 import {
   getAllMemories,
   createMemory,
   deleteMemory,
   updateMemory,
-} from "../../sevices/memoryService";
-import { PURPLE_SHADES, NEUTRAL_SHADES } from "../../utilities/globalStyles";
-import { PageContainer } from "../style";
+} from '../../sevices/memoryService';
+import { PURPLE_SHADES, NEUTRAL_SHADES } from '../../utilities/globalStyles';
+import { PageContainer } from '../style';
 import {
   MemoryCardsContainer,
   MemoriesHeaderContainer,
@@ -29,7 +30,7 @@ import {
   Container,
   MemoriesContainer,
   // SideMenu,
-} from "./style";
+} from './style';
 
 const Memories = () => {
   const { user } = useContext(AuthContext);
@@ -41,20 +42,20 @@ const Memories = () => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [memoryToUpdateValues, setMemoryToUpdateValues] = useState(null);
   const [memoryToUpdateId, setMemoryToUpdateId] = useState(null);
-  const [fileUrl, setFileUrl] = useState("");
+  const [fileUrl, setFileUrl] = useState('');
   const queryClient = useQueryClient();
 
   const { familyId } = useParams();
 
   // Queries
-  const memoryQuery = useQuery(["memories", familyId], () => getAllMemories(familyId));
+  const memoryQuery = useQuery(['memories', familyId], () => getAllMemories(familyId));
   // Mutations
   const createMutation = useMutation(createMemory, {
     onSuccess: () => {
       // Invalidate and refetch
       setIsCreateEditMemoryModalOpen(false);
-      notifySuccess("Memory created successfully", "🏡");
-      queryClient.invalidateQueries("memories");
+      notifySuccess('Memory created successfully', '🏡');
+      queryClient.invalidateQueries('memories');
       setIsCreateUpdateLoading(false);
     },
     onError: (err) => {
@@ -69,8 +70,8 @@ const Memories = () => {
   const deleteMutation = useMutation(deleteMemory, {
     onSuccess: () => {
       // Invalidate and refetch
-      notifySuccess("Memory deleted successfully", "🌚");
-      queryClient.invalidateQueries("memories");
+      notifySuccess('Memory deleted successfully', '🌚');
+      queryClient.invalidateQueries('memories');
       // Close confirm modal
       setIsDeleteLoading(false);
       setIsConfirmDeleteModalOpen(false);
@@ -89,8 +90,8 @@ const Memories = () => {
       // Invalidate and refetch
       setIsCreateEditMemoryModalOpen(false);
       setIsEditMode(false);
-      notifySuccess("Memory updated successfully", "🍀");
-      queryClient.invalidateQueries("memories");
+      notifySuccess('Memory updated successfully', '🍀');
+      queryClient.invalidateQueries('memories');
       setIsCreateUpdateLoading(false);
     },
     onError: (err) => {
@@ -131,10 +132,10 @@ const Memories = () => {
     // format api data to form data
     setMemoryToUpdateValues({
       date,
-      title: memory?.title ? memory.title : "",
-      publication: memory?.publication ? memory.publication : "",
+      title: memory?.title ? memory.title : '',
+      publication: memory?.publication ? memory.publication : '',
       tags: memory?.tags?.length ? memory.tags : [],
-      place: memory?.place ? memory.place : "",
+      place: memory?.place ? memory.place : '',
       isPrivate: memory?.owner ? true : false,
       gallery: memory?.gallery?.length ? memory.gallery : [],
     });
@@ -163,28 +164,28 @@ const Memories = () => {
       <Navbar />
       <PageContainer>
         <GoBackContainer>
-          <Link to="/families">
+          <Link to='/families'>
             <IconButton>
               <ArrowBackRoundedIcon />
             </IconButton>
-            <Typography>Go back to families</Typography>
+            <LinkTypography text='Go back to families' />
           </Link>
         </GoBackContainer>
-        {memoryQuery.status === "loading" && <MemoriesPageSkeleton />}
-        {memoryQuery.status === "success" && (
+        {memoryQuery.status === 'loading' && <MemoriesPageSkeleton />}
+        {memoryQuery.status === 'success' && (
           <Container>
             <MemoriesContainer>
               <MemoriesHeaderContainer>
-                <Typography variant="h4" color={PURPLE_SHADES[1000]}>
+                <Typography variant='h4' color={PURPLE_SHADES[1000]}>
                   {memoryQuery?.data?.length
                     ? `${memoryQuery.data[0].family.title} memories`
-                    : "No memories yet"}
+                    : 'No memories yet'}
                 </Typography>
                 <Button
                   onClick={() => setIsCreateEditMemoryModalOpen(true)}
-                  disabled={!memoryQuery.status === "success" || isCreateUpdateLoading}
+                  disabled={!memoryQuery.status === 'success' || isCreateUpdateLoading}
                   loading={isCreateUpdateLoading}
-                  sx={{ minWidth: "200px" }}
+                  sx={{ minWidth: '200px' }}
                 >
                   Add new memory
                 </Button>
@@ -237,9 +238,9 @@ const Memories = () => {
         onClose={() => setIsConfirmDeleteModalOpen(false)}
         isOpen={isConfirmDeleteModalOpen}
         loading={isDeleteLoading}
-        actionName="Delete"
-        actionString="Are you sure you want to delete this memory? 😢"
-        explanation="It will be deleted for everybody in your family"
+        actionName='Delete'
+        actionString='Are you sure you want to delete this memory? 😢'
+        explanation='It will be deleted for everybody in your family'
         onConfirm={handleDeleteMemory}
       />
     </>
