@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useState } from "react"
 
-import { Typography, Chip, Tooltip, SvgIcon, Avatar } from "@mui/material";
-import KeyboardDoubleArrowRightRoundedIcon from "@mui/icons-material/KeyboardDoubleArrowRightRounded";
+import { Typography, Chip, Tooltip, SvgIcon, Avatar } from "@mui/material"
+import KeyboardDoubleArrowRightRoundedIcon from "@mui/icons-material/KeyboardDoubleArrowRightRounded"
 
-import MemoryMenu from "../MemoryMenu/MemoryMenu";
-import { formatDateString } from "../../utilities/dateUtilities";
+import MemoryMenu from "../MemoryMenu/MemoryMenu"
+import { formatDateString } from "../../utilities/dateUtilities"
 import {
   StyledMemoryCard,
   TitleAndButtons,
@@ -16,7 +16,7 @@ import {
   boldTextStyles,
   subTextStyles,
   avatarStyles,
-} from "./style";
+} from "./style"
 
 const MemoryCard = ({
   memory,
@@ -26,16 +26,16 @@ const MemoryCard = ({
   handleOpenPreview,
 }) => {
   // a state to hold the number of characters to show initially in publication field
-  const [publicationToShow, setPublicationToShow] = useState(800);
-  const [showAllFiles, setShowAllFiles] = useState(false);
+  const [publicationToShow, setPublicationToShow] = useState(800)
+  const [showAllFiles, setShowAllFiles] = useState(false)
 
   // handleFilesToShow function updates the showAllFiles state to be false
   // when the number of files to show is equal to the length of the gallery array
   const handleFilesToShow = () => {
-    setShowAllFiles(filesToShow === memory.gallery.length ? false : true);
-  };
+    setShowAllFiles(filesToShow === memory.gallery.length ? false : true)
+  }
 
-  const filesToShow = 6;
+  const filesToShow = 6
 
   return (
     <StyledMemoryCard>
@@ -159,8 +159,7 @@ const MemoryCard = ({
                     ))}
                   </div>
                 }
-                placement="top"
-              >
+                placement="top">
                 {/* the amount of the rest tags (length - 4)*/}
                 <Chip label={`+ ${memory.tags.length - 4}`} />
               </Tooltip>
@@ -169,7 +168,7 @@ const MemoryCard = ({
         </TagsContainer>
       )}
     </StyledMemoryCard>
-  );
-};
+  )
+}
 
-export default MemoryCard;
+export default MemoryCard

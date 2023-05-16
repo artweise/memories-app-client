@@ -1,105 +1,104 @@
-import { useState } from "react";
+import { useState } from "react"
 import {
   Autocomplete,
   TextField,
   Chip,
   FormHelperText,
   FormControl,
-} from "@mui/material";
+} from "@mui/material"
 
-import Button from "../../Button/Button";
-import { validateEmail } from "./utils";
-import { StyledForm, formControlStyle } from "../style";
-import { helperTextStyle } from "./style";
+import Button from "../../Button/Button"
+import { validateEmail } from "./utils"
+import { StyledForm, formControlStyle } from "../style"
+import { helperTextStyle } from "./style"
 
-import ModalComponent from "../Modal";
+import ModalComponent from "../Modal"
 
 const CreateFamilyModal = ({ isOpen, handleClose, onCreate, loading }) => {
   const [familyValues, setFamilyValues] = useState({
     members: [],
     title: "",
     description: "",
-  });
-  const [emailsError, setEmailsError] = useState("");
-  const [titleError, setTitleError] = useState("");
+  })
+  const [emailsError, setEmailsError] = useState("")
+  const [titleError, setTitleError] = useState("")
 
   // When start typing new email clear emails error if there is one
   const handleEmailsInputChange = () => {
     if (emailsError) {
-      setEmailsError("");
+      setEmailsError("")
     }
-  };
+  }
 
   const handleTitleChange = (value) => {
-    setTitleError("");
+    setTitleError("")
     setFamilyValues({
       ...familyValues,
       title: value,
-    });
-  };
+    })
+  }
 
   const handleMembersChange = (value, reason) => {
     // When clear emails - remove error message
-    value === [] && setEmailsError("");
+    value === [] && setEmailsError("")
     // When added new email - validate before saving to the state
     if (reason === "createOption" || reason === "blur") {
-      const newEmail = value[value.length - 1];
-      const isValidEmail = validateEmail(newEmail);
+      const newEmail = value[value.length - 1]
+      const isValidEmail = validateEmail(newEmail)
       if (isValidEmail) {
         setFamilyValues({
           ...familyValues,
           members: [...familyValues.members, newEmail],
-        });
+        })
       } else {
-        setEmailsError("Invalid email");
+        setEmailsError("Invalid email")
       }
     } else {
       // When removed one email or all emails - update the state
-      setEmailsError("");
+      setEmailsError("")
       setFamilyValues({
         ...familyValues,
         members: value,
-      });
+      })
     }
-  };
+  }
 
   const onClose = () => {
     // clear errors
-    setEmailsError("");
-    setTitleError("");
+    setEmailsError("")
+    setTitleError("")
     // clear form
     setFamilyValues({
       members: [],
       title: "",
       description: "",
-    });
+    })
     // close modal
-    handleClose();
-  };
+    handleClose()
+  }
 
   const onSubmitForm = (event) => {
-    event.preventDefault();
+    event.preventDefault()
     if (!emailsError) {
       // send request
-      onCreate(familyValues);
+      onCreate(familyValues)
       // clear errors
-      setEmailsError("");
-      setTitleError("");
+      setEmailsError("")
+      setTitleError("")
       // clear form
       setFamilyValues({
         members: [],
         title: "",
         description: "",
-      });
+      })
     }
-  };
+  }
 
   return (
     <ModalComponent
       isOpen={isOpen}
       handleClose={() => onClose()}
-      title="Create new family"
-    >
+      title="Create new family">
       <StyledForm onSubmit={(event) => onSubmitForm(event)}>
         <FormControl sx={formControlStyle}>
           <TextField
@@ -127,7 +126,7 @@ const CreateFamilyModal = ({ isOpen, handleClose, onCreate, loading }) => {
               setFamilyValues({
                 ...familyValues,
                 description: event.target.value,
-              });
+              })
             }}
           />
         </FormControl>
@@ -175,13 +174,12 @@ const CreateFamilyModal = ({ isOpen, handleClose, onCreate, loading }) => {
           type="submit"
           isFormButton={true}
           loading={loading}
-          disabled={loading}
-        >
+          disabled={loading}>
           Create
         </Button>
       </StyledForm>
     </ModalComponent>
-  );
-};
+  )
+}
 
-export default CreateFamilyModal;
+export default CreateFamilyModal

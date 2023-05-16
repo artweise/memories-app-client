@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext } from "react"
 import {
   AppBar,
   Toolbar,
@@ -11,34 +11,34 @@ import {
   Container,
   Tooltip,
   MenuItem,
-} from "@mui/material";
-import Diversity1RoundedIcon from "@mui/icons-material/Diversity1Rounded";
-import { useNavigate, useLocation } from "react-router-dom";
+} from "@mui/material"
+import Diversity1RoundedIcon from "@mui/icons-material/Diversity1Rounded"
+import { useNavigate, useLocation } from "react-router-dom"
 
-import { AuthContext } from "../../context/auth.context";
-import { PRIMARY_SHADES } from "../../utilities/globalStyles";
-import { titleStyles } from "./style";
+import { AuthContext } from "../../context/auth.context"
+import { PRIMARY_SHADES } from "../../utilities/globalStyles"
+import { titleStyles } from "./style"
 
-const settings = [{ text: "My families", link: "/families" }];
+const settings = [{ text: "My families", link: "/families" }]
 
 const Navbar = () => {
-  const [anchorElUser, setAnchorElUser] = useState(null);
+  const [anchorElUser, setAnchorElUser] = useState(null)
 
   // Subscribe to the AuthContext to gain access to
   // the values from AuthContext.Provider `value` prop
-  const { isLoggedIn, user, logOutUser } = useContext(AuthContext);
-  const navigate = useNavigate();
-  const location = useLocation();
+  const { isLoggedIn, user, logOutUser } = useContext(AuthContext)
+  const navigate = useNavigate()
+  const location = useLocation()
 
   const handleOpenUserMenu = (event) => {
-    setAnchorElUser(event.currentTarget);
-  };
+    setAnchorElUser(event.currentTarget)
+  }
 
   const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
-  };
+    setAnchorElUser(null)
+  }
 
-  const isMainPage = location.pathname === "/";
+  const isMainPage = location.pathname === "/"
 
   return (
     <AppBar
@@ -46,8 +46,7 @@ const Navbar = () => {
       sx={{
         background: isMainPage ? "transparent" : PRIMARY_SHADES[700],
         boxShadow: "none",
-      }}
-    >
+      }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           {/* LOGO */}
@@ -60,8 +59,7 @@ const Navbar = () => {
             noWrap
             component="a"
             href="/"
-            sx={titleStyles}
-          >
+            sx={titleStyles}>
             FamilyMemories
           </Typography>
 
@@ -96,8 +94,7 @@ const Navbar = () => {
                     horizontal: "right",
                   }}
                   open={Boolean(anchorElUser)}
-                  onClose={handleCloseUserMenu}
-                >
+                  onClose={handleCloseUserMenu}>
                   {settings.map((setting, index) => (
                     <MenuItem
                       key={index}
@@ -106,8 +103,7 @@ const Navbar = () => {
                         setting?.link
                           ? () => navigate(`${setting.link}`)
                           : undefined
-                      }
-                    >
+                      }>
                       <Typography sx={{ paddingRight: "16px" }}>
                         {setting.text}
                       </Typography>
@@ -116,10 +112,9 @@ const Navbar = () => {
                   <MenuItem
                     sx={{ height: "32px" }}
                     onClick={() => {
-                      logOutUser();
-                      navigate("/login");
-                    }}
-                  >
+                      logOutUser()
+                      navigate("/login")
+                    }}>
                     <Typography color={PRIMARY_SHADES[700]} variant="body2">
                       Log out
                     </Typography>
@@ -130,8 +125,7 @@ const Navbar = () => {
               <Button
                 color="inherit"
                 sx={{ mr: 4 }}
-                onClick={() => navigate("/login")}
-              >
+                onClick={() => navigate("/login")}>
                 Log in
               </Button>
             )}
@@ -139,7 +133,7 @@ const Navbar = () => {
         </Toolbar>
       </Container>
     </AppBar>
-  );
-};
+  )
+}
 
-export default Navbar;
+export default Navbar

@@ -1,5 +1,5 @@
-import { useState, useContext } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useState, useContext } from "react"
+import { Link, useNavigate } from "react-router-dom"
 
 import {
   TextField,
@@ -9,17 +9,17 @@ import {
   InputAdornment,
   FormControl,
   Typography,
-} from "@mui/material";
-import { AuthContext } from "../../context/auth.context";
-import Visibility from "@mui/icons-material/Visibility";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import Navbar from "../../components/Navbar/Navbar";
-import Button from "../../components/Button/Button";
-import { signup, login } from "../../sevices/authService";
-import { notifySuccess, notifyError } from "../../utilities/toastUtilities";
-import { PageContainer } from "../style";
-import { Container, StyledForm, FlexRow } from "./style";
-import { PRIMARY_SHADES } from "../../utilities/globalStyles";
+} from "@mui/material"
+import { AuthContext } from "../../context/auth.context"
+import Visibility from "@mui/icons-material/Visibility"
+import VisibilityOff from "@mui/icons-material/VisibilityOff"
+import Navbar from "../../components/Navbar/Navbar"
+import Button from "../../components/Button/Button"
+import { signup, login } from "../../sevices/authService"
+import { notifySuccess, notifyError } from "../../utilities/toastUtilities"
+import { PageContainer } from "../style"
+import { Container, StyledForm, FlexRow } from "./style"
+import { PRIMARY_SHADES } from "../../utilities/globalStyles"
 
 const FormAuth = ({ title }) => {
   const [values, setValues] = useState({
@@ -28,21 +28,21 @@ const FormAuth = ({ title }) => {
     password: "",
     showPassword: false,
     msg: "",
-  });
-  const [loading, setLoading] = useState(false);
+  })
+  const [loading, setLoading] = useState(false)
 
-  const navigate = useNavigate();
-  const { storeToken, authenticateUser } = useContext(AuthContext);
+  const navigate = useNavigate()
+  const { storeToken, authenticateUser } = useContext(AuthContext)
 
   const handleChange = (prop) => (event) => {
-    setValues({ ...values, [prop]: event.target.value });
-  };
+    setValues({ ...values, [prop]: event.target.value })
+  }
   const handleClickShowPassword = () => {
     setValues({
       ...values,
       showPassword: !values.showPassword,
-    });
-  };
+    })
+  }
 
   const handleNavigation = () => {
     setValues({
@@ -51,8 +51,8 @@ const FormAuth = ({ title }) => {
       password: "",
       username: "",
       msg: "",
-    });
-  };
+    })
+  }
 
   const showErrorMsg = (msg) => {
     setValues({
@@ -61,61 +61,61 @@ const FormAuth = ({ title }) => {
       email: "",
       password: "",
       msg,
-    });
-    notifyError(msg);
-  };
+    })
+    notifyError(msg)
+  }
   const handleAction = async (event, action) => {
-    event.preventDefault();
+    event.preventDefault()
     if (action === "Sign Up") {
       const data = {
         username: values.username,
         email: values.email,
         password: values.password,
-      };
-      setLoading(true);
+      }
+      setLoading(true)
       try {
-        const response = await signup(data);
+        const response = await signup(data)
         setValues({
           ...values,
           username: "",
           email: "",
           password: "",
           msg: response.data.message,
-        });
-        setLoading(false);
-        notifySuccess("Signed up successfully. Please log in");
-        navigate("/login");
+        })
+        setLoading(false)
+        notifySuccess("Signed up successfully. Please log in")
+        navigate("/login")
       } catch (e) {
-        setLoading(false);
-        showErrorMsg(e.response.data.message);
+        setLoading(false)
+        showErrorMsg(e.response.data.message)
       }
     } else if (action === "Log In") {
       try {
         const data = {
           email: values.email,
           password: values.password,
-        };
-        setLoading(true);
-        const response = await login(data);
+        }
+        setLoading(true)
+        const response = await login(data)
         setValues({
           ...values,
           email: "",
           password: "",
-        });
+        })
         // Save the token in the localStorage.
-        storeToken(response.data.accessToken);
+        storeToken(response.data.accessToken)
         // Verify the token by sending a request
         // to the server"s JWT validation endpoint.
-        await authenticateUser();
-        notifySuccess("Logged in successfully.");
-        setLoading(false);
-        navigate("/families");
+        await authenticateUser()
+        notifySuccess("Logged in successfully.")
+        setLoading(false)
+        navigate("/families")
       } catch (e) {
-        setLoading(false);
-        showErrorMsg(e.response.data.message);
+        setLoading(false)
+        showErrorMsg(e.response.data.message)
       }
     }
-  };
+  }
 
   return (
     <>
@@ -125,8 +125,7 @@ const FormAuth = ({ title }) => {
           <h2>{title}</h2>
           <StyledForm
             autoComplete="off"
-            onSubmit={(event) => handleAction(event, title)}
-          >
+            onSubmit={(event) => handleAction(event, title)}>
             {title === "Sign Up" && (
               <TextField
                 required
@@ -163,8 +162,7 @@ const FormAuth = ({ title }) => {
                       aria-label="toggle password visibility"
                       onClick={handleClickShowPassword}
                       onSubmit={(event) => event.preventDefault()}
-                      edge="end"
-                    >
+                      edge="end">
                       {values.showPassword ? <VisibilityOff /> : <Visibility />}
                     </IconButton>
                   </InputAdornment>
@@ -184,8 +182,7 @@ const FormAuth = ({ title }) => {
                   !values.password) ||
                 (title === "Log In" && !values.email) ||
                 !values.password
-              }
-            >
+              }>
               {title === "Sign Up" ? "Sign Up" : "Log In"}
             </Button>
             <div style={{ marginTop: "0.5rem" }} onClick={handleNavigation}>
@@ -206,7 +203,7 @@ const FormAuth = ({ title }) => {
         </Container>
       </PageContainer>
     </>
-  );
-};
+  )
+}
 
-export default FormAuth;
+export default FormAuth

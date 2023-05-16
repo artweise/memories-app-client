@@ -5,10 +5,10 @@ import {
   Box,
   Typography,
   IconButton,
-} from "@mui/material";
-import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
+} from "@mui/material"
+import CloseRoundedIcon from "@mui/icons-material/CloseRounded"
 
-import { modalHeaderStyles, modalStyles } from "./style";
+import { modalHeaderStyles, modalStyles } from "./style"
 
 const ModalComponent = ({ isOpen, handleClose, children, title = "" }) => {
   return (
@@ -21,8 +21,7 @@ const ModalComponent = ({ isOpen, handleClose, children, title = "" }) => {
         backdrop: {
           timeout: 500,
         },
-      }}
-    >
+      }}>
       <Fade in={isOpen}>
         <Box sx={modalStyles}>
           <Box sx={modalHeaderStyles}>
@@ -35,7 +34,7 @@ const ModalComponent = ({ isOpen, handleClose, children, title = "" }) => {
         </Box>
       </Fade>
     </Modal>
-  );
-};
+  )
+}
 
-export default ModalComponent;
+export default ModalComponent

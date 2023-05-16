@@ -6,4 +6,4 @@ export const titleStyles = {
   letterSpacing: ".3rem",
   color: "inherit",
   textDecoration: "none",
-};
+}

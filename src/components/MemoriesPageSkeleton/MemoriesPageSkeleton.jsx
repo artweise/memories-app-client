@@ -1,11 +1,11 @@
-import { Skeleton } from "@mui/material";
+import { Skeleton } from "@mui/material"
 
-import { MemoriesHeaderSkeleton } from "./style";
+import { MemoriesHeaderSkeleton } from "./style"
 import {
   MemoryCardsContainer,
   Container,
   MemoriesContainer,
-} from "../../pages/Memories/style";
+} from "../../pages/Memories/style"
 
 const MemoriesPageSkeleton = () => {
   return (
@@ -33,7 +33,7 @@ const MemoriesPageSkeleton = () => {
         </MemoryCardsContainer>
       </MemoriesContainer>
     </Container>
-  );
-};
+  )
+}
 
-export default MemoriesPageSkeleton;
+export default MemoriesPageSkeleton

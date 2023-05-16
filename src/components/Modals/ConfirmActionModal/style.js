@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from "styled-components"
 
 export const Container = styled.div`
   width: 500px;
@@ -8,10 +8,10 @@ export const Container = styled.div`
   align-items: center;
   text-align: center;
   justify-content: center;
-`;
+`
 
 export const ButtonContainer = styled.div`
   display: flex;
   justify-content: center;
   gap: 88px;
-`;
+`

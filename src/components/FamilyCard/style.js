@@ -1,9 +1,9 @@
-import styled, { css } from "styled-components";
+import styled, { css } from "styled-components"
 import {
   NEUTRAL_SHADES,
   SUCCESS_SHADES,
   PRIMARY_SHADES,
-} from "../../utilities/globalStyles";
+} from "../../utilities/globalStyles"
 
 export const StyledFamilyCard = styled.div`
   ${({ color = SUCCESS_SHADES[300] }) => css`
@@ -19,7 +19,7 @@ export const StyledFamilyCard = styled.div`
       box-shadow: 4px 4px 16px 4px #ababab;
     }
   `}
-`;
+`
 // border: ${(props) => props.color};
 
 export const EmptyCard = styled(StyledFamilyCard)`
@@ -33,11 +33,11 @@ export const EmptyCard = styled(StyledFamilyCard)`
     height: 60%;
     fill: ${NEUTRAL_SHADES[600]};
   }
-`;
+`
 
 export const Description = styled.div`
   height: 60%;
-`;
+`
 
 export const MembersContainer = styled.div`
   width: 100%;
@@ -46,11 +46,11 @@ export const MembersContainer = styled.div`
   margin-top: 8px;
   align-items: center;
   height: 22%;
-`;
+`
 
 export const StyledSkeletonCard = styled.div`
   height: 24vw;
-`;
+`
 
 export const AvatarAndUsername = styled.div`
   display: flex;
@@ -59,18 +59,18 @@ export const AvatarAndUsername = styled.div`
   &:not(:last-of-type) {
     margin-bottom: 8px;
   }
-`;
+`
 
 export const avatarStyles = {
   bgcolor: PRIMARY_SHADES[800],
   width: 24,
   height: 24,
   fontSize: "12px",
-};
+}
 
-export const paperPopoverStyles = { padding: "16px", borderRadius: "8px" };
+export const paperPopoverStyles = { padding: "16px", borderRadius: "8px" }
 
 export const popoverStyles = {
   pointerEvents: "none",
   padding: "16px",
-};
+}

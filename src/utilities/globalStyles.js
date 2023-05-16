@@ -1,4 +1,4 @@
-import { createGlobalStyle } from "styled-components";
+import { createGlobalStyle } from "styled-components"
 
 export const PRIMARY_SHADES = {
   50: "#ECECF0",
@@ -13,7 +13,7 @@ export const PRIMARY_SHADES = {
   900: "#3D1084",
   1000: "#22084C",
   1100: "#080213",
-};
+}
 
 export const NEUTRAL_SHADES = {
   WHITE: "#FFFFFF",
@@ -32,7 +32,7 @@ export const NEUTRAL_SHADES = {
   1000: "#43464F",
   1100: "#2F3135",
   BLACK: "#000000",
-};
+}
 
 export const SUCCESS_SHADES = {
   50: "#E9F6F1",
@@ -44,7 +44,7 @@ export const SUCCESS_SHADES = {
   600: "#1E865A",
   700: "#176544",
   800: "#284029",
-};
+}
 
 export const ERROR_SHADES = {
   50: "#FCEBED",
@@ -56,7 +56,7 @@ export const ERROR_SHADES = {
   600: "#B1283A",
   700: "#851E2C",
   800: "#58141D",
-};
+}
 
 export const WARNING_SHADES = {
   50: "#FDF8ED",
@@ -69,7 +69,7 @@ export const WARNING_SHADES = {
   700: "#D4A94F",
   800: "#A5843D",
   900: "#765E2B",
-};
+}
 
 export const GlobalStyle = createGlobalStyle`
   *,
@@ -89,4 +89,4 @@ export const GlobalStyle = createGlobalStyle`
     color: ${NEUTRAL_SHADES.BLACK};
   }
 
-`;
+`

@@ -1,5 +1,5 @@
-import { validEmailPattern } from "../../../utilities/formUtilities";
+import { validEmailPattern } from "../../../utilities/formUtilities"
 
 export const validateEmail = (email) => {
-  return email?.match(validEmailPattern);
-};
+  return email?.match(validEmailPattern)
+}

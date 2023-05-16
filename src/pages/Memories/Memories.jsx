@@ -1,26 +1,26 @@
-import { useState, useContext } from "react";
-import { Link, useParams } from "react-router-dom";
-import { useQuery, useQueryClient, useMutation } from "react-query";
-import { Typography, IconButton } from "@mui/material";
-import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
+import { useState, useContext } from "react"
+import { Link, useParams } from "react-router-dom"
+import { useQuery, useQueryClient, useMutation } from "react-query"
+import { Typography, IconButton } from "@mui/material"
+import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded"
 
-import { AuthContext } from "../../context/auth.context";
-import Button from "../../components/Button/Button";
-import Navbar from "../../components/Navbar/Navbar";
-import MemoryCard from "../../components/MemoryCard/MemoryCard";
-import MemoriesPageSkeleton from "../../components/MemoriesPageSkeleton/MemoriesPageSkeleton";
-import CreateEditMemoryModal from "../../components/Modals/CreateEditMemoryModal.jsx/CreateEditMemoryModal";
-import PreviewModal from "../../components/Modals/PreviewModal/PreviewModal";
-import ConfirmActionModal from "../../components/Modals/ConfirmActionModal/ConfirmActionModal";
-import { notifySuccess, notifyError } from "../../utilities/toastUtilities";
+import { AuthContext } from "../../context/auth.context"
+import Button from "../../components/Button/Button"
+import Navbar from "../../components/Navbar/Navbar"
+import MemoryCard from "../../components/MemoryCard/MemoryCard"
+import MemoriesPageSkeleton from "../../components/MemoriesPageSkeleton/MemoriesPageSkeleton"
+import CreateEditMemoryModal from "../../components/Modals/CreateEditMemoryModal.jsx/CreateEditMemoryModal"
+import PreviewModal from "../../components/Modals/PreviewModal/PreviewModal"
+import ConfirmActionModal from "../../components/Modals/ConfirmActionModal/ConfirmActionModal"
+import { notifySuccess, notifyError } from "../../utilities/toastUtilities"
 import {
   getAllMemories,
   createMemory,
   deleteMemory,
   updateMemory,
-} from "../../sevices/memoryService";
-import { PRIMARY_SHADES, NEUTRAL_SHADES } from "../../utilities/globalStyles";
-import { PageContainer } from "../style";
+} from "../../sevices/memoryService"
+import { PRIMARY_SHADES, NEUTRAL_SHADES } from "../../utilities/globalStyles"
+import { PageContainer } from "../style"
 import {
   MemoryCardsContainer,
   MemoriesHeaderContainer,
@@ -29,109 +29,109 @@ import {
   Container,
   MemoriesContainer,
   SideMenu,
-} from "./style";
+} from "./style"
 
 const Memories = () => {
-  const { user } = useContext(AuthContext);
+  const { user } = useContext(AuthContext)
   const [isCreateEditMemoryModalOpen, setIsCreateEditMemoryModalOpen] =
-    useState(false);
-  const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
+    useState(false)
+  const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false)
   const [isConfirmDeleteModalOpen, setIsConfirmDeleteModalOpen] =
-    useState(false);
-  const [isCreateUpdateLoading, setIsCreateUpdateLoading] = useState(false);
-  const [isDeleteLoading, setIsDeleteLoading] = useState(false);
-  const [isEditMode, setIsEditMode] = useState(false);
-  const [memoryToUpdateValues, setMemoryToUpdateValues] = useState(null);
-  const [memoryToUpdateId, setMemoryToUpdateId] = useState(null);
-  const [fileUrl, setFileUrl] = useState("");
-  const queryClient = useQueryClient();
+    useState(false)
+  const [isCreateUpdateLoading, setIsCreateUpdateLoading] = useState(false)
+  const [isDeleteLoading, setIsDeleteLoading] = useState(false)
+  const [isEditMode, setIsEditMode] = useState(false)
+  const [memoryToUpdateValues, setMemoryToUpdateValues] = useState(null)
+  const [memoryToUpdateId, setMemoryToUpdateId] = useState(null)
+  const [fileUrl, setFileUrl] = useState("")
+  const queryClient = useQueryClient()
 
-  const { familyId } = useParams();
+  const { familyId } = useParams()
 
   // Queries
   const memoryQuery = useQuery(["memories", familyId], () =>
     getAllMemories(familyId)
-  );
+  )
   // Mutations
   const createMutation = useMutation(createMemory, {
     onSuccess: () => {
       // Invalidate and refetch
-      setIsCreateEditMemoryModalOpen(false);
-      notifySuccess("Memory created successfully", "🏡");
-      queryClient.invalidateQueries("memories");
-      setIsCreateUpdateLoading(false);
+      setIsCreateEditMemoryModalOpen(false)
+      notifySuccess("Memory created successfully", "🏡")
+      queryClient.invalidateQueries("memories")
+      setIsCreateUpdateLoading(false)
     },
     onError: (err) => {
-      notifyError(err.response.data.message);
-      setIsCreateUpdateLoading(false);
+      notifyError(err.response.data.message)
+      setIsCreateUpdateLoading(false)
     },
     onMutate: () => {
-      setIsCreateUpdateLoading(true);
+      setIsCreateUpdateLoading(true)
     },
-  });
+  })
 
   const deleteMutation = useMutation(deleteMemory, {
     onSuccess: () => {
       // Invalidate and refetch
-      notifySuccess("Memory deleted successfully", "🌚");
-      queryClient.invalidateQueries("memories");
+      notifySuccess("Memory deleted successfully", "🌚")
+      queryClient.invalidateQueries("memories")
       // Close confirm modal
-      setIsDeleteLoading(false);
-      setIsConfirmDeleteModalOpen(false);
+      setIsDeleteLoading(false)
+      setIsConfirmDeleteModalOpen(false)
     },
     onError: (err) => {
-      notifyError(err.response.data.message);
-      setIsDeleteLoading(false);
+      notifyError(err.response.data.message)
+      setIsDeleteLoading(false)
     },
     onMutate: () => {
-      setIsDeleteLoading(true);
+      setIsDeleteLoading(true)
     },
-  });
+  })
 
   const updateMutation = useMutation(updateMemory, {
     onSuccess: () => {
       // Invalidate and refetch
-      setIsCreateEditMemoryModalOpen(false);
-      setIsEditMode(false);
-      notifySuccess("Memory updated successfully", "🍀");
-      queryClient.invalidateQueries("memories");
-      setIsCreateUpdateLoading(false);
+      setIsCreateEditMemoryModalOpen(false)
+      setIsEditMode(false)
+      notifySuccess("Memory updated successfully", "🍀")
+      queryClient.invalidateQueries("memories")
+      setIsCreateUpdateLoading(false)
     },
     onError: (err) => {
-      notifyError(err.response.data.message);
-      setIsCreateUpdateLoading(false);
+      notifyError(err.response.data.message)
+      setIsCreateUpdateLoading(false)
     },
     onMutate: () => {
-      setIsCreateUpdateLoading(true);
+      setIsCreateUpdateLoading(true)
     },
-  });
+  })
 
   // Send request and create memory
   const handleCreateMemory = async (memoryValues) => {
-    createMutation.mutate(memoryValues);
-  };
+    createMutation.mutate(memoryValues)
+  }
 
   // Open "Are you sure modal"
   const handleConfirmDeleteMemory = (memoryId) => {
-    setMemoryToUpdateId(memoryId);
-    setIsConfirmDeleteModalOpen(true);
-  };
+    setMemoryToUpdateId(memoryId)
+    setIsConfirmDeleteModalOpen(true)
+  }
 
   // Send request and delete memory
   const handleDeleteMemory = () => {
-    deleteMutation.mutate(memoryToUpdateId);
-  };
+    deleteMutation.mutate(memoryToUpdateId)
+  }
 
   // Send request and update memory
   const handleUpdateMemory = ({ memoryId, data }) => {
-    updateMutation.mutate({ memoryId, data });
-  };
+    updateMutation.mutate({ memoryId, data })
+  }
 
   // When user wants to edit memory
   const handleEditMemory = (memory) => {
     // set isEditMode
-    setIsEditMode(true);
-    const date = new Date(memory.date);
+    setIsEditMode(true)
+    const date = new Date(memory.date)
     // format api data to form data
     setMemoryToUpdateValues({
       date,
@@ -141,26 +141,26 @@ const Memories = () => {
       place: memory?.place ? memory.place : "",
       isPrivate: memory?.owner ? true : false,
       gallery: memory?.gallery?.length ? memory.gallery : [],
-    });
-    setMemoryToUpdateId(memory._id);
+    })
+    setMemoryToUpdateId(memory._id)
     // open CreateEditModal with current memory formatted data for the state
-    setIsCreateEditMemoryModalOpen(true);
-  };
+    setIsCreateEditMemoryModalOpen(true)
+  }
 
   // close CreateEditModal, and clear memoryToUpdate if is in edit mode
   const handleCloseCreateEditModal = () => {
     if (isEditMode) {
-      setIsEditMode(false);
-      setMemoryToUpdateValues(null);
-      setMemoryToUpdateId(null);
+      setIsEditMode(false)
+      setMemoryToUpdateValues(null)
+      setMemoryToUpdateId(null)
     }
-    setIsCreateEditMemoryModalOpen(false);
-  };
+    setIsCreateEditMemoryModalOpen(false)
+  }
 
   const handleOpenPreview = (fileUrl) => {
-    setFileUrl(fileUrl);
-    setIsPreviewModalOpen(true);
-  };
+    setFileUrl(fileUrl)
+    setIsPreviewModalOpen(true)
+  }
 
   return (
     <>
@@ -190,8 +190,7 @@ const Memories = () => {
                     !memoryQuery.status === "success" || isCreateUpdateLoading
                   }
                   loading={isCreateUpdateLoading}
-                  sx={{ minWidth: "200px" }}
-                >
+                  sx={{ minWidth: "200px" }}>
                   Add new memory
                 </Button>
               </MemoriesHeaderContainer>
@@ -236,7 +235,7 @@ const Memories = () => {
         isOpen={isPreviewModalOpen}
         fileUrl={fileUrl}
         handleClose={() => {
-          setIsPreviewModalOpen(false);
+          setIsPreviewModalOpen(false)
         }}
       />
       <ConfirmActionModal
@@ -249,7 +248,7 @@ const Memories = () => {
         onConfirm={handleDeleteMemory}
       />
     </>
-  );
-};
+  )
+}
 
-export default Memories;
+export default Memories

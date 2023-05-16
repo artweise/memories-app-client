@@ -1,7 +1,7 @@
-import { useState } from "react";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { useState } from "react"
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider"
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns"
+import { DatePicker } from "@mui/x-date-pickers/DatePicker"
 
 const DatePickerComponent = ({ date, setDate }) => {
   return (
@@ -14,7 +14,7 @@ const DatePickerComponent = ({ date, setDate }) => {
         format="dd/MMMM/yyyy"
       />
     </LocalizationProvider>
-  );
-};
+  )
+}
 
-export default DatePickerComponent;
+export default DatePickerComponent

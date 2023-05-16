@@ -1,4 +1,4 @@
-import { StyledButton, formButtonStyles } from "./style";
+import { StyledButton, formButtonStyles } from "./style"
 
 const Button = ({
   children,
@@ -19,8 +19,7 @@ const Button = ({
       fullWidth={fullWidth}
       onClick={onClick}
       disabled={disabled}
-      loading={loading}
-    >
+      loading={loading}>
       {/* There is a known issue with translating a page using Chrome tools 
       when a Loading Button is present. After the page is translated, 
       the application crashes when the loading state of a Button changes.
@@ -29,7 +28,7 @@ const Button = ({
       {/* https://mui.com/material-ui/react-button/ */}
       <span>{children}</span>
     </StyledButton>
-  );
-};
+  )
+}
 
-export default Button;
+export default Button

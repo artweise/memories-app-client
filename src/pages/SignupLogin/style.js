@@ -1,6 +1,6 @@
-import styled from "styled-components";
+import styled from "styled-components"
 
-import { PRIMARY_SHADES } from "../../utilities/globalStyles";
+import { PRIMARY_SHADES } from "../../utilities/globalStyles"
 
 export const Container = styled.div`
   display: flex;
@@ -8,7 +8,7 @@ export const Container = styled.div`
   align-items: center;
   justify-content: center;
   margin-top: 48px;
-`;
+`
 
 export const StyledForm = styled.form`
   display: flex;
@@ -18,9 +18,9 @@ export const StyledForm = styled.form`
   padding: 16px 16px 24px;
   margin-top: 16px;
   border-radius: 8px;
-`;
+`
 
 export const FlexRow = styled.div`
   display: flex;
   gap: 4px;
-`;
+`

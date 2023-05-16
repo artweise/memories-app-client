@@ -1,54 +1,54 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import { useQuery, useQueryClient, useMutation } from "react-query";
+import { useState } from "react"
+import { Link } from "react-router-dom"
+import { useQuery, useQueryClient, useMutation } from "react-query"
 
-import Navbar from "../../components/Navbar/Navbar";
-import FamilyCard from "../../components/FamilyCard/FamilyCard";
-import FamilyCardEmpty from "../../components/FamilyCard/FamilyCardEmpty";
-import CreateFamilyModal from "../../components/Modals/CreateFamilyModal/CreateFamilyModal";
-import { getAllFamilies, createFamily } from "../../sevices/familyService";
-import { notifySuccess, notifyError } from "../../utilities/toastUtilities";
-import { PageContainer } from "../style";
-import { FamiliesContainer } from "./style";
-import FamilyCardSkeleton from "../../components/FamilyCard/FamilyCardSkeleton";
+import Navbar from "../../components/Navbar/Navbar"
+import FamilyCard from "../../components/FamilyCard/FamilyCard"
+import FamilyCardEmpty from "../../components/FamilyCard/FamilyCardEmpty"
+import CreateFamilyModal from "../../components/Modals/CreateFamilyModal/CreateFamilyModal"
+import { getAllFamilies, createFamily } from "../../sevices/familyService"
+import { notifySuccess, notifyError } from "../../utilities/toastUtilities"
+import { PageContainer } from "../style"
+import { FamiliesContainer } from "./style"
+import FamilyCardSkeleton from "../../components/FamilyCard/FamilyCardSkeleton"
 
 const Families = () => {
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const [isCreationLoading, setIsCreationLoading] = useState(false);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
+  const [isCreationLoading, setIsCreationLoading] = useState(false)
 
   // Access the client
-  const queryClient = useQueryClient();
+  const queryClient = useQueryClient()
 
   // Queries
-  const familyQuery = useQuery("families", () => getAllFamilies());
+  const familyQuery = useQuery("families", () => getAllFamilies())
   // Mutations
   const mutation = useMutation(createFamily, {
     onSuccess: () => {
       // Invalidate and refetch
-      setIsCreateModalOpen(false);
-      notifySuccess("Family created successfully", "🏡");
-      queryClient.invalidateQueries("families");
-      setIsCreationLoading(false);
+      setIsCreateModalOpen(false)
+      notifySuccess("Family created successfully", "🏡")
+      queryClient.invalidateQueries("families")
+      setIsCreationLoading(false)
     },
     onError: (err) => {
-      notifyError(err.response.data.message);
-      setIsCreationLoading(false);
+      notifyError(err.response.data.message)
+      setIsCreationLoading(false)
     },
     onMutate: () => {
-      setIsCreationLoading(true);
+      setIsCreationLoading(true)
     },
-  });
+  })
 
   const handleCreateFamily = async (familyValues) => {
-    mutation.mutate(familyValues);
-  };
+    mutation.mutate(familyValues)
+  }
 
   // Skeleton
   const renderFamiliesSkeleton = () => {
     return [...Array(2).keys()].map((el, index) => (
       <FamilyCardSkeleton key={index} />
-    ));
-  };
+    ))
+  }
 
   return (
     <>
@@ -76,7 +76,7 @@ const Families = () => {
         loading={isCreationLoading}
       />
     </>
-  );
-};
+  )
+}
 
-export default Families;
+export default Families

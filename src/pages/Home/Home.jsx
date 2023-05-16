@@ -1,14 +1,14 @@
-import { useState } from "react";
+import { useState } from "react"
 
-import { Typography } from "@mui/material";
-import { Link } from "react-router-dom";
-import Navbar from "../../components/Navbar/Navbar";
-import Canvas from "../../components/Canvas/Canvas";
-import Button from "../../components/Button/Button";
+import { Typography } from "@mui/material"
+import { Link } from "react-router-dom"
+import Navbar from "../../components/Navbar/Navbar"
+import Canvas from "../../components/Canvas/Canvas"
+import Button from "../../components/Button/Button"
 
-import { FlexRight, FlexLeft, FlexRow, Container } from "./style";
-import { PageContainer } from "../style";
-import appImage from "../../assests/images/home.png";
+import { FlexRight, FlexLeft, FlexRow, Container } from "./style"
+import { PageContainer } from "../style"
+import appImage from "../../assests/images/home.png"
 const Home = () => {
   const [values, setValues] = useState({
     username: "",
@@ -16,7 +16,7 @@ const Home = () => {
     password: "",
     showPassword: false,
     msg: "",
-  });
+  })
 
   const handleNavigation = () => {
     setValues({
@@ -25,8 +25,8 @@ const Home = () => {
       password: "",
       username: "",
       msg: "",
-    });
-  };
+    })
+  }
   return (
     <>
       <Navbar />
@@ -39,8 +39,7 @@ const Home = () => {
               align="left"
               width="48vw"
               sx={{ fontWeight: "bold", fontSize: 72 }}
-              gutterBottom
-            >
+              gutterBottom>
               Save and share the brightest moments of your life.
             </Typography>
             <Typography
@@ -48,8 +47,7 @@ const Home = () => {
               align="left"
               width="44vw"
               sx={{ mt: 6, fontWeight: 500 }}
-              gutterBottom
-            >
+              gutterBottom>
               Revolutionary app that will help you to save and share every
               moment with your family. Make sure you never miss and never
               forget.
@@ -75,7 +73,7 @@ const Home = () => {
         </Container>
       </PageContainer>
     </>
-  );
-};
+  )
+}
 
-export default Home;
+export default Home

@@ -1,11 +1,11 @@
-import styled from "styled-components";
+import styled from "styled-components"
 
-import { NEUTRAL_SHADES } from "../../utilities/globalStyles";
+import { NEUTRAL_SHADES } from "../../utilities/globalStyles"
 
 export const modalHeaderStyles = {
   display: "flex",
   alignItems: "center",
-};
+}
 
 export const modalStyles = {
   position: "absolute",
@@ -16,13 +16,13 @@ export const modalStyles = {
   bgcolor: `${NEUTRAL_SHADES.WHITE}`,
   boxShadow: 24,
   p: 4,
-};
+}
 
 export const StyledForm = styled.form`
   width: 600px;
-`;
+`
 
 export const formControlStyle = {
   width: "100%",
   marginTop: "16px",
-};
+}

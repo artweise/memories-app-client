@@ -1,8 +1,8 @@
-import { useState } from "react";
-import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
-import { Divider, Typography, Popover, Tooltip, Avatar } from "@mui/material";
+import { useState } from "react"
+import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded"
+import { Divider, Typography, Popover, Tooltip, Avatar } from "@mui/material"
 
-import { SUCCESS_SHADES } from "../../utilities/globalStyles";
+import { SUCCESS_SHADES } from "../../utilities/globalStyles"
 import {
   StyledFamilyCard,
   Description,
@@ -11,18 +11,18 @@ import {
   paperPopoverStyles,
   popoverStyles,
   avatarStyles,
-} from "./style";
+} from "./style"
 
 const FamilyCard = ({ family }) => {
-  const [anchorEl, setAnchorEl] = useState(null);
+  const [anchorEl, setAnchorEl] = useState(null)
 
   const handlePopoverOpen = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
+    setAnchorEl(event.currentTarget)
+  }
 
   const handlePopoverClose = () => {
-    setAnchorEl(null);
-  };
+    setAnchorEl(null)
+  }
 
   return (
     <StyledFamilyCard color={family.color}>
@@ -41,8 +41,7 @@ const FamilyCard = ({ family }) => {
                       ? family.description.slice(100)
                       : ""
                   }
-                  placement="top"
-                >
+                  placement="top">
                   <span>...</span>
                 </Tooltip>
               </>
@@ -56,8 +55,7 @@ const FamilyCard = ({ family }) => {
       <Divider light />
       <MembersContainer
         onMouseEnter={handlePopoverOpen}
-        onMouseLeave={handlePopoverClose}
-      >
+        onMouseLeave={handlePopoverClose}>
         <AccountCircleRoundedIcon sx={{ color: SUCCESS_SHADES[700] }} />
         {!!family?.members?.length > 0 && (
           <Typography variant="button">
@@ -82,8 +80,7 @@ const FamilyCard = ({ family }) => {
         disableRestoreFocus
         PaperProps={{
           sx: paperPopoverStyles,
-        }}
-      >
+        }}>
         {!!family?.members?.length &&
           family.members.map((member, index) => (
             <AvatarAndUsername key={index}>
@@ -95,7 +92,7 @@ const FamilyCard = ({ family }) => {
           ))}
       </Popover>
     </StyledFamilyCard>
-  );
-};
+  )
+}
 
-export default FamilyCard;
+export default FamilyCard

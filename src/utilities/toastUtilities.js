@@ -1,4 +1,4 @@
-import { toast } from "react-toastify";
+import { toast } from "react-toastify"
 
 export const notifySuccess = (message = "Success", icon = "🧸") => {
   toast.success(`${icon} ${message}`, {
@@ -10,8 +10,8 @@ export const notifySuccess = (message = "Success", icon = "🧸") => {
     draggable: true,
     progress: undefined,
     theme: "light",
-  });
-};
+  })
+}
 
 export const notifyError = (message = "Something went wong", icon = "👀") => {
   toast.error(`${icon} ${message}`, {
@@ -23,5 +23,5 @@ export const notifyError = (message = "Something went wong", icon = "👀") => {
     draggable: true,
     progress: undefined,
     theme: "light",
-  });
-};
+  })
+}

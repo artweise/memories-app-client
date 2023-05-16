@@ -1,5 +1,5 @@
-import ModalComponent from "../Modal";
-import { FileContainer, StyledImg } from "./style";
+import ModalComponent from "../Modal"
+import { FileContainer, StyledImg } from "./style"
 
 const PreviewModal = ({ isOpen, handleClose, fileUrl }) => {
   return (
@@ -8,7 +8,7 @@ const PreviewModal = ({ isOpen, handleClose, fileUrl }) => {
         <StyledImg src={fileUrl} alt="preview" />
       </FileContainer>
     </ModalComponent>
-  );
-};
+  )
+}
 
-export default PreviewModal;
+export default PreviewModal

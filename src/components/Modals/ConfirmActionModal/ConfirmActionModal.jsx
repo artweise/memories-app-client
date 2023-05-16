@@ -1,9 +1,9 @@
-import Button from "../../Button/Button";
-import ModalComponent from "../Modal";
-import { Typography } from "@mui/material";
-import { isFunction } from "lodash";
+import Button from "../../Button/Button"
+import ModalComponent from "../Modal"
+import { Typography } from "@mui/material"
+import { isFunction } from "lodash"
 
-import { Container, ButtonContainer } from "./style";
+import { Container, ButtonContainer } from "./style"
 
 const ConfirmActionModal = ({
   onClose,
@@ -35,7 +35,7 @@ const ConfirmActionModal = ({
         </ButtonContainer>
       </Container>
     </ModalComponent>
-  );
-};
+  )
+}
 
-export default ConfirmActionModal;
+export default ConfirmActionModal

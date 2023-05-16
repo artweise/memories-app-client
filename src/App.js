@@ -1,13 +1,13 @@
-import { Routes, Route } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
+import { Routes, Route } from "react-router-dom"
+import { ToastContainer } from "react-toastify"
 
-import IsPrivate from "./components/IsPrivate/IsPrivate";
-import IsAnon from "./components/IsAnon/IsAnon";
-import Home from "./pages/Home/Home";
-import FormAuth from "./pages/SignupLogin/SignupLogin";
-import Families from "./pages/Families/Families";
-import "react-toastify/dist/ReactToastify.css";
-import Memories from "./pages/Memories/Memories";
+import IsPrivate from "./components/IsPrivate/IsPrivate"
+import IsAnon from "./components/IsAnon/IsAnon"
+import Home from "./pages/Home/Home"
+import FormAuth from "./pages/SignupLogin/SignupLogin"
+import Families from "./pages/Families/Families"
+import "react-toastify/dist/ReactToastify.css"
+import Memories from "./pages/Memories/Memories"
 
 const App = () => {
   return (
@@ -59,7 +59,7 @@ const App = () => {
         />
       </Routes>
     </div>
-  );
-};
+  )
+}
 
-export default App;
+export default App

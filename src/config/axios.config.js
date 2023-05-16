@@ -1,22 +1,22 @@
-import axios from "axios";
+import axios from "axios"
 
 // const baseURL = process.env.REACT_APP_PROD_SERVER_API;
 
 const baseURL =
   process.env.NODE_ENV === "production"
     ? process.env.REACT_APP_PROD_SERVER_API
-    : process.env.REACT_APP_DEV_SERVER_API;
+    : process.env.REACT_APP_DEV_SERVER_API
 
 export default axios.create({
   baseURL,
-});
+})
 
 export const getHeaders = () => {
-  const token = localStorage.getItem("accessToken");
+  const token = localStorage.getItem("accessToken")
   return {
     headers: { Authorization: `Bearer ${token}` },
-  };
-};
+  }
+}
 
 // {
 //   // The headers property specifies the HTTP headers

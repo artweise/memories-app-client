@@ -1,6 +1,6 @@
-import Tooltip from "@mui/material/Tooltip";
-import AddRoundedIcon from "@mui/icons-material/AddRounded";
-import { EmptyCard } from "./style";
+import Tooltip from "@mui/material/Tooltip"
+import AddRoundedIcon from "@mui/icons-material/AddRounded"
+import { EmptyCard } from "./style"
 
 const FamilyCardEmpty = ({ onClick }) => {
   return (
@@ -9,7 +9,7 @@ const FamilyCardEmpty = ({ onClick }) => {
         <AddRoundedIcon fontSize="large" />
       </Tooltip>
     </EmptyCard>
-  );
-};
+  )
+}
 
-export default FamilyCardEmpty;
+export default FamilyCardEmpty

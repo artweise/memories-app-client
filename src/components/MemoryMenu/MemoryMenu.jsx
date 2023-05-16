@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState } from "react"
 
 import {
   Typography,
@@ -6,21 +6,20 @@ import {
   MenuItem,
   Menu,
   ListItemIcon,
-} from "@mui/material";
-import EditRoundedIcon from "@mui/icons-material/EditRounded";
-import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
-import MoreVertRoundedIcon from "@mui/icons-material/MoreVertRounded";
+} from "@mui/material"
+import EditRoundedIcon from "@mui/icons-material/EditRounded"
+import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded"
+import MoreVertRoundedIcon from "@mui/icons-material/MoreVertRounded"
 
-import { ActionButtonsContainer, iconButtonStyles, paperStyles } from "./style";
+import { ActionButtonsContainer, iconButtonStyles, paperStyles } from "./style"
 
 const MemoryMenu = ({ handleEdit, handleDelete, memory }) => {
-  const [anchorEl, setAnchorEl] = useState(null);
+  const [anchorEl, setAnchorEl] = useState(null)
   return (
     <ActionButtonsContainer>
       <IconButton
         onClick={(event) => setAnchorEl(event.currentTarget)}
-        sx={iconButtonStyles}
-      >
+        sx={iconButtonStyles}>
         <MoreVertRoundedIcon />
       </IconButton>
       <Menu
@@ -29,15 +28,13 @@ const MemoryMenu = ({ handleEdit, handleDelete, memory }) => {
         onClose={() => setAnchorEl(null)}
         PaperProps={{
           style: paperStyles,
-        }}
-      >
+        }}>
         {/* Handle Edit */}
         <MenuItem
           onClick={() => {
-            setAnchorEl(null);
-            handleEdit(memory);
-          }}
-        >
+            setAnchorEl(null)
+            handleEdit(memory)
+          }}>
           <ListItemIcon sx={iconButtonStyles}>
             <EditRoundedIcon fontSize="small" />
           </ListItemIcon>
@@ -46,10 +43,9 @@ const MemoryMenu = ({ handleEdit, handleDelete, memory }) => {
         {/* Handle Delete */}
         <MenuItem
           onClick={() => {
-            setAnchorEl(null);
-            handleDelete(memory._id);
-          }}
-        >
+            setAnchorEl(null)
+            handleDelete(memory._id)
+          }}>
           <ListItemIcon sx={iconButtonStyles}>
             <DeleteRoundedIcon fontSize="small" />
           </ListItemIcon>
@@ -57,7 +53,7 @@ const MemoryMenu = ({ handleEdit, handleDelete, memory }) => {
         </MenuItem>
       </Menu>
     </ActionButtonsContainer>
-  );
-};
+  )
+}
 
-export default MemoryMenu;
+export default MemoryMenu

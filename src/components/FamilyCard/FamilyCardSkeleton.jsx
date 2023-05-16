@@ -1,6 +1,6 @@
-import Skeleton from "@mui/material/Skeleton";
+import Skeleton from "@mui/material/Skeleton"
 
-import { StyledSkeletonCard } from "./style";
+import { StyledSkeletonCard } from "./style"
 
 const FamilyCardSkeleton = () => {
   return (
@@ -12,7 +12,7 @@ const FamilyCardSkeleton = () => {
         style={{ borderRadius: "16px" }}
       />
     </StyledSkeletonCard>
-  );
-};
+  )
+}
 
-export default FamilyCardSkeleton;
+export default FamilyCardSkeleton
