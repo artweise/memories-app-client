@@ -1,11 +1,11 @@
-import LoadingButton from "@mui/lab/LoadingButton";
+import LoadingButton from '@mui/lab/LoadingButton';
 
-import { formButtonStyles } from "./style";
+import { formButtonStyles } from './style';
 
 const Button = ({
   children,
-  type = "button",
-  variant = "contained",
+  type = 'button',
+  variant = 'contained',
   isFormButton = false,
   fullWidth = false,
   sx = {},

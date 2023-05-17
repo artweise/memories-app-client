@@ -13,10 +13,11 @@ import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import ErrorOutlineRoundedIcon from '@mui/icons-material/ErrorOutlineRounded';
 import { isEmpty, difference } from 'lodash';
 
-import Button from '../../Button/Button';
+import Button from '../../AppComponents/Button/Button';
 import ModalComponent from '../Modal';
 import ConfirmActionModal from '../ConfirmActionModal/ConfirmActionModal';
-import DatePickerComponent from '../../DatePickerComponent/DatePickerComponent';
+import DatePickerComponent from '../../AppComponents/DatePickerComponent/DatePickerComponent';
+
 import { formatToISO } from '../../../utilities/dateUtilities';
 import { uploadFiles } from '../../../sevices/memoryService';
 import { notifyError } from '../../../utilities/toastUtilities';

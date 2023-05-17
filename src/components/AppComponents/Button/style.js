@@ -1,4 +1,4 @@
 export const formButtonStyles = {
-  width: "50%",
-  marginLeft: "25%",
+  width: '50%',
+  marginLeft: '25%',
 };
