@@ -12,6 +12,8 @@ const Button = ({
   onClick = null,
   loading = false,
   disabled = false,
+  color = 'primary',
+  size = 'medium',
 }) => {
   return (
     <LoadingButton
@@ -22,6 +24,8 @@ const Button = ({
       onClick={onClick}
       disabled={disabled}
       loading={loading}
+      color={color}
+      size={size}
     >
       {/* There is a known issue with translating a page using Chrome tools 
       when a Loading Button is present. After the page is translated, 

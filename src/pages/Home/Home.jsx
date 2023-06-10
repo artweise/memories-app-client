@@ -1,7 +1,8 @@
-import { useState } from 'react';
-
+import { useState, useContext } from 'react';
 import { Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
+
+import { AuthContext } from '../../context/auth.context';
 import Navbar from '../../components/Navbar/Navbar';
 import Canvas from '../../components/Canvas/Canvas';
 import Button from '../../components/AppComponents/Button/Button';
@@ -10,6 +11,8 @@ import { FlexRight, FlexLeft, FlexRow, Container } from './style';
 import { PageContainer } from '../style';
 // import appImage from "../../assests/images/home.png";
 const Home = () => {
+  const { isLoggedIn } = useContext(AuthContext);
+
   const [values, setValues] = useState({
     username: '',
     email: '',
@@ -56,7 +59,7 @@ const Home = () => {
 
             <div style={{ marginTop: '0.5rem' }} onClick={handleNavigation}>
               <FlexRow>
-                <Link to='/signup'>
+                <Link to={isLoggedIn ? '/families' : '/signup'}>
                   <Button sx={{ mt: 6, fontWeight: 500 }}>Try now</Button>
                 </Link>
               </FlexRow>

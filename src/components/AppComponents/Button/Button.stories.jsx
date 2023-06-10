@@ -10,6 +10,14 @@ export default {
       options: ['contained', 'outlined', 'text'],
       control: { type: 'radio' },
     },
+    color: {
+      options: ['primary', 'secondary'],
+      control: { type: 'radio' },
+    },
+    size: {
+      options: ['small', 'medium', 'large'],
+      control: { type: 'radio' },
+    },
     text: {
       control: { type: 'text' },
     },
