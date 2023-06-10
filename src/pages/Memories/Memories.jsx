@@ -206,7 +206,7 @@ const Memories = () => {
                       memory={memory}
                       handleDelete={handleConfirmDeleteMemory}
                       handleEdit={handleEditMemory}
-                      currentUserId={user?._id}
+                      currentUserId={user?.userId}
                       handleOpenPreview={handleOpenPreview}
                     />
                   ))}
