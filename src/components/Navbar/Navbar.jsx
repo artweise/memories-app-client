@@ -1,4 +1,5 @@
-import { useState, useContext } from "react";
+import { useState, useContext } from 'react';
+import { Link } from 'react-router-dom';
 import {
   AppBar,
   Toolbar,
@@ -11,15 +12,16 @@ import {
   Container,
   Tooltip,
   MenuItem,
-} from "@mui/material";
-import Diversity1RoundedIcon from "@mui/icons-material/Diversity1Rounded";
-import { useNavigate, useLocation } from "react-router-dom";
+} from '@mui/material';
+import Diversity1RoundedIcon from '@mui/icons-material/Diversity1Rounded';
+import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
+import { useNavigate, useLocation } from 'react-router-dom';
 
-import { AuthContext } from "../../context/auth.context";
-import { PURPLE_SHADES } from "../../utilities/globalStyles";
-import { titleStyles } from "./style";
+import { AuthContext } from '../../context/auth.context';
+import { PURPLE_SHADES, NEUTRAL_SHADES } from '../../utilities/globalStyles';
+import { LogoutMenuContainer, titleStyles } from './style';
 
-const settings = [{ text: "My families", link: "/families" }];
+const options = [{ text: 'My families', link: '/families' }];
 
 const Navbar = () => {
   const [anchorElUser, setAnchorElUser] = useState(null);
@@ -38,80 +40,89 @@ const Navbar = () => {
     setAnchorElUser(null);
   };
 
-  const isMainPage = location.pathname === "/";
+  const isMainPage = location.pathname === '/';
 
   return (
     <AppBar
-      position="fixed"
+      position='fixed'
       sx={{
-        background: isMainPage ? "transparent" : PURPLE_SHADES[700],
-        boxShadow: "none",
+        background: isMainPage ? 'transparent' : PURPLE_SHADES[700],
+        boxShadow: 'none',
       }}
     >
-      <Container maxWidth="xl">
+      <Container maxWidth='xl'>
         <Toolbar disableGutters>
-          {/* LOGO */}
-          <Diversity1RoundedIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1, ml: 4 }} />
-          {/* APPLICATION TITLE */}
-          <Typography variant="h6" noWrap component="a" href="/" sx={titleStyles}>
-            FamilyMemories
-          </Typography>
+          {/* LOGO AND NAME for bigger screens*/}
+          <Diversity1RoundedIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1, ml: 4 }} />
+          <Tooltip title='Home' placement='bottom-start'>
+            <Link to='/'>
+              <Typography variant='h6' noWrap sx={titleStyles}>
+                FamilyMemories
+              </Typography>
+            </Link>
+          </Tooltip>
 
-          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
-            {/* LOGO */}
-            <Diversity1RoundedIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
+          {/* LOGO for small screens */}
+          <Box sx={{ cursor: 'pointer', flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+            <Tooltip title='Home' placement='bottom'>
+              <Link to='/'>
+                <Diversity1RoundedIcon
+                  sx={{ color: NEUTRAL_SHADES.WHITE, display: { xs: 'flex', md: 'none' }, mr: 1 }}
+                />
+              </Link>
+            </Tooltip>
           </Box>
 
-          <Box sx={{ flexGrow: 0, marginLeft: "auto" }}>
+          <Box sx={{ flexGrow: 0, marginLeft: 'auto' }}>
             {isLoggedIn ? (
               <Box sx={{ flexGrow: 0, mr: 4 }}>
-                <Tooltip title="Open settings">
+                <Tooltip title='Options'>
                   <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                     <Avatar>{user && user.username.slice(0, 1).toUpperCase()}</Avatar>
                   </IconButton>
                 </Tooltip>
                 <Menu
-                  sx={{ mt: "45px", mr: "10px" }}
-                  id="menu-appbar"
+                  sx={{ mt: '45px', mr: '10px' }}
+                  id='menu-appbar'
                   anchorEl={anchorElUser}
                   anchorOrigin={{
-                    vertical: "top",
-                    horizontal: "right",
+                    vertical: 'top',
+                    horizontal: 'right',
                   }}
                   keepMounted
                   transformOrigin={{
-                    vertical: "top",
-                    horizontal: "right",
+                    vertical: 'top',
+                    horizontal: 'right',
                   }}
                   open={Boolean(anchorElUser)}
                   onClose={handleCloseUserMenu}
                 >
-                  {settings.map((setting, index) => (
+                  {options.map((option, index) => (
                     <MenuItem
                       key={index}
                       onClick={
                         // if link was provided - navigate, else do not do anything
-                        setting?.link ? () => navigate(`${setting.link}`) : undefined
+                        option?.link ? () => navigate(`${option.link}`) : undefined
                       }
                     >
-                      <Typography sx={{ paddingRight: "16px" }}>{setting.text}</Typography>
+                      <Typography sx={{ paddingRight: '16px' }}>{option.text}</Typography>
                     </MenuItem>
                   ))}
                   <MenuItem
-                    sx={{ height: "32px" }}
                     onClick={() => {
                       logOutUser();
-                      navigate("/login");
+                      navigate('/login');
                     }}
                   >
-                    <Typography color={PURPLE_SHADES[700]} variant="body2">
-                      Log out
-                    </Typography>
+                    <LogoutMenuContainer>
+                      <LogoutRoundedIcon color='secondary' />
+                      <Typography color={PURPLE_SHADES[700]}>Log out</Typography>
+                    </LogoutMenuContainer>
                   </MenuItem>
                 </Menu>
               </Box>
             ) : (
-              <Button color="inherit" sx={{ mr: 4 }} onClick={() => navigate("/login")}>
+              <Button color='inherit' sx={{ mr: 4 }} onClick={() => navigate('/login')}>
                 Log in
               </Button>
             )}
